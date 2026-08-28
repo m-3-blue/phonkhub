@@ -94,6 +94,127 @@
     padding: 2.5rem 1.5rem 5rem;
   }
 
+  .track-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .track-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    color: var(--white);
+  }
+
+  .section-kicker {
+    color: var(--red);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .featured-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .featured-card {
+    position: relative;
+    display: flex;
+    min-height: 9.5rem;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background:
+      linear-gradient(135deg, rgba(255,153,0,0.16), transparent 58%),
+      linear-gradient(160deg, #181818, var(--card-bg));
+    color: var(--white);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  }
+
+  .featured-card::before {
+    content: '';
+    position: absolute;
+    top: -3rem;
+    right: -2rem;
+    width: 8rem;
+    height: 8rem;
+    border: 1px solid rgba(255,153,0,0.22);
+    border-radius: 50%;
+  }
+
+  .featured-card:hover,
+  .featured-card:focus-visible {
+    border-color: var(--red-dim);
+    background:
+      linear-gradient(135deg, rgba(255,153,0,0.24), transparent 62%),
+      linear-gradient(160deg, #1d1d1d, var(--card-bg));
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  .featured-number {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--red);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    opacity: 0.72;
+  }
+
+  .featured-card-title {
+    position: relative;
+    z-index: 1;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .featured-card-artist {
+    position: relative;
+    z-index: 1;
+    margin-top: 0.25rem;
+    color: var(--gray);
+    font-size: 0.78rem;
+  }
+
+  .featured-card-link {
+    position: relative;
+    z-index: 1;
+    margin-top: 0.85rem;
+    color: var(--red);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
   .track-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -214,10 +335,14 @@
   }
 
   @media (max-width: 780px) {
+    .featured-list,
     .track-list { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 480px) {
+    .featured-list,
     .track-list { grid-template-columns: 1fr; }
+
+    .section-heading { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
   }
 
   footer {
@@ -291,132 +416,148 @@
 </header>
 
 <main>
-  <div class="track-list" id="trackList">
-
-    <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/EkXu0bPHP-0?si=p3LRP2by8pXM6Q-V" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">1</span>
-        <div class="track-meta">
-          <div class="track-title">YARA YARA YA FUNK</div>
-          <div class="track-artist">JOKO PHONK</div>
-        </div>
-        <span class="track-badge">New</span>
-        <span class="track-badge">Hot</span>
-      </div>
+  <section class="track-section" aria-labelledby="featured-heading">
+    <div class="section-heading">
+      <h2 class="section-title" id="featured-heading">Featured</h2>
     </div>
+    <div class="featured-list">
+      <article class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/neWz6AFzfkA?si=gWEraASeIccip6CZ" title="Hava Nagila Hardtekk Remix by Dmitry Webster" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="track-header">
+          <span class="rank">1</span>
+          <div class="track-meta">
+            <div class="track-title">HAVA NAGILA (HARDTEKK REMIX)</div>
+            <div class="track-artist">Dmitry Webster</div>
+          </div>
+          <span class="track-badge">Top</span>
+        </div>
+      </article>
 
-  
-    <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/xVS4zgb9AuU?si=rFWE66PANndVRMB-" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
+      <article class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/7gW_OjuEwOM?si=T4A0F7ndeAanrpyr" title="EFN HardTekk Slowed by zesuna" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
         </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">2</span>
-        <div class="track-meta">
-          <div class="track-title">TIKI TIKI</div>
-          <div class="track-artist">QMIIR</div>
+        <div class="track-header">
+          <span class="rank">2</span>
+          <div class="track-meta">
+            <div class="track-title">EFN (HardTekk - Slowed)</div>
+            <div class="track-artist">zesuna</div>
+          </div>
+          <span class="track-badge">Top</span>
         </div>
-        <span class="track-badge">Hot</span>
-      </div>
-    </div>
+      </article>
 
-   <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560"
-height="315" 
-src="https://www.youtube.com/embed/aVrxbSbyIgU?si=86CkC4UzXJucC-rZ" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
+      <article class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/xVS4zgb9AuU?si=rFWE66PANndVRMB-" title="Tiki Tiki by Qmiir" frameborder="0" allow="accelerometer; autoplay; clipboard; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
         </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">3</span>
-        <div class="track-meta">
-          <div class="track-title">NO BATIDÃO</div>
-          <div class="track-artist">Phonk Time</div>
+        <div class="track-header">
+          <span class="rank">3</span>
+          <div class="track-meta">
+            <div class="track-title">TIKI TIKI</div>
+            <div class="track-artist">QMIIR</div>
+          </div>
+          <span class="track-badge">Top</span>
         </div>
-        <span class="track-badge">Hot</span>
-      </div>
+      </article>
     </div>
+  </section>
 
-       <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/neWz6AFzfkA?si=gWEraASeIccip6CZ" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">4</span>
-        <div class="track-meta">
-          <div class="track-title">HAVA NAGILA (HARDTEKK REMIX)</div>
-          <div class="track-artist">Dmitry Webster</div>
-        </div>
-      </div>
+  <section class="track-section" aria-labelledby="all-tracks-heading">
+    <div class="section-heading">
+      <h2 class="section-title" id="all-tracks-heading">All Tracks</h2>
     </div>
+    <div class="track-list" id="trackList">
 
-       <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/7gW_OjuEwOM?si=T4A0F7ndeAanrpyr" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
+            <div class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/52IoCmGPnx8?si=MBYQ6XtCTW3QeTvQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="track-header">
+          <span class="rank">4</span>
+          <div class="track-meta">
+            <div class="track-title">Miguel Phonk</div>
+            <div class="track-artist">DJ Tuff</div>
+          </div>
+          <span class="track-badge">New</span>
+          <span class="track-badge">Hot</span>
         </div>
       </div>
-      <div class="track-header">
-        <span class="rank">5</span>
-        <div class="track-meta">
-          <div class="track-title">EFN (HardTekk - Slowed)</div>
-          <div class="track-artist">zesuna</div>
+
+            <div class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/ZbJa2ialf-M?si=4osALazHJe41KZTG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="track-header">
+          <span class="rank">5</span>
+          <div class="track-meta">
+            <div class="track-title">VERITY HARDTEKK</div>
+            <div class="track-artist">EUPHXRIA</div>
+          </div>
+          <span class="track-badge">New</span>
+          <span class="track-badge">Hot</span>
         </div>
       </div>
-    </div>
+
+            <div class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/X_TB2B1_uU8?si=Cs0Rq2IPIw2RR5mr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="track-header">
+          <span class="rank">6</span>
+          <div class="track-meta">
+            <div class="track-title">OH NO NO NO FUNKk</div>
+            <div class="track-artist">Loop Hit Music</div>
+          </div>
+          <span class="track-badge">Hot</span>
+        </div>
+      </div>
+      
+      <div class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/EkXu0bPHP-0?si=p3LRP2by8pXM6Q-V" title="Yara Yara Ya Funk by Joko Phonk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="track-header">
+          <span class="rank">7</span>
+          <div class="track-meta">
+            <div class="track-title">YARA YARA YA FUNK</div>
+            <div class="track-artist">JOKO PHONK</div>
+          </div>
+          <span class="track-badge">Hot</span>
+        </div>
+      </div>
+
+      <div class="track-card">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/aVrxbSbyIgU?si=86CkC4UzXJucC-rZ" title="No Batidão by Phonk Time" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="track-header">
+          <span class="rank">8</span>
+          <div class="track-meta">
+            <div class="track-title">NO BATIDÃO</div>
+            <div class="track-artist">Phonk Time</div>
+          </div>
+          <span class="track-badge">Hot</span>
+        </div>
+      </div>
 
        <div class="track-card">
       <div class="video-panel">
@@ -434,7 +575,7 @@ allowfullscreen>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">6</span>
+        <span class="rank">9</span>
         <div class="track-meta">
           <div class="track-title">CALA BONITA (Instagram Remix)</div>
           <div class="track-artist">zedow.</div>
@@ -458,7 +599,7 @@ allowfullscreen>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">7</span>
+        <span class="rank">10</span>
         <div class="track-meta">
           <div class="track-title">MATADORA</div>
           <div class="track-artist">INTERTONE</div>
@@ -482,7 +623,7 @@ allowfullscreen>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">8</span>
+        <span class="rank">11</span>
         <div class="track-meta">
           <div class="track-title">DARK AURA</div>
           <div class="track-artist">void</div>
@@ -506,7 +647,7 @@ allowfullscreen>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">9</span>
+        <span class="rank">12</span>
         <div class="track-meta">
           <div class="track-title">FUNK CRIMINAL</div>
           <div class="track-artist">ICEDMANE</div>
@@ -530,7 +671,7 @@ allowfullscreen>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">10</span>
+        <span class="rank">13</span>
         <div class="track-meta">
           <div class="track-title">MONTAGEM ALQUIMIA</div>
           <div class="track-artist">Yonas blox</div>
@@ -554,7 +695,7 @@ allowfullscreen>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">11</span>
+        <span class="rank">14</span>
         <div class="track-meta">
           <div class="track-title">SEMPERO</div>
           <div class="track-artist">Phonkmania</div>
@@ -578,7 +719,7 @@ allowfullscreen>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">12</span>
+        <span class="rank">15</span>
         <div class="track-meta">
           <div class="track-title">HEAVENLY JUMPSTYLE</div>
           <div class="track-artist">The Vibe Guide</div>
@@ -589,23 +730,14 @@ allowfullscreen>
         <div class="track-card">
       <div class="video-panel">
         <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/7LjwJW3fnKQ?si=mCZqQMhU1rGWiL6N" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JjPtDl6EJ3o?si=EonPI8IeScenb49Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
       </div>
       <div class="track-header">
-        <span class="rank">13</span>
+        <span class="rank">16</span>
         <div class="track-meta">
-          <div class="track-title">VEM VEM FUNK (Ultra Slowed)</div>
-          <div class="track-artist">Deniz t.m</div>
+          <div class="track-title">MONTAGEM XONADA</div>
+          <div class="track-artist">TheGoodVibe</div>
         </div>
       </div>
     </div>
@@ -624,6 +756,7 @@ allowfullscreen>
 </div>
 
   </div>
+  </section>
 </main>
 
 <footer>
