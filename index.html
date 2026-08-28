@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhonkHub</title>
+<meta name="description" content="Official PhonkHub: Goon to the moon!" />
+
+<meta itemprop="name" content="PhonkHub" />
+<meta itemprop="description" content="Official PhonkHub: Goon to the moon!" />
+<meta itemprop="image" content="https://i.ibb.co/qLQrcbPq/phonk-hub.png" />
+
+<meta property="og:url" content="https://phonk-hub.netlify.app/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="PhonkHub" />
+<meta property="og:description" content="Official PhonkHub: Goon to the moon!" />
+<meta property="og:image" content="https://i.ibb.co/qLQrcbPq/phonk-hub.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="PhonkHub" />
+<meta name="twitter:description" content="Official PhonkHub: Goon to the moon!" />
+<meta name="twitter:image" content="https://i.ibb.co/qLQrcbPq/phonk-hub.png" />
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #ff9900;
+    --red-dim: #cb7603;
+    --white: #f0ece4;
+    --gray: #888;
+    --bg: #080808;
+    --card-bg: #111;
+    --border: #222;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.013) 60px, rgba(255,255,255,0.013) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.013) 60px, rgba(255,255,255,0.013) 61px);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 3rem 1rem 2rem;
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    margin-top: 2rem;
+  }
+
+  #logo {
+    width: clamp(14rem, 30vw, 22rem);
+    animation: logoIn 0.8s cubic-bezier(.16,1,.3,1) both;
+  }
+
+  @keyframes logoIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    letter-spacing: 0.35em;
+    line-height: 1.15;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--red);
+    margin-top: 0.2rem;
+    animation: fadeIn 1s 0.3s both;
+  }
+
+
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+
+  .track-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .track-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: cardIn 0.5s cubic-bezier(.16,1,.3,1) both;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .track-card:hover { border-color: var(--red-dim); transform: translateY(-2px); }
+
+  .track-card:nth-child(1) { animation-delay: 0.05s; }
+  .track-card:nth-child(2) { animation-delay: 0.10s; }
+  .track-card:nth-child(3) { animation-delay: 0.15s; }
+  .track-card:nth-child(4) { animation-delay: 0.20s; }
+  .track-card:nth-child(5) { animation-delay: 0.25s; }
+  .track-card:nth-child(6) { animation-delay: 0.30s; }
+  .track-card:nth-child(7) { animation-delay: 0.35s; }
+  .track-card:nth-child(8) { animation-delay: 0.40s; }
+  .track-card:nth-child(9) { animation-delay: 0.45s; }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .video-panel {
+    display: block !important;
+    border: none;
+    padding: 0;
+    background: #000;
+    flex-shrink: 0;
+  }
+
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    background: #000;
+  }
+
+  .video-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .track-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border);
+    cursor: default;
+    user-select: none;
+    min-width: 0;
+  }
+
+  .rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--red);
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .track-card:first-child .rank { opacity: 1; text-shadow: 0 0 16px rgba(255,153,0,0.5); }
+
+  .track-meta {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .track-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-artist {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 0.15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.45rem;
+    border-radius: 2px;
+    background: rgba(255,153,0,0.12);
+    color: var(--red);
+    border: 1px solid var(--red-dim);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 780px) {
+    .track-list { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .track-list { grid-template-columns: 1fr; }
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: #333;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    padding: 0;
+    border: 1px solid var(--red-dim);
+    border-radius: 50%;
+    background: rgba(255,153,0,0.12);
+    color: var(--red);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+  }
+
+  .social-link:hover,
+  .social-link:focus-visible {
+    background: var(--red);
+    color: var(--bg);
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  .social-link:active { transform: scale(0.97); }
+
+  .social-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: currentColor;
+  }
+
+  header .social-link {
+    align-self: center;
+    margin-top: 0.1rem;
+    position: relative;
+    top: 12px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @media (max-width: 500px) {
+    .track-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo">
+    <span class="tagline">The Phonk Hub</span>
+
+  <a class="social-link" href="https://discord.gg/gGv7yUQw7y" target="_blank" rel="noopener noreferrer" aria-label="Join PhonkHub on Discord">
+      <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M19.54 5.01A16.84 16.84 0 0 0 15.38 3.7l-.5 1.02a15.6 15.6 0 0 0-5.76 0L8.62 3.7a16.84 16.84 0 0 0-4.16 1.31C1.83 9.03 1.12 12.96 1.47 16.84a16.9 16.9 0 0 0 5.1 2.58l1.23-1.67c-.68-.25-1.33-.56-1.95-.93l.48-.37c3.76 1.76 7.83 1.76 11.54 0l.48.37c-.62.37-1.27.68-1.95.93l1.23 1.67a16.9 16.9 0 0 0 5.1-2.58c.41-4.49-.7-8.38-3.19-11.83ZM8.35 15.02c-1.13 0-2.06-1.04-2.06-2.32s.91-2.32 2.06-2.32 2.08 1.04 2.06 2.32c0 1.28-.91 2.32-2.06 2.32Zm7.3 0c-1.13 0-2.06-1.04-2.06-2.32s.91-2.32 2.06-2.32 2.08 1.04 2.06 2.32c0 1.28-.91 2.32-2.06 2.32Z"/>
+      </svg>
+    </a>
+</header>
+
+<main>
+  <div class="track-list" id="trackList">
+
+    <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/EkXu0bPHP-0?si=p3LRP2by8pXM6Q-V" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">1</span>
+        <div class="track-meta">
+          <div class="track-title">YARA YARA YA FUNK</div>
+          <div class="track-artist">JOKO PHONK</div>
+        </div>
+        <span class="track-badge">New</span>
+        <span class="track-badge">Hot</span>
+      </div>
+    </div>
+
+  
+    <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/xVS4zgb9AuU?si=rFWE66PANndVRMB-" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">2</span>
+        <div class="track-meta">
+          <div class="track-title">TIKI TIKI</div>
+          <div class="track-artist">QMIIR</div>
+        </div>
+        <span class="track-badge">Hot</span>
+      </div>
+    </div>
+
+   <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560"
+height="315" 
+src="https://www.youtube.com/embed/aVrxbSbyIgU?si=86CkC4UzXJucC-rZ" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">3</span>
+        <div class="track-meta">
+          <div class="track-title">NO BATIDÃO</div>
+          <div class="track-artist">Phonk Time</div>
+        </div>
+        <span class="track-badge">Hot</span>
+      </div>
+    </div>
+
+       <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/neWz6AFzfkA?si=gWEraASeIccip6CZ" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">4</span>
+        <div class="track-meta">
+          <div class="track-title">HAVA NAGILA (HARDTEKK REMIX)</div>
+          <div class="track-artist">Dmitry Webster</div>
+        </div>
+      </div>
+    </div>
+
+       <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/7gW_OjuEwOM?si=T4A0F7ndeAanrpyr" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">5</span>
+        <div class="track-meta">
+          <div class="track-title">EFN (HardTekk - Slowed)</div>
+          <div class="track-artist">zesuna</div>
+        </div>
+      </div>
+    </div>
+
+       <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/vQIhJQXSfdM?si=JTiH0Bf-4T0aUzFm" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">6</span>
+        <div class="track-meta">
+          <div class="track-title">CALA BONITA (Instagram Remix)</div>
+          <div class="track-artist">zedow.</div>
+        </div>
+      </div>
+    </div>
+    
+       <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/65Mb6GcqZ6A?si=Y8p9AGlC7cw5LO95" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">7</span>
+        <div class="track-meta">
+          <div class="track-title">MATADORA</div>
+          <div class="track-artist">INTERTONE</div>
+        </div>
+      </div>
+    </div>
+
+           <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/Evibe7lPzjU?si=-3go140AvhbZzKNY" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">8</span>
+        <div class="track-meta">
+          <div class="track-title">DARK AURA</div>
+          <div class="track-artist">void</div>
+        </div>
+      </div>
+    </div>
+
+        <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/wUQAlBR7-K4?si=ExWxHhI2V93kwIf_" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">9</span>
+        <div class="track-meta">
+          <div class="track-title">FUNK CRIMINAL</div>
+          <div class="track-artist">ICEDMANE</div>
+        </div>
+      </div>
+    </div>
+
+        <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/iMTttPpJjAY?si=cSUi6gnqVOC2qHeo" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">10</span>
+        <div class="track-meta">
+          <div class="track-title">MONTAGEM ALQUIMIA</div>
+          <div class="track-artist">Yonas blox</div>
+        </div>
+      </div>
+    </div>
+
+        <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560"
+height="315" 
+src="https://www.youtube.com/embed/ojCbolxVf5Q?si=NSeGrLfjHNHMctcD" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">11</span>
+        <div class="track-meta">
+          <div class="track-title">SEMPERO</div>
+          <div class="track-artist">Phonkmania</div>
+        </div>
+      </div>
+    </div>
+
+        <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/6HJjhZ-jloI?si=-aHZ4sBVvNMgkvtk" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">12</span>
+        <div class="track-meta">
+          <div class="track-title">HEAVENLY JUMPSTYLE</div>
+          <div class="track-artist">The Vibe Guide</div>
+        </div>
+      </div>
+    </div>
+
+        <div class="track-card">
+      <div class="video-panel">
+        <div class="video-wrap">
+<iframe 
+width="560" 
+height="315" 
+src="https://www.youtube.com/embed/7LjwJW3fnKQ?si=mCZqQMhU1rGWiL6N" 
+title="YouTube video player" 
+frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+referrerpolicy="strict-origin-when-cross-origin" 
+allowfullscreen>
+</iframe>
+        </div>
+      </div>
+      <div class="track-header">
+        <span class="rank">13</span>
+        <div class="track-meta">
+          <div class="track-title">VEM VEM FUNK (Ultra Slowed)</div>
+          <div class="track-artist">Deniz t.m</div>
+        </div>
+      </div>
+    </div>
+
+<div class="track-card">
+  <div class="video-panel">
+    <div class="video-wrap"></div>
+  </div>
+  <div class="track-header">
+    <div class="track-meta">
+      <div class="track-title">COMING SOON</div>
+      <div class="track-artist"></div>
+    </div>
+    <span class="track-badge">Soon</span>
+  </div>
+</div>
+
+  </div>
+</main>
+
+<footer>
+  <p><span class="tagline">New Tracks Added Periodically</span><br>&nbsp;<br>&copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists</p>
+</footer>
+
+</body>
+</html>
