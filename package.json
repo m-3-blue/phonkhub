@@ -1,0 +1,23 @@
+{
+  "name": "phonkhub",
+  "version": "1.0.0",
+  "description": "Official PhonkHub: Goon to the moon!",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m-3-blue/phonkhub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/m-3-blue/phonkhub/issues"
+  },
+  "homepage": "https://github.com/m-3-blue/phonkhub#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
