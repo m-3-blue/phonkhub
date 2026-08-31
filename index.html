@@ -23,755 +23,911 @@
 <link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --red: #ff9900;
-    --red-dim: #cb7603;
-    --white: #f0ece4;
-    --gray: #888;
-    --bg: #080808;
-    --card-bg: #111;
-    --border: #222;
-  }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
+    :root {
+      --red: #ff9900;
+      --red-dim: #cb7603;
+      --white: #f0ece4;
+      --gray: #888;
+      --bg: #080808;
+      --card-bg: #111;
+      --border: #222;
+    }
 
-  body {
-    background-color: var(--bg);
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.013) 60px, rgba(255,255,255,0.013) 61px),
-      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.013) 60px, rgba(255,255,255,0.013) 61px);
-    color: var(--white);
-    font-family: 'Barlow', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 3rem 1rem 2rem;
-    position: relative;
-  }
+    html,
+    body {
+      min-height: 100vh;
+    }
 
-  header::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--red), transparent);
-    margin-top: 2rem;
-  }
+    body {
+      background: #000000;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+    }
 
-  #logo {
-    width: clamp(14rem, 30vw, 22rem);
-    animation: logoIn 0.8s cubic-bezier(.16,1,.3,1) both;
-  }
+    header {
+      position: relative;
+      background: #050505;
+      border-bottom: 1px solid #242424;
+    }
 
-  @keyframes logoIn {
-    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
+    .header-main,
+    .nav-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
 
-  .tagline {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-    letter-spacing: 0.35em;
-    line-height: 1.15;
-    text-transform: uppercase;
-    text-align: center;
-    color: var(--red);
-    margin-top: 0.2rem;
-    animation: fadeIn 1s 0.3s both;
-  }
+    .header-main {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1.15rem;
+      padding: 0.75rem 1.25rem;
+    }
 
+    .brand-lockup {
+      display: inline-flex;
+      align-items: center;
+    }
 
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem 5rem;
-  }
+    #logo {
+      display: block;
+      width: clamp(8rem, 14vw, 11.5rem);
+      height: auto;
+      animation: logoIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
 
-  .track-section {
-    margin-bottom: 3.5rem;
-  }
+    .search-box {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      max-width: 32rem;
+      height: 2.35rem;
+      padding: 0 0.8rem;
+      border: 1px solid #303030;
+      border-radius: 999px;
+      background: #191919;
+      color: #aaa;
+      justify-self: center;
+      width: 100%;
+      pointer-events: none; /* 👈 makes it unclickable */
+      cursor: default;
+    }
+    .search-box svg {
+      width: 1rem;
+      height: 1rem;
+      flex: 0 0 auto;
+    }
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      padding: 0 0.6rem;
+      background: transparent;
+      color: var(--white);
+      font: inherit;
+      pointer-events: none; /* extra safety */
+      cursor: default;
+    }
+    .search-box input::placeholder {
+      color: #858585;
+    }
 
-  .track-section:last-child {
-    margin-bottom: 0;
-  }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      justify-self: end;
+    }
 
-  .section-heading {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.65rem;
-    border-bottom: 1px solid var(--border);
-  }
+    .action-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 2.15rem;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid #383838;
+      border-radius: 999px;
+      color: #ddd;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .action-chip.accent {
+      background: var(--red);
+      border-color: var(--red);
+      color: #080808;
+    }
 
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.6rem, 3vw, 2.25rem);
-    letter-spacing: 0.08em;
-    line-height: 1;
-    color: var(--white);
-  }
+    .primary-nav {
+      border-top: 1px solid #181818;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1rem, 3vw, 3rem);
+      overflow-x: auto;
+      padding: 0 1.25rem;
+    }
+    .nav-link {
+      position: relative;
+      flex: 0 0 auto;
+      padding: 0.75rem 0.1rem 0.68rem;
+      color: #d4d4d4;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: var(--red);
+      outline: none;
+    }
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--red);
+    }
 
-  .section-kicker {
-    color: var(--red);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
+    @keyframes logoIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
 
-  .featured-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
+    .content-frame {
+      position: relative;
+      max-width: 1600px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: url('https://i.ibb.co/xbYDgSL/Untitled18-20260831201428.png') no-repeat center top / 100% auto;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .featured-card {
-    position: relative;
-    display: flex;
-    min-height: 9.5rem;
-    flex-direction: column;
-    justify-content: flex-end;
-    overflow: hidden;
-    padding: 1.25rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background:
-      linear-gradient(135deg, rgba(255,153,0,0.16), transparent 58%),
-      linear-gradient(160deg, #181818, var(--card-bg));
-    color: var(--white);
-    text-decoration: none;
-    transition: border-color 0.2s, transform 0.2s, background 0.2s;
-  }
+    main {
+      flex: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+      width: 100%;
+    }
 
-  .featured-card::before {
-    content: '';
-    position: absolute;
-    top: -3rem;
-    right: -2rem;
-    width: 8rem;
-    height: 8rem;
-    border: 1px solid rgba(255,153,0,0.22);
-    border-radius: 50%;
-  }
+    .track-section {
+      margin-bottom: 2.75rem;
+    }
 
-  .featured-card:hover,
-  .featured-card:focus-visible {
-    border-color: var(--red-dim);
-    background:
-      linear-gradient(135deg, rgba(255,153,0,0.24), transparent 62%),
-      linear-gradient(160deg, #1d1d1d, var(--card-bg));
-    outline: none;
-    transform: translateY(-2px);
-  }
+    .track-section:first-of-type {
+      margin-top: 215px;
+    }
 
-  .featured-number {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    color: var(--red);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.4rem;
-    line-height: 1;
-    opacity: 0.72;
-  }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.7rem;
+      padding: 0.7rem 0;
+      border: 1px solid #1d1d1d;
+      border-left: 3px solid var(--red);
+      background: rgba(13, 13, 13, 0.8);
+      backdrop-filter: blur(4px);
+    }
+     .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--white);
+      text-transform: uppercase;
+    }
 
-  .featured-card-title {
-    position: relative;
-    z-index: 1;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
+    .featured-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 0 70px;
+    }
 
-  .featured-card-artist {
-    position: relative;
-    z-index: 1;
-    margin-top: 0.25rem;
-    color: var(--gray);
-    font-size: 0.78rem;
-  }
+    .featured-card {
+      position: relative;
+      display: flex;
+      min-height: 9.5rem;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background:
+        linear-gradient(135deg, rgba(255, 153, 0, 0.16), transparent 58%),
+        linear-gradient(160deg, #181818, var(--card-bg));
+      color: var(--white);
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    }
+    .featured-card::before {
+      content: '';
+      position: absolute;
+      top: -3rem;
+      right: -2rem;
+      width: 8rem;
+      height: 8rem;
+      border: 1px solid rgba(255, 153, 0, 0.22);
+      border-radius: 50%;
+    }
+    .featured-card:hover,
+    .featured-card:focus-visible {
+      border-color: var(--red-dim);
+      background:
+        linear-gradient(135deg, rgba(255, 153, 0, 0.24), transparent 62%),
+        linear-gradient(160deg, #1d1d1d, var(--card-bg));
+      outline: none;
+      transform: translateY(-2px);
+    }
+    .featured-number {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: var(--red);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      line-height: 1;
+      opacity: 0.72;
+    }
+    .featured-card-title {
+      position: relative;
+      z-index: 1;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .featured-card-artist {
+      position: relative;
+      z-index: 1;
+      margin-top: 0.25rem;
+      color: var(--gray);
+      font-size: 0.78rem;
+    }
+    .featured-card-link {
+      position: relative;
+      z-index: 1;
+      margin-top: 0.85rem;
+      color: var(--red);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
 
-  .featured-card-link {
-    position: relative;
-    z-index: 1;
-    margin-top: 0.85rem;
-    color: var(--red);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
+    .track-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.55rem;
+      padding: 0 70px;
+    }
 
-  .track-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-  }
+    .track-card {
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid #1d1d1d;
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: cardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    }
+    .track-card:hover {
+      border-color: var(--red-dim);
+      background: rgba(11, 11, 11, 0.95);
+      transform: translateY(-2px);
+    }
 
-  .track-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    animation: cardIn 0.5s cubic-bezier(.16,1,.3,1) both;
-    transition: border-color 0.2s, transform 0.2s;
-  }
+    .track-card:nth-child(1) { animation-delay: 0.05s; }
+    .track-card:nth-child(2) { animation-delay: 0.10s; }
+    .track-card:nth-child(3) { animation-delay: 0.15s; }
+    .track-card:nth-child(4) { animation-delay: 0.20s; }
+    .track-card:nth-child(5) { animation-delay: 0.25s; }
+    .track-card:nth-child(6) { animation-delay: 0.30s; }
+    .track-card:nth-child(7) { animation-delay: 0.35s; }
+    .track-card:nth-child(8) { animation-delay: 0.40s; }
+    .track-card:nth-child(9) { animation-delay: 0.45s; }
 
-  .track-card:hover { border-color: var(--red-dim); transform: translateY(-2px); }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-  .track-card:nth-child(1) { animation-delay: 0.05s; }
-  .track-card:nth-child(2) { animation-delay: 0.10s; }
-  .track-card:nth-child(3) { animation-delay: 0.15s; }
-  .track-card:nth-child(4) { animation-delay: 0.20s; }
-  .track-card:nth-child(5) { animation-delay: 0.25s; }
-  .track-card:nth-child(6) { animation-delay: 0.30s; }
-  .track-card:nth-child(7) { animation-delay: 0.35s; }
-  .track-card:nth-child(8) { animation-delay: 0.40s; }
-  .track-card:nth-child(9) { animation-delay: 0.45s; }
+    .video-panel {
+      display: block !important;
+      border: none;
+      padding: 0;
+      background: #000;
+      flex-shrink: 0;
+    }
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      background: #000;
+    }
+    .video-wrap iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .track-card.coming-soon .video-panel {
+      display: none !important;
+    }
+    .track-card.coming-soon .track-header {
+      border-top: none;
+      padding: 1.25rem 0.75rem;
+      justify-content: center;
+    }
+    .track-card.coming-soon .track-title {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--red);
+    }
 
-  .video-panel {
-    display: block !important;
-    border: none;
-    padding: 0;
-    background: #000;
-    flex-shrink: 0;
-  }
+    .track-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.65rem 0.75rem 0.85rem;
+      border-top: 1px solid #181818;
+      cursor: default;
+      user-select: none;
+      min-width: 0;
+    }
+    .rank {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.35rem;
+      color: var(--red);
+      line-height: 1;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+    .track-card:first-child .rank {
+      opacity: 1;
+      text-shadow: 0 0 16px rgba(255, 153, 0, 0.5);
+    }
 
-  .video-wrap {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    height: 0;
-    background: #000;
-  }
+    .track-meta {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      flex-direction: column;
+    }
+    .track-title {
+      order: 2;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.035em;
+      line-height: 1.08;
+      text-transform: uppercase;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-artist {
+      order: 1;
+      margin: 0 0 0.25rem;
+      color: #a2a2a2;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.45rem;
+      border-radius: 2px;
+      background: rgba(255, 153, 0, 0.12);
+      color: var(--red);
+      border: 1px solid var(--red-dim);
+      white-space: nowrap;
+    }
 
-  .video-wrap iframe {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+    footer {
+      background: #000000;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: #ccc;
+      letter-spacing: 0.1em;
+      border-top: 1px solid var(--border);
+      margin-top: 0;
+    }
 
-  .track-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border-top: 1px solid var(--border);
-    cursor: default;
-    user-select: none;
-    min-width: 0;
-  }
+    .tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(0.68rem, 1.4vw, 0.82rem);
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
 
-  .rank {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    color: var(--red);
-    line-height: 1;
-    flex-shrink: 0;
-    opacity: 0.85;
-  }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
 
-  .track-card:first-child .rank { opacity: 1; text-shadow: 0 0 16px rgba(255,153,0,0.5); }
+    @media (max-width: 780px) {
+      .header-main {
+        grid-template-columns: auto 1fr auto;
+        gap: 0.7rem;
+      }
+      .search-box {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        max-width: none;
+        justify-self: stretch;
+      }
+      .header-actions { gap: 0.35rem; }
+      .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
 
-  .track-meta {
-    flex: 1;
-    min-width: 0;
-  }
+      .section-heading {
+        padding: 0.7rem 0;
+      }
+      .featured-list,
+      .track-list {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 30px;
+      }
+      .content-frame { min-height: auto; }
+      main { padding: 0 0.75rem 3rem; }
+    }
 
-  .track-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    @media (max-width: 480px) {
+      .header-main {
+        padding: 0.65rem 0.75rem;
+        grid-template-columns: auto 1fr auto;
+      }
+      .header-actions .action-chip:first-child { display: none; }
+      .nav-inner { justify-content: flex-start; gap: 1.25rem; }
 
-  .track-artist {
-    font-size: 0.75rem;
-    color: var(--gray);
-    margin-top: 0.15rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+      .section-heading {
+        padding: 0.7rem 0;
+      }
+      .featured-list,
+      .track-list {
+        grid-template-columns: 1fr;
+        padding: 0 8px;
+        gap: 0.85rem;
+      }
 
-  .track-badge {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.2rem 0.45rem;
-    border-radius: 2px;
-    background: rgba(255,153,0,0.12);
-    color: var(--red);
-    border: 1px solid var(--red-dim);
-    white-space: nowrap;
-  }
+      .track-card {
+        border-radius: 6px;
+        background: rgba(5, 5, 5, 0.92);
+        backdrop-filter: blur(4px);
+        border-color: #2a2a2a;
+        transform: none;
+      }
+      .track-card:hover {
+        transform: none;
+        border-color: var(--red-dim);
+      }
 
-  @media (max-width: 780px) {
-    .featured-list,
-    .track-list { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 480px) {
-    .featured-list,
-    .track-list { grid-template-columns: 1fr; }
+      .video-wrap {
+        padding-bottom: 56.25%;
+      }
 
-    .section-heading { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
-  }
+      .track-header {
+        padding: 1rem 1rem 1.1rem;
+        gap: 0.9rem;
+        border-top: 1px solid #282828;
+      }
 
-  footer {
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.75rem;
-    color: #333;
-    letter-spacing: 0.1em;
-    border-top: 1px solid var(--border);
-  }
+      .rank {
+        font-size: 2.2rem;
+        opacity: 1;
+        min-width: 2.2rem;
+      }
 
-  .social-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.35rem;
-    height: 2.35rem;
-    padding: 0;
-    border: 1px solid var(--red-dim);
-    border-radius: 50%;
-    background: rgba(255,153,0,0.12);
-    color: var(--red);
-    text-decoration: none;
-    transition: background 0.2s, color 0.2s, transform 0.2s;
-  }
+      .track-title {
+        font-size: 1.25rem;
+        line-height: 1.15;
+        letter-spacing: 0.05em;
+      }
 
-  .social-link:hover,
-  .social-link:focus-visible {
-    background: var(--red);
-    color: var(--bg);
-    outline: none;
-    transform: translateY(-1px);
-  }
+      .track-artist {
+        font-size: 0.85rem;
+        margin-bottom: 0.3rem;
+        color: #bbb;
+      }
 
-  .social-link:active { transform: scale(0.97); }
+      .track-badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+      }
 
-  .social-icon {
-    width: 1.1rem;
-    height: 1.1rem;
-    fill: currentColor;
-  }
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
 
-  header .social-link {
-    align-self: center;
-    margin-top: 0.1rem;
-    position: relative;
-    top: 12px;
-  }
+      main { padding: 0 0.5rem 2rem; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  @media (max-width: 500px) {
-    .track-badge { display: none; }
-  }
-</style>
+      .track-card.coming-soon .track-header {
+        padding: 1.5rem 1rem;
+      }
+      .track-card.coming-soon .track-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-<header>
-  <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo">
-    <span class="tagline">The Phonk Hub</span>
-
-  <a class="social-link" href="https://discord.gg/gGv7yUQw7y" target="_blank" rel="noopener noreferrer" aria-label="Join PhonkHub on Discord">
-      <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M19.54 5.01A16.84 16.84 0 0 0 15.38 3.7l-.5 1.02a15.6 15.6 0 0 0-5.76 0L8.62 3.7a16.84 16.84 0 0 0-4.16 1.31C1.83 9.03 1.12 12.96 1.47 16.84a16.9 16.9 0 0 0 5.1 2.58l1.23-1.67c-.68-.25-1.33-.56-1.95-.93l.48-.37c3.76 1.76 7.83 1.76 11.54 0l.48.37c-.62.37-1.27.68-1.95.93l1.23 1.67a16.9 16.9 0 0 0 5.1-2.58c.41-4.49-.7-8.38-3.19-11.83ZM8.35 15.02c-1.13 0-2.06-1.04-2.06-2.32s.91-2.32 2.06-2.32 2.08 1.04 2.06 2.32c0 1.28-.91 2.32-2.06 2.32Zm7.3 0c-1.13 0-2.06-1.04-2.06-2.32s.91-2.32 2.06-2.32 2.08 1.04 2.06 2.32c0 1.28-.91 2.32-2.06 2.32Z"/>
-      </svg>
-    </a>
-</header>
-
-<main>
-  <section class="track-section" aria-labelledby="featured-heading">
-    <div class="section-heading">
-      <h2 class="section-title" id="featured-heading">Featured</h2>
-    </div>
-    <div class="featured-list">
-      <article class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/neWz6AFzfkA?si=gWEraASeIccip6CZ" title="Hava Nagila Hardtekk Remix by Dmitry Webster" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">1</span>
-          <div class="track-meta">
-            <div class="track-title">HAVA NAGILA (HARDTEKK REMIX)</div>
-            <div class="track-artist">Dmitry Webster</div>
-          </div>
-          <span class="track-badge">Top</span>
-        </div>
-      </article>
-
-      <article class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/7gW_OjuEwOM?si=T4A0F7ndeAanrpyr" title="EFN HardTekk Slowed by zesuna" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">2</span>
-          <div class="track-meta">
-            <div class="track-title">EFN (HardTekk - Slowed)</div>
-            <div class="track-artist">zesuna</div>
-          </div>
-          <span class="track-badge">Top</span>
-        </div>
-      </article>
-
-      <article class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/xVS4zgb9AuU?si=rFWE66PANndVRMB-" title="Tiki Tiki by Qmiir" frameborder="0" allow="accelerometer; autoplay; clipboard; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">3</span>
-          <div class="track-meta">
-            <div class="track-title">TIKI TIKI</div>
-            <div class="track-artist">QMIIR</div>
-          </div>
-          <span class="track-badge">Top</span>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section class="track-section" aria-labelledby="all-tracks-heading">
-    <div class="section-heading">
-      <h2 class="section-title" id="all-tracks-heading">All Tracks</h2>
-    </div>
-    <div class="track-list" id="trackList">
-
-            <div class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/52IoCmGPnx8?si=MBYQ6XtCTW3QeTvQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">4</span>
-          <div class="track-meta">
-            <div class="track-title">Miguel Phonk</div>
-            <div class="track-artist">DJ Tuff</div>
-          </div>
-          <span class="track-badge">New</span>
-          <span class="track-badge">Hot</span>
-        </div>
-      </div>
-
-            <div class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/ZbJa2ialf-M?si=4osALazHJe41KZTG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">5</span>
-          <div class="track-meta">
-            <div class="track-title">VERITY HARDTEKK</div>
-            <div class="track-artist">EUPHXRIA</div>
-          </div>
-          <span class="track-badge">New</span>
-          <span class="track-badge">Hot</span>
-        </div>
-      </div>
-
-            <div class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/X_TB2B1_uU8?si=Cs0Rq2IPIw2RR5mr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">6</span>
-          <div class="track-meta">
-            <div class="track-title">OH NO NO NO FUNKk</div>
-            <div class="track-artist">Loop Hit Music</div>
-          </div>
-          <span class="track-badge">Hot</span>
-        </div>
-      </div>
-      
-      <div class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/EkXu0bPHP-0?si=p3LRP2by8pXM6Q-V" title="Yara Yara Ya Funk by Joko Phonk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">7</span>
-          <div class="track-meta">
-            <div class="track-title">YARA YARA YA FUNK</div>
-            <div class="track-artist">JOKO PHONK</div>
-          </div>
-          <span class="track-badge">Hot</span>
-        </div>
-      </div>
-
-      <div class="track-card">
-        <div class="video-panel">
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/aVrxbSbyIgU?si=86CkC4UzXJucC-rZ" title="No Batidão by Phonk Time" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="track-header">
-          <span class="rank">8</span>
-          <div class="track-meta">
-            <div class="track-title">NO BATIDÃO</div>
-            <div class="track-artist">Phonk Time</div>
-          </div>
-          <span class="track-badge">Hot</span>
-        </div>
-      </div>
-
-       <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/vQIhJQXSfdM?si=JTiH0Bf-4T0aUzFm" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">9</span>
-        <div class="track-meta">
-          <div class="track-title">CALA BONITA (Instagram Remix)</div>
-          <div class="track-artist">zedow.</div>
-        </div>
-      </div>
-    </div>
-    
-       <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/65Mb6GcqZ6A?si=Y8p9AGlC7cw5LO95" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">10</span>
-        <div class="track-meta">
-          <div class="track-title">MATADORA</div>
-          <div class="track-artist">INTERTONE</div>
-        </div>
+  <header id="top">
+    <div class="header-main">
+      <a class="brand-lockup" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <label class="search-box" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+        <input type="search" placeholder="Search PhonkHub" aria-label="Search tracks" readonly onfocus="this.blur()" />
+      </label>
+      <div class="header-actions">
+        <a class="action-chip accent" href="#featured-heading">Featured</a>
+        <a class="action-chip" href="https://discord.gg/gGv7yUQw7y" target="_blank" rel="noopener noreferrer">Join Discord</a>
       </div>
     </div>
 
-           <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/Evibe7lPzjU?si=-3go140AvhbZzKNY" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
-        </div>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <div class="nav-inner">
+        <a class="nav-link active" >Home</a>
+        <a class="nav-link" >Featured</a>
+        <a class="nav-link" >All Tracks</a>
+        <a class="nav-link" >Genres</a>
+        <a class="nav-link" >Community</a>
+        <a class="nav-link" >About</a>
       </div>
-      <div class="track-header">
-        <span class="rank">11</span>
-        <div class="track-meta">
-          <div class="track-title">DARK AURA</div>
-          <div class="track-artist">void</div>
-        </div>
-      </div>
-    </div>
+    </nav>
+  </header>
 
-        <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/wUQAlBR7-K4?si=ExWxHhI2V93kwIf_" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
+  <div class="content-frame">
+    <main>
+      <section class="track-section" aria-labelledby="featured-heading">
+        <div class="section-heading">
+          <h2 class="section-title" id="featured-heading">Featured</h2>
         </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">12</span>
-        <div class="track-meta">
-          <div class="track-title">FUNK CRIMINAL</div>
-          <div class="track-artist">ICEDMANE</div>
-        </div>
-      </div>
-    </div>
+        <div class="featured-list">
+          <article class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/neWz6AFzfkA?si=gWEraASeIccip6CZ" title="Hava Nagila Hardtekk Remix by Dmitry Webster" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">1</span>
+              <div class="track-meta">
+                <div class="track-title">HAVA NAGILA (HARDTEKK REMIX)</div>
+                <div class="track-artist">Dmitry Webster</div>
+              </div>
+              <span class="track-badge">Top</span>
+            </div>
+          </article>
 
-        <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/iMTttPpJjAY?si=cSUi6gnqVOC2qHeo" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">13</span>
-        <div class="track-meta">
-          <div class="track-title">MONTAGEM ALQUIMIA</div>
-          <div class="track-artist">Yonas blox</div>
-        </div>
-      </div>
-    </div>
+          <article class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/7gW_OjuEwOM?si=T4A0F7ndeAanrpyr" title="EFN HardTekk Slowed by zesuna" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">2</span>
+              <div class="track-meta">
+                <div class="track-title">EFN (HardTekk - Slowed)</div>
+                <div class="track-artist">zesuna</div>
+              </div>
+              <span class="track-badge">Top</span>
+            </div>
+          </article>
 
-        <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560"
-height="315" 
-src="https://www.youtube.com/embed/ojCbolxVf5Q?si=NSeGrLfjHNHMctcD" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
+          <article class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/xVS4zgb9AuU?si=rFWE66PANndVRMB-" title="Tiki Tiki by Qmiir" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">3</span>
+              <div class="track-meta">
+                <div class="track-title">TIKI TIKI</div>
+                <div class="track-artist">QMIIR</div>
+              </div>
+              <span class="track-badge">Top</span>
+            </div>
+          </article>
         </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">14</span>
-        <div class="track-meta">
-          <div class="track-title">SEMPERO</div>
-          <div class="track-artist">Phonkmania</div>
-        </div>
-      </div>
-    </div>
+      </section>
 
-        <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe 
-width="560" 
-height="315" 
-src="https://www.youtube.com/embed/6HJjhZ-jloI?si=-aHZ4sBVvNMgkvtk" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-referrerpolicy="strict-origin-when-cross-origin" 
-allowfullscreen>
-</iframe>
+      <section class="track-section" aria-labelledby="all-tracks-heading">
+        <div class="section-heading">
+          <h2 class="section-title" id="all-tracks-heading">All Tracks</h2>
         </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">15</span>
-        <div class="track-meta">
-          <div class="track-title">HEAVENLY JUMPSTYLE</div>
-          <div class="track-artist">The Vibe Guide</div>
-        </div>
-      </div>
-    </div>
+        <div class="track-list" id="trackList">
 
-        <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/JjPtDl6EJ3o?si=EonPI8IeScenb49Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">16</span>
-        <div class="track-meta">
-          <div class="track-title">MONTAGEM XONADA</div>
-          <div class="track-artist">TheGoodVibe</div>
-        </div>
-      </div>
-    </div>
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/52IoCmGPnx8?si=MBYQ6XtCTW3QeTvQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">4</span>
+              <div class="track-meta">
+                <div class="track-title">Miguel Phonk</div>
+                <div class="track-artist">DJ Tuff</div>
+              </div>
+              <span class="track-badge">New</span>
+              <span class="track-badge">Hot</span>
+            </div>
+          </div>
 
-      <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/hC0O9EVZQcg?si=wgp9UQWVKQ6ZBbAx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">17</span>
-        <div class="track-meta">
-          <div class="track-title">MISERY PHONK</div>
-          <div class="track-artist">BERSERK PHONK</div>
-        </div>
-      </div>
-    </div>
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/ZbJa2ialf-M?si=4osALazHJe41KZTG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">5</span>
+              <div class="track-meta">
+                <div class="track-title">VERITY HARDTEKK</div>
+                <div class="track-artist">EUPHXRIA</div>
+              </div>
+              <span class="track-badge">New</span>
+              <span class="track-badge">Hot</span>
+            </div>
+          </div>
 
-            <div class="track-card">
-      <div class="video-panel">
-        <div class="video-wrap">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/NbuzmpmB8Jo?si=gwDaM8Q6KFeUyr2l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>
-      </div>
-      <div class="track-header">
-        <span class="rank">18</span>
-        <div class="track-meta">
-          <div class="track-title">HELLO NEIGHBOUR PHONK</div>
-          <div class="track-artist">DUCKYBLXX</div>
-        </div>
-      </div>
-    </div>
-      
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/X_TB2B1_uU8?si=Cs0Rq2IPIw2RR5mr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">6</span>
+              <div class="track-meta">
+                <div class="track-title">OH NO NO NO FUNKk</div>
+                <div class="track-artist">Loop Hit Music</div>
+              </div>
+              <span class="track-badge">Hot</span>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/EkXu0bPHP-0?si=p3LRP2by8pXM6Q-V" title="Yara Yara Ya Funk by Joko Phonk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">7</span>
+              <div class="track-meta">
+                <div class="track-title">YARA YARA YA FUNK</div>
+                <div class="track-artist">JOKO PHONK</div>
+              </div>
+              <span class="track-badge">Hot</span>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/aVrxbSbyIgU?si=86CkC4UzXJucC-rZ" title="No Batidão by Phonk Time" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">8</span>
+              <div class="track-meta">
+                <div class="track-title">NO BATIDÃO</div>
+                <div class="track-artist">Phonk Time</div>
+              </div>
+              <span class="track-badge">Hot</span>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/vQIhJQXSfdM?si=JTiH0Bf-4T0aUzFm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">9</span>
+              <div class="track-meta">
+                <div class="track-title">CALA BONITA (Instagram Remix)</div>
+                <div class="track-artist">zedow.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/65Mb6GcqZ6A?si=Y8p9AGlC7cw5LO95" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">10</span>
+              <div class="track-meta">
+                <div class="track-title">MATADORA</div>
+                <div class="track-artist">INTERTONE</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/Evibe7lPzjU?si=-3go140AvhbZzKNY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">11</span>
+              <div class="track-meta">
+                <div class="track-title">DARK AURA</div>
+                <div class="track-artist">void</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/wUQAlBR7-K4?si=ExWxHhI2V93kwIf_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">12</span>
+              <div class="track-meta">
+                <div class="track-title">FUNK CRIMINAL</div>
+                <div class="track-artist">ICEDMANE</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/iMTttPpJjAY?si=cSUi6gnqVOC2qHeo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">13</span>
+              <div class="track-meta">
+                <div class="track-title">MONTAGEM ALQUIMIA</div>
+                <div class="track-artist">Yonas blox</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/ojCbolxVf5Q?si=NSeGrLfjHNHMctcD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">14</span>
+              <div class="track-meta">
+                <div class="track-title">SEMPERO</div>
+                <div class="track-artist">Phonkmania</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/6HJjhZ-jloI?si=-aHZ4sBVvNMgkvtk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">15</span>
+              <div class="track-meta">
+                <div class="track-title">HEAVENLY JUMPSTYLE</div>
+                <div class="track-artist">The Vibe Guide</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/JjPtDl6EJ3o?si=EonPI8IeScenb49Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">16</span>
+              <div class="track-meta">
+                <div class="track-title">MONTAGEM XONADA</div>
+                <div class="track-artist">TheGoodVibe</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/hC0O9EVZQcg?si=wgp9UQWVKQ6ZBbAx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">17</span>
+              <div class="track-meta">
+                <div class="track-title">MISERY PHONK</div>
+                <div class="track-artist">BERSERK PHONK</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-card">
+            <div class="video-panel">
+              <div class="video-wrap">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/NbuzmpmB8Jo?si=gwDaM8Q6KFeUyr2l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="track-header">
+              <span class="rank">18</span>
+              <div class="track-meta">
+                <div class="track-title">HELLO NEIGHBOUR PHONK</div>
+                <div class="track-artist">DUCKYBLXX</div>
+              </div>
+            </div>
+          </div>
+
 <div class="track-card">
   <div class="video-panel">
     <div class="video-wrap"></div>
@@ -785,26 +941,17 @@ allowfullscreen>
   </div>
 </div>
 
+        </div>
+      </section>
+    </main>
   </div>
-  </section>
-</main>
 
-<footer>
-  <p><span class="tagline">New Tracks Added Periodically</span><br>&nbsp;<br>&copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists</p>
-</footer>
-
-<script>
-(function(pfsh){
-var d = document,
-    s = d.createElement(‘script’),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = pfsh || {};
-s.src = “\/\/relieved-understanding.com\/bVXXV.s\/dlGVl_0CY-Wic_\/heAm\/9CuaZ\/Ujl\/kIP\/T\/cuzJN\/jvkp3tNMzmMstmNNzuMV2cOLTzca3ZNbwn”;
-s.async = true;
-s.referrerPolicy = ‘no-referrer-when-downgrade’;
-l.parentNode.insertBefore(s, l);
-})({})
-</script>
+  <footer>
+    <p>
+      <span class="tagline">New Tracks Added Periodically</span><br />&nbsp;<br />
+      &copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists
+    </p>
+  </footer>
 
 <script>
 (function(cfzet){
@@ -832,7 +979,7 @@ l.parentNode.insertBefore(s, l);
 })({})
 </script>
 
-  <script>
+    <script>
 (function(pqby){
 var d = document,
     s = d.createElement('script'),
@@ -844,7 +991,7 @@ s.referrerPolicy = 'no-referrer-when-downgrade';
 l.parentNode.insertBefore(s, l);
 })({})
 </script>
-  
+
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
@@ -856,6 +1003,6 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-  
+
 </body>
 </html>
