@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track — PhonkHub</title>
+<meta name="description" content="Official PhonkHub: Goon to the moon!" />
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --red: #ff9900;
+    --red-dim: #cb7603;
+    --white: #f0ece4;
+    --gray: #888;
+    --bg: #080808;
+    --card-bg: #111;
+    --border: #222;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body { min-height: 100vh; }
+
+  body {
+    background: #000000;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  header {
+    position: relative;
+    background: #050505;
+    border-bottom: 1px solid #242424;
+  }
+
+  .header-main, .nav-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .header-main {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.15rem;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .brand-lockup { display: inline-flex; align-items: center; }
+
+  #logo {
+    display: block;
+    width: clamp(8rem, 14vw, 11.5rem);
+    height: auto;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 32rem;
+    height: 2.35rem;
+    padding: 0 0.8rem;
+    border: 1px solid #303030;
+    border-radius: 999px;
+    background: #191919;
+    color: #aaa;
+    justify-self: center;
+    width: 100%;
+    pointer-events: none;
+  }
+  .search-box svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
+  .search-box input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    padding: 0 0.6rem;
+    background: transparent;
+    color: var(--white);
+    font: inherit;
+    pointer-events: none;
+  }
+  .search-box input::placeholder { color: #858585; }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    justify-self: end;
+  }
+
+  .action-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.15rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #383838;
+    border-radius: 999px;
+    color: #ddd;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .action-chip.accent {
+    background: var(--red);
+    border-color: var(--red);
+    color: #080808;
+  }
+
+  .primary-nav { border-top: 1px solid #181818; }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 3rem);
+    overflow-x: auto;
+    padding: 0 1.25rem;
+  }
+  .nav-link {
+    position: relative;
+    flex: 0 0 auto;
+    padding: 0.75rem 0.1rem 0.68rem;
+    color: #d4d4d4;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-link:hover, .nav-link:focus-visible { color: var(--red); outline: none; }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    width: 100%;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #999;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--red); }
+
+  .player-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    background: #000;
+    border: 1px solid #1d1d1d;
+    margin-bottom: 1.5rem;
+  }
+  .player-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .track-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #1d1d1d;
+    margin-bottom: 2rem;
+  }
+
+  .rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--red);
+    line-height: 1;
+    flex-shrink: 0;
+    text-shadow: 0 0 20px rgba(255, 153, 0, 0.4);
+  }
+
+  .meta { flex: 1; min-width: 0; }
+
+  .track-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .track-artist {
+    color: #a2a2a2;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+
+  .section-heading {
+    margin-bottom: 0.7rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #1d1d1d;
+    border-left: 3px solid var(--red);
+    background: rgba(13, 13, 13, 0.8);
+  }
+
+  .track-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
+  }
+
+  .track-card {
+    background: rgba(5, 5, 5, 0.85);
+    border: 1px solid #1d1d1d;
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  }
+  .track-card:hover {
+    border-color: var(--red-dim);
+    background: rgba(11, 11, 11, 0.95);
+    transform: translateY(-2px);
+  }
+
+  .thumb-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    background: #000;
+    overflow: hidden;
+  }
+  .thumb-wrap img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s;
+  }
+  .track-card:hover .thumb-wrap img { transform: scale(1.04); }
+
+  .track-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.65rem 0.75rem 0.85rem;
+    border-top: 1px solid #181818;
+    min-width: 0;
+  }
+
+  .card-rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem;
+    color: var(--red);
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  .track-meta {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .card-title {
+    order: 2;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    line-height: 1.08;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-artist {
+    order: 1;
+    margin: 0 0 0.25rem;
+    color: #a2a2a2;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  footer {
+    background: #000000;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: #ccc;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+
+  .tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.68rem, 1.4vw, 0.82rem);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .loading-msg {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gray);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 780px) {
+    .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
+    .search-box {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      max-width: none;
+      justify-self: stretch;
+    }
+    .header-actions { gap: 0.35rem; }
+    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+    .track-list { grid-template-columns: 1fr; }
+    main { padding: 0 0.75rem 3rem; }
+  }
+
+  @media (max-width: 480px) {
+    .header-main { padding: 0.65rem 0.75rem; }
+    .header-actions .action-chip:first-child { display: none; }
+    .nav-inner { justify-content: flex-start; gap: 1.25rem; }
+    .rank { font-size: 2.5rem; }
+  }
+</style>
+</head>
+
+<body>
+  <header id="top">
+    <div class="header-main">
+      <a class="brand-lockup" href="/" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <label class="search-box" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+        <input type="search" placeholder="Search PhonkHub" aria-label="Search tracks" readonly onfocus="this.blur()" />
+      </label>
+      <div class="header-actions">
+        <a class="action-chip accent" href="/">Featured</a>
+        <a class="action-chip" href="https://discord.gg/b7gQNCpjy4" target="_blank" rel="noopener noreferrer">Join Discord</a>
+      </div>
+    </div>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <div class="nav-inner">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link">Featured</a>
+        <a class="nav-link">All Tracks</a>
+        <a class="nav-link">Genres</a>
+        <a class="nav-link">Community</a>
+        <a class="nav-link">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="loading-msg">Loading…</div>
+  </main>
+
+  <footer>
+    <p>
+      <span class="tagline">New Tracks Added Periodically</span><br />&nbsp;<br />
+      &copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists
+    </p>
+  </footer>
+
+<script>
+  function thumbUrl(id) {
+    return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+  }
+
+  function esc(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Get the track ID from the URL: /track-5  ->  5
+  function getTrackId() {
+    var match = window.location.pathname.match(/^\/track-(\d+)/);
+    return match ? match[1] : null;
+  }
+
+  function buildCard(track) {
+    return (
+      '<a class="track-card" href="/track-' + track.id + '">' +
+        '<div class="thumb-wrap">' +
+          '<img loading="lazy" src="' + thumbUrl(track.youtube_id) + '" alt="' + esc(track.title) + '">' +
+        '</div>' +
+        '<div class="track-header">' +
+          '<span class="card-rank">' + track.id + '</span>' +
+          '<div class="track-meta">' +
+            '<div class="card-title">' + esc(track.title) + '</div>' +
+            '<div class="card-artist">' + esc(track.artist) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</a>'
+    );
+  }
+
+  function renderError(msg) {
+    document.getElementById('main').innerHTML =
+      '<div class="loading-msg">' + msg + '</div>';
+  }
+
+  var id = getTrackId();
+  if (!id) {
+    renderError('Track not found');
+  } else {
+    fetch('/api/tracks?id=' + id)
+      .then(function (r) {
+        if (!r.ok) throw new Error('Track not found');
+        return r.json();
+      })
+      .then(function (data) {
+        var t = data.track;
+        var recs = data.recommended || [];
+
+        var html =
+          '<a class="back-link" href="/">← Back to all tracks</a>' +
+          '<div class="player-wrap">' +
+            '<iframe src="https://www.youtube.com/embed/' + t.youtube_id + '?autoplay=1" ' +
+              'title="' + esc(t.title) + '" ' +
+              'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+              'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' +
+          '</div>' +
+          '<div class="track-info">' +
+            '<span class="rank">' + t.id + '</span>' +
+            '<div class="meta">' +
+              '<div class="track-title">' + esc(t.title) + '</div>' +
+              '<div class="track-artist">' + esc(t.artist) + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="section-heading"><h2 class="section-title">Recommended</h2></div>' +
+          '<div class="track-list">' +
+            recs.map(buildCard).join('') +
+          '</div>';
+
+        document.getElementById('main').innerHTML = html;
+        document.title = t.title + ' — PhonkHub';
+      })
+      .catch(function () {
+        renderError('Track not found');
+      });
+  }
+</script>
+
+<script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//relieved-understanding.com/bTX-Vus.d/GEln0LYpWqcH/peQmP9vuvZWUIlCkmPTTOcWzJNhj/kIwtMTTjcbttNEzCME2nOYTrAiybMSQ-";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+<script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//unfolded-uncle.com/cVD.9p6Kbo2E5/l/S_WbQD9fNQzzM_2MOGD/k/3kN/y/0Q3wM/ziYJ4/OkThgCxw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+<script>
+(function(pqby){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = pqby || {};
+s.src = "//relieved-understanding.com/bgXGV.sQdkGrlt0nYSWAcR/meomJ9OuFZeUalZk/PRTwc-zCNMjmkowYN/TacttjNTzaMi2pOfTcAN2KMuQw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+</body>
+</html>

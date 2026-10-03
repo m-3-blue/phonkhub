@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhonkHub</title>
+<meta name="description" content="Official PhonkHub: Goon to the moon!" />
+<link rel="canonical" href="https://phonkhub.online/" />
+
+<meta itemprop="name" content="PhonkHub" />
+<meta itemprop="description" content="Official PhonkHub: Goon to the moon!" />
+<meta itemprop="image" content="https://i.ibb.co/qLQrcbPq/phonk-hub.png" />
+
+<meta property="og:url" content="https://phonk-hub.netlify.app/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="PhonkHub" />
+<meta property="og:description" content="Official PhonkHub: Goon to the moon!" />
+<meta property="og:image" content="https://i.ibb.co/qLQrcbPq/phonk-hub.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="PhonkHub" />
+<meta name="twitter:description" content="Official PhonkHub: Goon to the moon!" />
+<meta name="twitter:image" content="https://i.ibb.co/qLQrcbPq/phonk-hub.png" />
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --red: #ff9900;
+      --red-dim: #cb7603;
+      --white: #f0ece4;
+      --gray: #888;
+      --bg: #080808;
+      --card-bg: #111;
+      --border: #222;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+    }
+
+    body {
+      background: #000000;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: relative;
+      background: #050505;
+      border-bottom: 1px solid #242424;
+    }
+
+    .header-main,
+    .nav-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .header-main {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1.15rem;
+      padding: 0.75rem 1.25rem;
+    }
+
+    .brand-lockup {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    #logo {
+      display: block;
+      width: clamp(8rem, 14vw, 11.5rem);
+      height: auto;
+      animation: logoIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      max-width: 32rem;
+      height: 2.35rem;
+      padding: 0 0.8rem;
+      border: 1px solid #303030;
+      border-radius: 999px;
+      background: #191919;
+      color: #aaa;
+      justify-self: center;
+      width: 100%;
+      pointer-events: none; 
+      cursor: default;
+    }
+    .search-box svg {
+      width: 1rem;
+      height: 1rem;
+      flex: 0 0 auto;
+    }
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      padding: 0 0.6rem;
+      background: transparent;
+      color: var(--white);
+      font: inherit;
+      pointer-events: none; 
+      cursor: default;
+    }
+    .search-box input::placeholder {
+      color: #858585;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      justify-self: end;
+    }
+
+    .action-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 2.15rem;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid #383838;
+      border-radius: 999px;
+      color: #ddd;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .action-chip.accent {
+      background: var(--red);
+      border-color: var(--red);
+      color: #080808;
+    }
+
+    .primary-nav {
+      border-top: 1px solid #181818;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1rem, 3vw, 3rem);
+      overflow-x: auto;
+      padding: 0 1.25rem;
+    }
+    .nav-link {
+      position: relative;
+      flex: 0 0 auto;
+      padding: 0.75rem 0.1rem 0.68rem;
+      color: #d4d4d4;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: var(--red);
+      outline: none;
+    }
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--red);
+    }
+
+    @keyframes logoIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .content-frame {
+      position: relative;
+      max-width: 1600px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: url('https://i.ibb.co/xbYDgSL/Untitled18-20260831201428.png') no-repeat center top / 100% auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+      width: 100%;
+    }
+
+    .track-section {
+      margin-bottom: 2.75rem;
+    }
+
+    .track-section:first-of-type {
+      margin-top: 215px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.7rem;
+      padding: 0.7rem 0;
+      border: 1px solid #1d1d1d;
+      border-left: 3px solid var(--red);
+      background: rgba(13, 13, 13, 0.8);
+      backdrop-filter: blur(4px);
+    }
+     .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .featured-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 0 70px;
+    }
+
+    .track-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.55rem;
+      padding: 0 70px;
+    }
+
+    .track-card {
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid #1d1d1d;
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      animation: cardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    }
+    .track-card:hover {
+      border-color: var(--red-dim);
+      background: rgba(11, 11, 11, 0.95);
+      transform: translateY(-2px);
+    }
+
+    .track-card:nth-child(1) { animation-delay: 0.05s; }
+    .track-card:nth-child(2) { animation-delay: 0.10s; }
+    .track-card:nth-child(3) { animation-delay: 0.15s; }
+    .track-card:nth-child(4) { animation-delay: 0.20s; }
+    .track-card:nth-child(5) { animation-delay: 0.25s; }
+    .track-card:nth-child(6) { animation-delay: 0.30s; }
+    .track-card:nth-child(7) { animation-delay: 0.35s; }
+    .track-card:nth-child(8) { animation-delay: 0.40s; }
+    .track-card:nth-child(9) { animation-delay: 0.45s; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .thumb-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      background: #000;
+      overflow: hidden;
+    }
+    .thumb-wrap img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s;
+    }
+    .track-card:hover .thumb-wrap img {
+      transform: scale(1.04);
+    }
+    .thumb-wrap::after {
+      content: '▶';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid var(--red);
+      border-radius: 50%;
+      color: var(--red);
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .track-card:hover .thumb-wrap::after {
+      opacity: 1;
+    }
+
+    .track-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.65rem 0.75rem 0.85rem;
+      border-top: 1px solid #181818;
+      cursor: default;
+      user-select: none;
+      min-width: 0;
+    }
+    .rank {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.35rem;
+      color: var(--red);
+      line-height: 1;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+    .track-card:first-child .rank {
+      opacity: 1;
+      text-shadow: 0 0 16px rgba(255, 153, 0, 0.5);
+    }
+
+    .track-meta {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      flex-direction: column;
+    }
+    .track-title {
+      order: 2;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.035em;
+      line-height: 1.08;
+      text-transform: uppercase;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-artist {
+      order: 1;
+      margin: 0 0 0.25rem;
+      color: #a2a2a2;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.45rem;
+      border-radius: 2px;
+      background: rgba(255, 153, 0, 0.12);
+      color: var(--red);
+      border: 1px solid var(--red-dim);
+      white-space: nowrap;
+    }
+
+    footer {
+      background: #000000;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: #ccc;
+      letter-spacing: 0.1em;
+      border-top: 1px solid var(--border);
+      margin-top: 0;
+    }
+
+    .tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(0.68rem, 1.4vw, 0.82rem);
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .loading-msg {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 780px) {
+      .header-main {
+        grid-template-columns: auto 1fr auto;
+        gap: 0.7rem;
+      }
+      .search-box {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        max-width: none;
+        justify-self: stretch;
+      }
+      .header-actions { gap: 0.35rem; }
+      .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+
+      .section-heading {
+        padding: 0.7rem 0;
+      }
+      .featured-list,
+      .track-list {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 30px;
+      }
+      .content-frame { min-height: auto; }
+      main { padding: 0 0.75rem 3rem; }
+    }
+
+    @media (max-width: 480px) {
+      .header-main {
+        padding: 0.65rem 0.75rem;
+        grid-template-columns: auto 1fr auto;
+      }
+      .header-actions .action-chip:first-child { display: none; }
+      .nav-inner { justify-content: flex-start; gap: 1.25rem; }
+
+      .section-heading {
+        padding: 0.7rem 0;
+      }
+      .featured-list,
+      .track-list {
+        grid-template-columns: 1fr;
+        padding: 0 8px;
+        gap: 0.85rem;
+      }
+
+      .track-card {
+        border-radius: 6px;
+        background: rgba(5, 5, 5, 0.92);
+        backdrop-filter: blur(4px);
+        border-color: #2a2a2a;
+        transform: none;
+      }
+      .track-card:hover {
+        transform: none;
+        border-color: var(--red-dim);
+      }
+
+      .track-header {
+        padding: 1rem 1rem 1.1rem;
+        gap: 0.9rem;
+        border-top: 1px solid #282828;
+      }
+
+      .rank {
+        font-size: 2.2rem;
+        opacity: 1;
+        min-width: 2.2rem;
+      }
+
+      .track-title {
+        font-size: 1.25rem;
+        line-height: 1.15;
+        letter-spacing: 0.05em;
+      }
+
+      .track-artist {
+        font-size: 0.85rem;
+        margin-bottom: 0.3rem;
+        color: #bbb;
+      }
+
+      .track-badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+      }
+
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      main { padding: 0 0.5rem 2rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <header id="top">
+    <div class="header-main">
+      <a class="brand-lockup" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <label class="search-box" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+        <input type="search" placeholder="Search PhonkHub" aria-label="Search tracks" readonly onfocus="this.blur()" />
+      </label>
+      <div class="header-actions">
+        <a class="action-chip accent" href="#featured-heading">Featured</a>
+        <a class="action-chip" href="https://discord.gg/b7gQNCpjy4" target="_blank" rel="noopener noreferrer">Join Discord</a>
+      </div>
+    </div>
+
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <div class="nav-inner">
+        <a class="nav-link active">Home</a>
+        <a class="nav-link">Featured</a>
+        <a class="nav-link">All Tracks</a>
+        <a class="nav-link">Genres</a>
+        <a class="nav-link">Community</a>
+        <a class="nav-link">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="content-frame">
+    <main>
+      <section class="track-section" aria-labelledby="featured-heading">
+        <div class="section-heading">
+          <h2 class="section-title" id="featured-heading">Featured</h2>
+        </div>
+        <div class="featured-list" id="featuredList">
+          <div class="loading-msg">Loading…</div>
+        </div>
+      </section>
+
+      <section class="track-section" aria-labelledby="all-tracks-heading">
+        <div class="section-heading">
+          <h2 class="section-title" id="all-tracks-heading">All Tracks</h2>
+        </div>
+        <div class="track-list" id="trackList">
+          <div class="loading-msg">Loading…</div>
+        </div>
+      </section>
+    </main>
+  </div>
+  
+  <footer>
+    <p>
+      <span class="tagline">New Tracks Added Periodically</span><br />&nbsp;<br />
+      &copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists
+    </p>
+  </footer>
+
+<script>
+  // Thumbnail URL builder
+  function thumbUrl(youtubeId) {
+    return 'https://i.ytimg.com/vi/' + youtubeId + '/hqdefault.jpg';
+  }
+
+  // Escape any HTML in titles/artists
+  function esc(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Build one track card (as a link to /track-{id})
+  function buildCard(track, badges) {
+    var badgeHtml = '';
+    if (badges && badges.length) {
+      for (var i = 0; i < badges.length; i++) {
+        badgeHtml += '<span class="track-badge">' + badges[i] + '</span>';
+      }
+    }
+    return (
+      '<a class="track-card" href="/track-' + track.id + '">' +
+        '<div class="thumb-wrap">' +
+          '<img loading="lazy" src="' + thumbUrl(track.youtube_id) + '" alt="' + esc(track.title) + '">' +
+        '</div>' +
+        '<div class="track-header">' +
+          '<span class="rank">' + track.id + '</span>' +
+          '<div class="track-meta">' +
+            '<div class="track-title">' + esc(track.title) + '</div>' +
+            '<div class="track-artist">' + esc(track.artist) + '</div>' +
+          '</div>' +
+          badgeHtml +
+        '</div>' +
+      '</a>'
+    );
+  }
+
+  // Load tracks from our API and render them
+  fetch('/api/tracks')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var tracks = data.tracks || [];
+
+      var featured = tracks.slice(0, 3);
+      var rest = tracks.slice(3);
+
+      var featuredEl = document.getElementById('featuredList');
+      var listEl = document.getElementById('trackList');
+
+      if (!tracks.length) {
+        featuredEl.innerHTML = '<div class="loading-msg">No tracks yet</div>';
+        listEl.innerHTML = '<div class="loading-msg">No tracks yet</div>';
+        return;
+      }
+
+      featuredEl.innerHTML = featured.map(function (t) {
+        return buildCard(t, ['Top']);
+      }).join('');
+
+      listEl.innerHTML = rest.map(function (t, i) {
+        var badges = [];
+        if (i < 3) badges.push('New');
+        if (i < 5) badges.push('Hot');
+        return buildCard(t, badges);
+      }).join('');
+    })
+    .catch(function (err) {
+      document.getElementById('featuredList').innerHTML =
+        '<div class="loading-msg">Could not load tracks</div>';
+      document.getElementById('trackList').innerHTML =
+        '<div class="loading-msg">Could not load tracks</div>';
+      console.error(err);
+    });
+</script>
+
+<script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//relieved-understanding.com/bTX-Vus.d/GEln0LYpWqcH/peQmP9vuvZWUIlCkmPTTOcWzJNhj/kIwtMTTjcbttNEzCME2nOYTrAiybMSQ-";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+  <script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//unfolded-uncle.com/cVD.9p6Kbo2E5/l/S_WbQD9fNQzzM_2MOGD/k/3kN/y/0Q3wM/ziYJ4/OkThgCxw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+    <script>
+(function(pqby){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = pqby || {};
+s.src = "//relieved-understanding.com/bgXGV.sQdkGrlt0nYSWAcR/meomJ9OuFZeUalZk/PRTwc-zCNMjmkowYN/TacttjNTzaMi2pOfTcAN2KMuQw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a9123a2adffc434447198de/1k13f6f7v';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+</body>
+</html>
