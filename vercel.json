@@ -1,17 +1,6 @@
 {
   "rewrites": [
     { "source": "/track-:id", "destination": "/track.html" },
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "v.phonkhub.online" }],
-      "destination": "/admin.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "v.phonkhub.online" }],
-      "headers": [{ "key": "x-admin-test", "value": "yes" }]
-    }
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }
