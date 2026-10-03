@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — PhonkHub</title>
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --red: #ff9900;
+    --red-dim: #cb7603;
+    --white: #f0ece4;
+    --gray: #888;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+    overflow: hidden;
+  }
+
+  .box {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(13, 13, 13, 0.95);
+    border: 1px solid #2a2a2a;
+    border-top: 3px solid var(--red);
+    border-radius: 2px;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+  }
+
+  .code {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 18vw, 8rem);
+    line-height: 1;
+    color: var(--red);
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 40px rgba(255, 153, 0, 0.35);
+    margin-bottom: 0.5rem;
+  }
+
+  .title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .msg {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  .msg .tagline {
+    display: block;
+    margin-top: 0.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background: var(--red);
+    border: 1px solid var(--red);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+
+  .footer {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #1a1a1a;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+  }
+</style>
+</head>
+
+<body>
+  <div class="box">
+    <div class="code">404</div>
+    <div class="title">Page Not Found</div>
+    <div class="msg">
+      This page doesn't exist. Maybe it got deleted, or you typed the URL wrong.
+    </div>
+    <a class="btn" href="/">Back Home</a>
+    <div class="footer">
+      &copy; 2026 PhonkHub &middot; Property Of &yen;GoyMafia&yen;&trade;
+    </div>
+  </div>
+</body>
+</html>
