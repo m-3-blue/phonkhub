@@ -1,10 +1,5 @@
 {
   "rewrites": [
-    { "source": "/track-:id", "destination": "/track.html" },
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "v.phonkhub.online" }],
-      "destination": "/admin.html"
-    }
+    { "source": "/track-:id", "destination": "/track.html" }
   ]
 }
