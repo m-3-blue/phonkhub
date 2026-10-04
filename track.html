@@ -20,11 +20,7 @@
     --border: #222;
   }
 
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body { min-height: 100vh; }
 
@@ -51,11 +47,7 @@
     margin: 0 auto;
   }
 
-  .brand-lockup {
-    display: inline-flex;
-    align-items: center;
-    justify-self: start;
-  }
+  .brand-lockup { display: inline-flex; align-items: center; justify-self: start; }
 
   #logo {
     display: block;
@@ -194,24 +186,10 @@
     border-radius: 2px;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
-  .vote-btn:hover:not(:disabled) {
-    border-color: var(--red-dim);
-    color: var(--red);
-  }
-  .vote-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-  .vote-btn.up.active {
-    background: rgba(255, 153, 0, 0.15);
-    border-color: var(--red);
-    color: var(--red);
-  }
-  .vote-btn.down.active {
-    background: rgba(120, 60, 60, 0.15);
-    border-color: #995555;
-    color: #ff7777;
-  }
+  .vote-btn:hover:not(:disabled) { border-color: var(--red-dim); color: var(--red); }
+  .vote-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+  .vote-btn.up.active { background: rgba(255, 153, 0, 0.15); border-color: var(--red); color: var(--red); }
+  .vote-btn.down.active { background: rgba(120, 60, 60, 0.15); border-color: #995555; color: #ff7777; }
 
   .vote-score {
     font-family: 'Bebas Neue', sans-serif;
@@ -268,11 +246,7 @@
     color: inherit;
     transition: border-color 0.2s, transform 0.2s, background 0.2s;
   }
-  .track-card:hover {
-    border-color: var(--red-dim);
-    background: rgba(11, 11, 11, 0.95);
-    transform: translateY(-2px);
-  }
+  .track-card:hover { border-color: var(--red-dim); background: rgba(11, 11, 11, 0.95); transform: translateY(-2px); }
 
   .thumb-wrap {
     position: relative;
@@ -312,12 +286,7 @@
     opacity: 0.8;
   }
 
-  .track-meta {
-    display: flex;
-    flex: 1;
-    min-width: 0;
-    flex-direction: column;
-  }
+  .track-meta { display: flex; flex: 1; min-width: 0; flex-direction: column; }
 
   .card-title {
     order: 2;
@@ -342,6 +311,276 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  /* -------- COMMENTS -------- */
+  .comments-section { margin-top: 2.5rem; }
+
+  .comment-form-box {
+    background: rgba(13, 13, 13, 0.95);
+    border: 1px solid #2a2a2a;
+    border-top: 3px solid var(--red);
+    border-radius: 2px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .comment-form-box textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 0.75rem 0.9rem;
+    background: #080808;
+    border: 1px solid #2a2a2a;
+    color: var(--white);
+    font: inherit;
+    font-size: 0.9rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 2px;
+    font-family: inherit;
+  }
+  .comment-form-box textarea:focus { border-color: var(--red-dim); }
+
+  .comment-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .comment-form-actions button {
+    padding: 0.65rem 1.5rem;
+    background: var(--red);
+    border: 1px solid var(--red);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+  .comment-form-actions button:hover { opacity: 0.85; }
+  .comment-form-actions button:disabled { opacity: 0.4; cursor: wait; }
+
+  .comment-char-count {
+    margin-left: auto;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+  }
+  .comment-char-count.over { color: #ff5555; }
+
+  .comment-form-status {
+    margin-top: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-height: 1rem;
+  }
+  .comment-form-status.err { color: #ff5555; }
+
+  .comment-login-prompt {
+    padding: 1.5rem;
+    text-align: center;
+    background: rgba(13, 13, 13, 0.95);
+    border: 1px dashed #1d1d1d;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #888;
+  }
+  .comment-login-prompt a { color: var(--red); text-decoration: none; }
+  .comment-login-prompt a:hover { text-decoration: underline; }
+
+  .comment-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .comment {
+    background: rgba(13, 13, 13, 0.7);
+    border: 1px solid #1d1d1d;
+    border-radius: 2px;
+    padding: 0.9rem 1rem;
+  }
+
+  .comment-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .comment-author {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--red);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .comment-author:hover { text-decoration: underline; }
+
+  .comment-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .comment-edited {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: #555;
+    text-transform: uppercase;
+    font-style: italic;
+  }
+
+  .comment-body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #ddd;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .comment-body a.mention {
+    color: var(--red);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .comment-body a.mention:hover { text-decoration: underline; }
+
+  .comment-actions {
+    display: flex;
+    gap: 0.85rem;
+    margin-top: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    align-items: center;
+  }
+
+  .comment-actions button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #777;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .comment-actions button:hover { color: var(--red); }
+  .comment-actions button.delete-btn:hover { color: #ff5555; }
+
+  .comment-actions button.like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+  }
+  .comment-actions button.like-btn .like-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+  .comment-actions button.like-btn .like-count {
+    font-size: 0.85rem;
+  }
+  .comment-actions button.like-btn.liked {
+    color: var(--red);
+  }
+  .comment-actions button.like-btn:hover {
+    color: var(--red);
+  }
+  .comment-actions button.like-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .comment-replies {
+    margin-top: 0.6rem;
+    padding-left: 1.25rem;
+    border-left: 2px solid #1d1d1d;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .comment-replies.deep {
+    padding-left: 0.5rem;
+    border-left-color: #161616;
+  }
+
+  .reply-form-container, .edit-form-container {
+    margin-top: 0.6rem;
+    display: none;
+  }
+  .reply-form-container.open, .edit-form-container.open { display: block; }
+
+  .reply-form-container textarea, .edit-form-container textarea {
+    width: 100%;
+    min-height: 50px;
+    padding: 0.6rem 0.75rem;
+    background: #080808;
+    border: 1px solid #2a2a2a;
+    color: var(--white);
+    font: inherit;
+    font-size: 0.85rem;
+    resize: vertical;
+    outline: none;
+    border-radius: 2px;
+    font-family: inherit;
+  }
+  .reply-form-container textarea:focus, .edit-form-container textarea:focus { border-color: var(--red-dim); }
+
+  .reply-form-actions, .edit-form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .reply-form-actions button, .edit-form-actions button {
+    padding: 0.45rem 1rem;
+    background: var(--red);
+    border: 1px solid var(--red);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .reply-form-actions button.ghost, .edit-form-actions button.ghost {
+    background: transparent;
+    color: var(--white);
+    border-color: #444;
+  }
+
+  .no-comments {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #555;
   }
 
   footer {
@@ -377,6 +616,7 @@
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
     .track-list { grid-template-columns: 1fr; }
     main { padding: 0 0.75rem 3rem; }
+    .comment-replies { padding-left: 0.75rem; }
   }
 
   @media (max-width: 480px) {
@@ -411,6 +651,8 @@
   </footer>
 
 <script>
+  var MAX_COMMENT = 100;
+
   function thumbUrl(id) {
     return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
   }
@@ -418,6 +660,13 @@
   function esc(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function renderBody(raw) {
+    var safe = esc(raw);
+    return safe.replace(/(^|[^a-zA-Z0-9_])@([a-zA-Z0-9_]{3,20})\b/g, function (m, prefix, username) {
+      return prefix + '<a class="mention" href="/@' + username + '">@' + username + '</a>';
     });
   }
 
@@ -443,7 +692,25 @@
     );
   }
 
-  // ---- Header auth ----
+  function timeAgo(iso) {
+    var then = new Date(iso).getTime();
+    var now = Date.now();
+    var sec = Math.floor((now - then) / 1000);
+
+    if (sec < 5) return 'just now';
+    if (sec < 60) return sec + 's ago';
+    var min = Math.floor(sec / 60);
+    if (min < 60) return min + 'm ago';
+    var hr = Math.floor(min / 60);
+    if (hr < 24) return hr + 'h ago';
+    var day = Math.floor(hr / 24);
+    if (day < 30) return day + 'd ago';
+    var mon = Math.floor(day / 30);
+    if (mon < 12) return mon + 'mo ago';
+    var yr = Math.floor(mon / 12);
+    return yr + 'y ago';
+  }
+
   (async function () {
     var actions = document.getElementById('headerActions');
     if (!actions) return;
@@ -456,7 +723,7 @@
         var userChip = document.createElement('a');
         userChip.className = 'action-chip';
         userChip.href = '/@' + data.user.username;
-        userChip.textContent = '@' + data.user.username;
+        userChip.textContent = data.user.display_name || data.user.username;
 
         var logoutBtn = document.createElement('a');
         logoutBtn.className = 'action-chip accent';
@@ -487,10 +754,10 @@
     } catch (err) {}
   })();
 
-  // ---- Voting state ----
   var currentUserVote = 0;
   var voteScore = 0;
   var loggedIn = false;
+  var currentUser = null;
   var currentTrackId = null;
 
   function renderVotes() {
@@ -520,7 +787,6 @@
 
   async function castVote(value) {
     if (!loggedIn) return;
-
     var newValue = (currentUserVote === value) ? 0 : value;
 
     try {
@@ -545,7 +811,336 @@
     downBtn.onclick = function () { castVote(-1); };
   }
 
-  // ---- Load track page (single request) ----
+  var commentsData = [];
+
+  async function loadComments() {
+    try {
+      var res = await fetch('/api/comments?action=list&track_id=' + currentTrackId);
+      var data = await res.json();
+      commentsData = data.comments || [];
+      renderComments();
+    } catch (err) {}
+  }
+
+  function renderComments() {
+    var listEl = document.getElementById('commentList');
+    if (!listEl) return;
+
+    if (commentsData.length === 0) {
+      listEl.innerHTML = '<div class="no-comments">No comments yet. Be the first.</div>';
+      return;
+    }
+
+    listEl.innerHTML = commentsData.map(function (c) {
+      return renderComment(c, 0);
+    }).join('');
+
+    attachCommentHandlers();
+  }
+
+  function renderComment(c, depth) {
+    var repliesHtml = '';
+
+    if (c.replies && c.replies.length) {
+      repliesHtml = '<div class="' + (depth >= 3 ? 'comment-replies deep' : 'comment-replies') + '">' +
+        c.replies.map(function (r) { return renderComment(r, depth + 1); }).join('') +
+      '</div>';
+    }
+
+    var isOwn = currentUser && currentUser.id === c.user.id;
+
+    var likeBtnHtml =
+      '<button class="like-btn' + (c.user_liked ? ' liked' : '') + '" data-like="' + c.id + '"' + (loggedIn ? '' : ' disabled') + '>' +
+        '<span class="like-icon">' + (c.user_liked ? '♥' : '♡') + '</span>' +
+        '<span class="like-count">' + (c.like_count || 0) + '</span>' +
+      '</button>';
+
+    var actions = [likeBtnHtml];
+    if (loggedIn) {
+      actions.push('<button data-reply="' + c.id + '">Reply</button>');
+    }
+    if (isOwn) {
+      actions.push('<button data-edit="' + c.id + '">Edit</button>');
+      actions.push('<button class="delete-btn" data-delete="' + c.id + '">Delete</button>');
+    }
+
+    var displayName = c.user.display_name || c.user.username;
+    var editedTag = c.edited_at ? '<span class="comment-edited">(edited)</span>' : '';
+
+    return (
+      '<div class="comment" data-comment-id="' + c.id + '">' +
+        '<div class="comment-header">' +
+          '<a class="comment-author" href="/@' + esc(c.user.username) + '">' + esc(displayName) + '</a>' +
+          '<span class="comment-time">' + timeAgo(c.created_at) + '</span>' +
+          editedTag +
+        '</div>' +
+        '<div class="comment-body" data-body-for="' + c.id + '">' + renderBody(c.body) + '</div>' +
+        '<div class="comment-actions">' + actions.join('') + '</div>' +
+        '<div class="reply-form-container" data-reply-form="' + c.id + '">' +
+          '<textarea placeholder="Write a reply…" maxlength="' + MAX_COMMENT + '" data-reply-body="' + c.id + '"></textarea>' +
+          '<div class="reply-form-actions">' +
+            '<button data-reply-submit="' + c.id + '">Post Reply</button>' +
+            '<button class="ghost" data-reply-cancel="' + c.id + '">Cancel</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="edit-form-container" data-edit-form="' + c.id + '">' +
+          '<textarea maxlength="' + MAX_COMMENT + '" data-edit-body="' + c.id + '">' + esc(c.body) + '</textarea>' +
+          '<div class="edit-form-actions">' +
+            '<button data-edit-submit="' + c.id + '">Save</button>' +
+            '<button class="ghost" data-edit-cancel="' + c.id + '">Cancel</button>' +
+          '</div>' +
+        '</div>' +
+        repliesHtml +
+      '</div>'
+    );
+  }
+
+  function attachCommentHandlers() {
+    var listEl = document.getElementById('commentList');
+    if (!listEl || listEl.dataset.wired) return;
+    listEl.dataset.wired = '1';
+
+    listEl.addEventListener('click', function (e) {
+      var replyBtn = e.target.closest('[data-reply]');
+      var replySubmit = e.target.closest('[data-reply-submit]');
+      var replyCancel = e.target.closest('[data-reply-cancel]');
+      var editBtn = e.target.closest('[data-edit]');
+      var editSubmit = e.target.closest('[data-edit-submit]');
+      var editCancel = e.target.closest('[data-edit-cancel]');
+      var delBtn = e.target.closest('[data-delete]');
+      var likeBtn = e.target.closest('[data-like]');
+
+      if (replyBtn) {
+        var id = replyBtn.getAttribute('data-reply');
+        var form = listEl.querySelector('[data-reply-form="' + id + '"]');
+        if (form) {
+          form.classList.toggle('open');
+          if (form.classList.contains('open')) {
+            var ta = form.querySelector('textarea');
+            if (ta) ta.focus();
+          }
+        }
+      }
+
+      if (replyCancel) {
+        var cancelId = replyCancel.getAttribute('data-reply-cancel');
+        var cancelForm = listEl.querySelector('[data-reply-form="' + cancelId + '"]');
+        if (cancelForm) {
+          cancelForm.classList.remove('open');
+          var ta2 = cancelForm.querySelector('textarea');
+          if (ta2) ta2.value = '';
+        }
+      }
+
+      if (replySubmit) {
+        var submitId = replySubmit.getAttribute('data-reply-submit');
+        var submitForm = listEl.querySelector('[data-reply-form="' + submitId + '"]');
+        if (submitForm) {
+          var ta3 = submitForm.querySelector('textarea');
+          var body = ta3 ? ta3.value.trim() : '';
+          if (body) submitReply(submitId, body, ta3);
+        }
+      }
+
+      if (editBtn) {
+        var editId = editBtn.getAttribute('data-edit');
+        var editForm = listEl.querySelector('[data-edit-form="' + editId + '"]');
+        if (editForm) {
+          editForm.classList.add('open');
+          var editTa = editForm.querySelector('textarea');
+          if (editTa) { editTa.focus(); editTa.select(); }
+        }
+      }
+
+      if (editCancel) {
+        var ecId = editCancel.getAttribute('data-edit-cancel');
+        var ecForm = listEl.querySelector('[data-edit-form="' + ecId + '"]');
+        if (ecForm) ecForm.classList.remove('open');
+      }
+
+      if (editSubmit) {
+        var esId = editSubmit.getAttribute('data-edit-submit');
+        var esForm = listEl.querySelector('[data-edit-form="' + esId + '"]');
+        if (esForm) {
+          var esTa = esForm.querySelector('textarea');
+          var newBody = esTa ? esTa.value.trim() : '';
+          if (newBody) submitEdit(esId, newBody);
+        }
+      }
+
+      if (delBtn) {
+        var delId = delBtn.getAttribute('data-delete');
+        if (confirm('Delete this comment?')) deleteComment(delId);
+      }
+
+      if (likeBtn && !likeBtn.disabled) {
+        var likeId = likeBtn.getAttribute('data-like');
+        toggleLike(likeId, likeBtn);
+      }
+    });
+  }
+
+  async function submitReply(parentId, body, ta) {
+    if (body.length > MAX_COMMENT) { alert('Max ' + MAX_COMMENT + ' characters'); return; }
+    try {
+      var res = await fetch('/api/comments?action=post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ track_id: parseInt(currentTrackId, 10), parent_id: parseInt(parentId, 10), body: body }),
+      });
+      if (!res.ok) {
+        var err = await res.json();
+        alert(err.error || 'Could not post reply');
+        return;
+      }
+      if (ta) ta.value = '';
+      var form = document.querySelector('[data-reply-form="' + parentId + '"]');
+      if (form) form.classList.remove('open');
+      await loadComments();
+    } catch (err) {
+      alert('Network error');
+    }
+  }
+
+  async function submitEdit(id, body) {
+    if (body.length > MAX_COMMENT) { alert('Max ' + MAX_COMMENT + ' characters'); return; }
+    try {
+      var res = await fetch('/api/comments?action=edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: parseInt(id, 10), body: body }),
+      });
+      if (!res.ok) {
+        var err = await res.json();
+        alert(err.error || 'Could not save');
+        return;
+      }
+      var form = document.querySelector('[data-edit-form="' + id + '"]');
+      if (form) form.classList.remove('open');
+      await loadComments();
+    } catch (err) {
+      alert('Network error');
+    }
+  }
+
+  async function deleteComment(id) {
+    try {
+      var res = await fetch('/api/comments?action=delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: parseInt(id, 10) }),
+      });
+      if (!res.ok) {
+        var err = await res.json();
+        alert(err.error || 'Could not delete');
+        return;
+      }
+      await loadComments();
+    } catch (err) {
+      alert('Network error');
+    }
+  }
+
+  async function toggleLike(id, btnEl) {
+    // Optimistic update: toggle instantly, then reconcile with server response
+    var wasLiked = btnEl.classList.contains('liked');
+    var iconEl = btnEl.querySelector('.like-icon');
+    var countEl = btnEl.querySelector('.like-count');
+    var oldCount = parseInt(countEl.textContent, 10) || 0;
+
+    btnEl.classList.toggle('liked', !wasLiked);
+    iconEl.textContent = !wasLiked ? '♥' : '♡';
+    countEl.textContent = !wasLiked ? oldCount + 1 : Math.max(0, oldCount - 1);
+
+    try {
+      var res = await fetch('/api/comments?action=like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: parseInt(id, 10) }),
+      });
+      var data = await res.json();
+      if (!res.ok) {
+        // Revert on error
+        btnEl.classList.toggle('liked', wasLiked);
+        iconEl.textContent = wasLiked ? '♥' : '♡';
+        countEl.textContent = oldCount;
+        return;
+      }
+      // Reconcile with authoritative values from server
+      btnEl.classList.toggle('liked', data.liked);
+      iconEl.textContent = data.liked ? '♥' : '♡';
+      countEl.textContent = data.like_count;
+    } catch (err) {
+      // Revert on network error
+      btnEl.classList.toggle('liked', wasLiked);
+      iconEl.textContent = wasLiked ? '♥' : '♡';
+      countEl.textContent = oldCount;
+    }
+  }
+
+  function attachTopLevelCommentForm() {
+    var form = document.getElementById('commentForm');
+    if (!form) return;
+
+    var ta = form.querySelector('textarea');
+    var btn = form.querySelector('button[type="submit"]');
+    var countEl = document.getElementById('commentCharCount');
+    var statusEl = document.getElementById('commentFormStatus');
+
+    function updateCount() {
+      var len = ta.value.length;
+      countEl.textContent = len + ' / ' + MAX_COMMENT;
+      countEl.classList.toggle('over', len > MAX_COMMENT);
+    }
+    ta.addEventListener('input', updateCount);
+    updateCount();
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var body = ta.value.trim();
+      if (!body) {
+        statusEl.textContent = 'Write something first';
+        statusEl.className = 'comment-form-status err';
+        return;
+      }
+      if (body.length > MAX_COMMENT) {
+        statusEl.textContent = 'Max ' + MAX_COMMENT + ' characters';
+        statusEl.className = 'comment-form-status err';
+        return;
+      }
+
+      btn.disabled = true;
+      statusEl.textContent = 'Posting…';
+      statusEl.className = 'comment-form-status';
+
+      try {
+        var res = await fetch('/api/comments?action=post', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ track_id: parseInt(currentTrackId, 10), parent_id: null, body: body }),
+        });
+
+        if (!res.ok) {
+          var err = await res.json();
+          statusEl.textContent = err.error || 'Failed';
+          statusEl.className = 'comment-form-status err';
+          btn.disabled = false;
+          return;
+        }
+
+        ta.value = '';
+        updateCount();
+        statusEl.textContent = '';
+        await loadComments();
+      } catch (err) {
+        statusEl.textContent = 'Network error';
+        statusEl.className = 'comment-form-status err';
+      }
+
+      btn.disabled = false;
+    });
+  }
+
   var id = getTrackId();
   if (!id) {
     document.getElementById('main').innerHTML = '<div class="loading-msg">Track not found</div>';
@@ -564,6 +1159,25 @@
         voteScore = data.score || 0;
         currentUserVote = data.userVote || 0;
         loggedIn = !!data.user;
+        currentUser = data.user;
+
+        var commentBoxHtml;
+        if (loggedIn) {
+          commentBoxHtml =
+            '<form class="comment-form-box" id="commentForm">' +
+              '<textarea placeholder="Write a comment…" maxlength="' + MAX_COMMENT + '"></textarea>' +
+              '<div class="comment-form-actions">' +
+                '<button type="submit">Post Comment</button>' +
+                '<div class="comment-char-count" id="commentCharCount">0 / ' + MAX_COMMENT + '</div>' +
+              '</div>' +
+              '<div class="comment-form-status" id="commentFormStatus"></div>' +
+            '</form>';
+        } else {
+          commentBoxHtml =
+            '<div class="comment-login-prompt">' +
+              '<a href="/login">Log in</a> or <a href="/signup">sign up</a> to comment' +
+            '</div>';
+        }
 
         var html =
           '<a class="back-link" href="/">← Back to all tracks</a>' +
@@ -589,6 +1203,11 @@
           '<div class="section-heading"><h2 class="section-title">Recommended</h2></div>' +
           '<div class="track-list">' +
             recs.map(buildCard).join('') +
+          '</div>' +
+          '<div class="comments-section">' +
+            '<div class="section-heading"><h2 class="section-title">Comments</h2></div>' +
+            commentBoxHtml +
+            '<div class="comment-list" id="commentList"><div class="no-comments">Loading…</div></div>' +
           '</div>';
 
         document.getElementById('main').innerHTML = html;
@@ -596,6 +1215,8 @@
 
         attachVoteHandlers();
         renderVotes();
+        attachTopLevelCommentForm();
+        loadComments();
       })
       .catch(function () {
         document.getElementById('main').innerHTML = '<div class="loading-msg">Track not found</div>';

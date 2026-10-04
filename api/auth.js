@@ -1,6 +1,5 @@
 import { createClient } from '@libsql/client';
 import bcrypt from 'bcryptjs';
-import { serialize, parse } from 'cookie';
 import crypto from 'crypto';
 
 const SESSION_COOKIE = 'ph_session';
@@ -30,28 +29,28 @@ function isValidEmail(e) {
 }
 
 function setSessionCookie(res, token, expiresAt) {
-  res.setHeader('Set-Cookie', serialize(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-    path: '/',
-    expires: new Date(expiresAt),
-  }));
+  res.setHeader('Set-Cookie',
+    SESSION_COOKIE + '=' + token +
+    '; Path=/; HttpOnly; SameSite=Lax; Expires=' + new Date(expiresAt).toUTCString()
+  );
 }
 
 function clearSessionCookie(res) {
-  res.setHeader('Set-Cookie', serialize(SESSION_COOKIE, '', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  }));
+  res.setHeader('Set-Cookie',
+    SESSION_COOKIE + '=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0'
+  );
 }
 
 function getSessionToken(req) {
-  const cookies = parse(req.headers.cookie || '');
-  return cookies[SESSION_COOKIE] || null;
+  const raw = req.headers.cookie || '';
+  const parts = raw.split(';');
+  for (const part of parts) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === SESSION_COOKIE) {
+      return rest.join('=') || null;
+    }
+  }
+  return null;
 }
 
 export default async function handler(req, res) {
@@ -61,7 +60,7 @@ export default async function handler(req, res) {
   try {
     // -------- SIGNUP --------
     if (action === 'signup' && req.method === 'POST') {
-      const { username, email, password } = req.body || {};
+      const { username, email, password, display_name } = req.body || {};
 
       if (!isValidUsername(username)) {
         return res.status(400).json({ error: 'Username must be 3-20 characters, letters/numbers/underscores only' });
@@ -73,7 +72,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Password must be at least 8 characters' });
       }
 
-      // Check if username or email is taken
       const existing = await client.execute({
         sql: 'SELECT id, username, email FROM users WHERE username = ? OR email = ?',
         args: [username, email],
@@ -88,14 +86,17 @@ export default async function handler(req, res) {
 
       const hash = await bcrypt.hash(password, 10);
 
+      const finalDisplayName = (typeof display_name === 'string' && display_name.trim())
+        ? display_name.trim().slice(0, 40)
+        : username;
+
       const result = await client.execute({
-        sql: 'INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, ?)',
-        args: [username, email, hash, now()],
+        sql: 'INSERT INTO users (username, email, password_hash, display_name, created_at) VALUES (?, ?, ?, ?, ?)',
+        args: [username, email, hash, finalDisplayName, now()],
       });
 
       const userId = Number(result.lastInsertRowid);
 
-      // Create session
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = daysFromNow(SESSION_DAYS);
       await client.execute({
@@ -105,7 +106,7 @@ export default async function handler(req, res) {
 
       setSessionCookie(res, token, expiresAt);
       return res.status(200).json({
-        user: { id: userId, username },
+        user: { id: userId, username, display_name: finalDisplayName },
       });
     }
 
@@ -117,9 +118,8 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Missing username or password' });
       }
 
-      // Allow login with username OR email
       const result = await client.execute({
-        sql: 'SELECT id, username, password_hash FROM users WHERE username = ? OR email = ?',
+        sql: 'SELECT id, username, display_name, password_hash FROM users WHERE username = ? OR email = ?',
         args: [username, username],
       });
 
@@ -133,7 +133,6 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Invalid username or password' });
       }
 
-      // Create session
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = daysFromNow(SESSION_DAYS);
       await client.execute({
@@ -143,7 +142,7 @@ export default async function handler(req, res) {
 
       setSessionCookie(res, token, expiresAt);
       return res.status(200).json({
-        user: { id: user.id, username: user.username },
+        user: { id: user.id, username: user.username, display_name: user.display_name || user.username },
       });
     }
 
@@ -160,7 +159,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
-    // -------- ME (who am I) --------
+    // -------- ME --------
     if (action === 'me' && req.method === 'GET') {
       const token = getSessionToken(req);
       if (!token) {
@@ -168,7 +167,7 @@ export default async function handler(req, res) {
       }
 
       const result = await client.execute({
-        sql: `SELECT u.id, u.username, s.expires_at
+        sql: `SELECT u.id, u.username, u.display_name, s.expires_at
               FROM sessions s
               JOIN users u ON u.id = s.user_id
               WHERE s.token = ?`,
@@ -182,7 +181,6 @@ export default async function handler(req, res) {
 
       const row = result.rows[0];
 
-      // Expired?
       if (new Date(row.expires_at) < new Date()) {
         await client.execute({ sql: 'DELETE FROM sessions WHERE token = ?', args: [token] });
         clearSessionCookie(res);
@@ -190,7 +188,7 @@ export default async function handler(req, res) {
       }
 
       return res.status(200).json({
-        user: { id: row.id, username: row.username },
+        user: { id: row.id, username: row.username, display_name: row.display_name || row.username },
       });
     }
 

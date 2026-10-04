@@ -15,6 +15,8 @@
     --white: #f0ece4;
     --gray: #888;
     --border: #222;
+    --accent: #ff9900;
+    --accent-rgb: 255, 153, 0;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +28,6 @@
     min-height: 100vh;
   }
 
-  /* -------- HEADER (same as homepage) -------- */
   header {
     position: relative;
     background: #050505;
@@ -84,7 +85,6 @@
     color: #080808;
   }
 
-  /* -------- MAIN -------- */
   main {
     max-width: 900px;
     margin: 0 auto;
@@ -109,21 +109,24 @@
   .back-link:hover { color: var(--red); }
 
   .profile-box {
-    background: rgba(13, 13, 13, 0.95);
+    background:
+      linear-gradient(135deg, rgba(var(--accent-rgb), 0.12), transparent 55%),
+      rgba(13, 13, 13, 0.95);
     border: 1px solid #2a2a2a;
-    border-top: 3px solid var(--red);
+    border-top: 3px solid var(--accent);
     border-radius: 2px;
     margin-bottom: 1.5rem;
     overflow: hidden;
   }
 
   .banner {
-    height: 140px;
+    height: 160px;
     background:
-      linear-gradient(135deg, rgba(255, 153, 0, 0.15), transparent 60%),
+      linear-gradient(135deg, rgba(var(--accent-rgb), 0.35), transparent 60%),
       linear-gradient(160deg, #181818, #0a0a0a);
     position: relative;
     border-bottom: 1px solid #1d1d1d;
+    overflow: hidden;
   }
 
   .profile-body {
@@ -136,27 +139,37 @@
     height: 96px;
     border-radius: 50%;
     background: #0a0a0a;
-    border: 3px solid var(--red);
+    border: 3px solid var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2.5rem;
-    color: var(--red);
+    color: var(--accent);
     margin-top: -48px;
     margin-bottom: 1rem;
     position: relative;
     z-index: 1;
+    overflow: hidden;
   }
 
-  .username {
+  .display-name {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 1.75rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
     color: var(--white);
+  }
+
+  .handle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
   }
 
   .joined {
@@ -167,22 +180,73 @@
     text-transform: uppercase;
   }
 
-  .section-heading {
-    margin-bottom: 0.7rem;
-    padding: 0.7rem 0.9rem;
-    border: 1px solid #1d1d1d;
-    border-left: 3px solid var(--red);
-    background: rgba(13, 13, 13, 0.8);
+  .edit-profile-btn {
+    position: absolute;
+    top: 3.5rem;
+    right: 1.75rem;
+    padding: 0.55rem 1.1rem;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #444;
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .edit-profile-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #1d1d1d;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
   }
 
-  .section-title {
+  .tab {
+    flex: 0 0 auto;
+    padding: 0.9rem 1.4rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #888;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--white);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
   }
+  .tab:hover { color: var(--white); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-count {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.4rem;
+    background: #1a1a1a;
+    border-radius: 999px;
+    font-size: 0.6rem;
+    color: #999;
+    letter-spacing: 0.05em;
+  }
+  .tab.active .tab-count {
+    background: rgba(var(--accent-rgb), 0.15);
+    color: var(--accent);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
   .empty-section {
     padding: 2rem 1rem;
@@ -194,6 +258,189 @@
     color: #666;
     border: 1px dashed #1d1d1d;
     border-radius: 2px;
+  }
+
+  .post-item {
+    background:
+      linear-gradient(135deg, rgba(var(--accent-rgb), 0.06), transparent 60%),
+      rgba(13, 13, 13, 0.85);
+    border: 1px solid #1d1d1d;
+    border-radius: 2px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-context {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #777;
+    margin-bottom: 0.5rem;
+  }
+  .post-context a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .post-context a:hover { text-decoration: underline; }
+
+  .post-body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #ddd;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .vote-item {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 0.9rem;
+    align-items: center;
+    padding: 0.7rem 0.9rem;
+    background:
+      linear-gradient(135deg, rgba(var(--accent-rgb), 0.05), transparent 65%),
+      rgba(13, 13, 13, 0.85);
+    border: 1px solid #1d1d1d;
+    border-radius: 2px;
+    margin-bottom: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .vote-item:hover {
+    border-color: var(--accent);
+    background:
+      linear-gradient(135deg, rgba(var(--accent-rgb), 0.1), transparent 65%),
+      rgba(20, 20, 20, 0.95);
+  }
+
+  .vote-arrow {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    line-height: 1;
+    text-align: center;
+  }
+  .vote-arrow.up { color: var(--accent); }
+  .vote-arrow.down { color: #ff7777; }
+
+  .vote-info { min-width: 0; }
+  .vote-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vote-artist {
+    font-size: 0.68rem;
+    color: #999;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .vote-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .bio-box {
+    background:
+      linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), transparent 65%),
+      rgba(13, 13, 13, 0.85);
+    border: 1px solid #1d1d1d;
+    border-radius: 2px;
+    padding: 1.1rem 1.2rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #ddd;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .socials-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.9rem;
+    background:
+      linear-gradient(135deg, rgba(var(--accent-rgb), 0.05), transparent 70%),
+      rgba(13, 13, 13, 0.85);
+    border: 1px solid #2a2a2a;
+    border-radius: 2px;
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .social-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .social-link .platform {
+    color: #888;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+  .social-link .value {
+    color: inherit;
+    text-transform: none;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+  }
+
+  .about-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .about-row:last-child { border-bottom: none; }
+
+  .about-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .about-value {
+    font-size: 0.9rem;
+    color: var(--white);
+    text-align: right;
   }
 
   .loading {
@@ -228,7 +475,9 @@
     .header-main { padding: 0.65rem 0.75rem; }
     .profile-body { padding: 0 1rem 1.5rem; }
     .avatar { width: 80px; height: 80px; font-size: 2rem; margin-top: -40px; }
-    .username { font-size: 1.4rem; }
+    .display-name { font-size: 1.4rem; }
+    .vote-item { grid-template-columns: 2rem 1fr auto; gap: 0.5rem; padding: 0.6rem 0.7rem; }
+    .edit-profile-btn { top: 3rem; right: 1rem; padding: 0.45rem 0.8rem; font-size: 0.62rem; }
   }
 </style>
 </head>
@@ -256,6 +505,30 @@
   </footer>
 
 <script>
+  var PLATFORM_LABELS = {
+    discord: 'Discord',
+    youtube: 'YouTube',
+    soundcloud: 'SoundCloud',
+    twitter: 'Twitter',
+    instagram: 'Instagram',
+    spotify: 'Spotify',
+  };
+
+  function socialHref(platform, value) {
+    var v = value.trim();
+    if (/^https?:\/\//i.test(v)) return v;
+
+    switch (platform) {
+      case 'discord':    return null;
+      case 'youtube':    return 'https://youtube.com/' + (v.startsWith('@') ? v : '@' + v);
+      case 'soundcloud': return 'https://soundcloud.com/' + v.replace(/^@/, '');
+      case 'twitter':    return 'https://x.com/' + v.replace(/^@/, '');
+      case 'instagram':  return 'https://instagram.com/' + v.replace(/^@/, '');
+      case 'spotify':    return 'https://open.spotify.com/user/' + v.replace(/^@/, '');
+      default:           return null;
+    }
+  }
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -268,12 +541,37 @@
     return months[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear();
   }
 
+  function timeAgo(iso) {
+    var then = new Date(iso).getTime();
+    var now = Date.now();
+    var sec = Math.floor((now - then) / 1000);
+    if (sec < 5) return 'just now';
+    if (sec < 60) return sec + 's ago';
+    var min = Math.floor(sec / 60);
+    if (min < 60) return min + 'm ago';
+    var hr = Math.floor(min / 60);
+    if (hr < 24) return hr + 'h ago';
+    var day = Math.floor(hr / 24);
+    if (day < 30) return day + 'd ago';
+    var mon = Math.floor(day / 30);
+    if (mon < 12) return mon + 'mo ago';
+    return Math.floor(mon / 12) + 'y ago';
+  }
+
   function getUsernameFromPath() {
     var match = window.location.pathname.match(/^\/@([a-zA-Z0-9_]+)/);
     return match ? match[1] : null;
   }
 
-  // ------ Header auth (same as homepage) ------
+  function hexToRgbString(hex) {
+    var r = parseInt(hex.substr(1, 2), 16);
+    var g = parseInt(hex.substr(3, 2), 16);
+    var b = parseInt(hex.substr(5, 2), 16);
+    return r + ', ' + g + ', ' + b;
+  }
+
+  var currentUser = null;
+
   (async function () {
     var actions = document.getElementById('headerActions');
     if (!actions) return;
@@ -281,12 +579,13 @@
     try {
       var res = await fetch('/api/auth?action=me');
       var data = await res.json();
+      currentUser = data.user;
 
       if (data.user) {
         var userChip = document.createElement('a');
         userChip.className = 'action-chip';
         userChip.href = '/@' + data.user.username;
-        userChip.textContent = '@' + data.user.username;
+        userChip.textContent = data.user.display_name || data.user.username;
 
         var logoutBtn = document.createElement('a');
         logoutBtn.className = 'action-chip accent';
@@ -317,7 +616,6 @@
     } catch (err) {}
   })();
 
-  // ------ Load profile ------
   (async function () {
     var main = document.getElementById('main');
     var username = getUsernameFromPath();
@@ -339,22 +637,145 @@
       }
 
       var user = data.user;
-      var initial = user.username.charAt(0).toUpperCase();
+      var votes = data.votes || [];
+      var comments = data.comments || [];
+      var counts = data.counts || { comments: 0, votes: 0 };
 
-      document.title = '@' + user.username + ' — PhonkHub';
+      var displayName = user.display_name || user.username;
+      var isOwnProfile = currentUser && currentUser.username === user.username;
+
+      var accent = user.accent_color || '#ff9900';
+      document.documentElement.style.setProperty('--accent', accent);
+      document.documentElement.style.setProperty('--accent-rgb', hexToRgbString(accent));
+
+      document.title = displayName + ' (@' + user.username + ') — PhonkHub';
+
+      var commentsCountHtml = counts.comments > 0 ? '<span class="tab-count">' + counts.comments + '</span>' : '';
+      var votesCountHtml = counts.votes > 0 ? '<span class="tab-count">' + counts.votes + '</span>' : '';
+
+      var commentsHtml;
+      if (comments.length === 0) {
+        commentsHtml = '<div class="empty-section">No comments yet</div>';
+      } else {
+        commentsHtml = comments.map(function (c) {
+          return (
+            '<div class="post-item">' +
+              '<div class="post-context">on <a href="/track-' + c.track_id + '">' + esc(c.track_title) + '</a></div>' +
+              '<div class="post-body">' + esc(c.body) + '</div>' +
+              '<div class="post-time">' + timeAgo(c.created_at) + '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      var votesHtml;
+      if (votes.length === 0) {
+        votesHtml = '<div class="empty-section">No votes yet</div>';
+      } else {
+        votesHtml = votes.map(function (v) {
+          var arrow = v.value > 0 ? '▲' : '▼';
+          var cls = v.value > 0 ? 'up' : 'down';
+          return (
+            '<a class="vote-item" href="/track-' + v.id + '">' +
+              '<div class="vote-arrow ' + cls + '">' + arrow + '</div>' +
+              '<div class="vote-info">' +
+                '<div class="vote-title">' + esc(v.title) + '</div>' +
+                '<div class="vote-artist">' + esc(v.artist) + '</div>' +
+              '</div>' +
+              '<div class="vote-time">' + timeAgo(v.voted_at) + '</div>' +
+            '</a>'
+          );
+        }).join('');
+      }
+
+      var aboutHtml = '';
+
+      if (user.bio) {
+        aboutHtml += '<div class="bio-box">' + esc(user.bio) + '</div>';
+      }
+
+      if (user.socials && Object.keys(user.socials).length > 0) {
+        var socialHtml = Object.keys(user.socials).map(function (key) {
+          var value = user.socials[key];
+          var label = PLATFORM_LABELS[key] || key;
+          var href = socialHref(key, value);
+
+          if (href) {
+            return (
+              '<a class="social-link" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' +
+                '<span class="platform">' + label + '</span>' +
+                '<span class="value">' + esc(value) + '</span>' +
+              '</a>'
+            );
+          } else {
+            return (
+              '<span class="social-link">' +
+                '<span class="platform">' + label + '</span>' +
+                '<span class="value">' + esc(value) + '</span>' +
+              '</span>'
+            );
+          }
+        }).join('');
+
+        aboutHtml += '<div class="socials-list">' + socialHtml + '</div>';
+      }
+
+      aboutHtml +=
+        '<div class="about-row">' +
+          '<div class="about-label">Joined</div>' +
+          '<div class="about-value">' + formatDate(user.created_at) + '</div>' +
+        '</div>' +
+        '<div class="about-row">' +
+          '<div class="about-label">Comments</div>' +
+          '<div class="about-value">' + counts.comments + '</div>' +
+        '</div>' +
+        '<div class="about-row">' +
+          '<div class="about-label">Votes Cast</div>' +
+          '<div class="about-value">' + counts.votes + '</div>' +
+        '</div>';
+
+      if (!user.bio && (!user.socials || Object.keys(user.socials).length === 0)) {
+        aboutHtml =
+          '<div class="empty-section" style="margin-bottom: 1rem;">No bio or social links yet</div>' +
+          aboutHtml;
+      }
+
+      var editBtnHtml = isOwnProfile
+        ? '<a class="edit-profile-btn" href="/edit-profile">Edit Profile</a>'
+        : '';
 
       main.innerHTML =
         '<a class="back-link" href="/">← Back to home</a>' +
         '<div class="profile-box">' +
           '<div class="banner"></div>' +
           '<div class="profile-body">' +
-            '<div class="avatar">' + initial + '</div>' +
-            '<div class="username">@' + esc(user.username) + '</div>' +
+            editBtnHtml +
+            '<div class="avatar">' + esc(displayName.charAt(0).toUpperCase()) + '</div>' +
+            '<div class="display-name">' + esc(displayName) + '</div>' +
+            '<div class="handle">@' + esc(user.username) + '</div>' +
             '<div class="joined">Joined ' + formatDate(user.created_at) + '</div>' +
           '</div>' +
         '</div>' +
-        '<div class="section-heading"><h2 class="section-title">Activity</h2></div>' +
-        '<div class="empty-section">No activity yet — votes and comments coming soon</div>';
+        '<div class="tabs">' +
+          '<button class="tab active" data-tab="comments">Comments' + commentsCountHtml + '</button>' +
+          '<button class="tab" data-tab="votes">Votes' + votesCountHtml + '</button>' +
+          '<button class="tab" data-tab="about">About</button>' +
+        '</div>' +
+        '<div class="tab-panel active" data-panel="comments">' + commentsHtml + '</div>' +
+        '<div class="tab-panel" data-panel="votes">' + votesHtml + '</div>' +
+        '<div class="tab-panel" data-panel="about">' + aboutHtml + '</div>';
+
+      var tabs = main.querySelectorAll('.tab');
+      var panels = main.querySelectorAll('.tab-panel');
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          tabs.forEach(function (t) { t.classList.remove('active'); });
+          panels.forEach(function (p) { p.classList.remove('active'); });
+          tab.classList.add('active');
+          var panel = main.querySelector('.tab-panel[data-panel="' + tab.getAttribute('data-tab') + '"]');
+          if (panel) panel.classList.add('active');
+        });
+      });
     } catch (err) {
       main.innerHTML = '<div class="loading">Could not load profile</div>';
     }

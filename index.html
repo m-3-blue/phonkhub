@@ -644,7 +644,6 @@
     );
   }
 
-  // ---- Header auth ----
   (async function () {
     var actions = document.getElementById('headerActions');
     if (!actions) return;
@@ -657,7 +656,7 @@
         var userChip = document.createElement('a');
         userChip.className = 'action-chip';
         userChip.href = '/@' + data.user.username;
-        userChip.textContent = '@' + data.user.username;
+        userChip.textContent = data.user.display_name || data.user.username;
 
         var logoutBtn = document.createElement('a');
         logoutBtn.className = 'action-chip accent';
@@ -688,7 +687,6 @@
     } catch (err) {}
   })();
 
-  // ---- Load tracks (single request) ----
   fetch('/api/home')
     .then(function (r) { return r.json(); })
     .then(function (data) {

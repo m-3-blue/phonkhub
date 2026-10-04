@@ -68,6 +68,13 @@
     margin-bottom: 0.3rem;
   }
 
+  label .optional {
+    color: #555;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: none;
+  }
+
   input {
     width: 100%;
     padding: 0.75rem 0.9rem;
@@ -138,7 +145,10 @@
     <h1>Create Account</h1>
 
     <label for="username">Username</label>
-    <input type="text" id="username" placeholder="3-20 characters" autocomplete="username" autocapitalize="none" spellcheck="false">
+    <input type="text" id="username" placeholder="3-20 chars, letters/numbers/underscores" autocomplete="username" autocapitalize="none" spellcheck="false">
+
+    <label for="display_name">Display Name <span class="optional">(optional)</span></label>
+    <input type="text" id="display_name" placeholder="What shows on your profile" autocomplete="name">
 
     <label for="email">Email</label>
     <input type="email" id="email" placeholder="you@example.com" autocomplete="email" autocapitalize="none" spellcheck="false">
@@ -169,11 +179,12 @@
 
   async function submit() {
     var username = document.getElementById('username').value.trim();
+    var display_name = document.getElementById('display_name').value.trim();
     var email = document.getElementById('email').value.trim();
     var password = document.getElementById('password').value;
 
     if (!username || !email || !password) {
-      setMsg('Fill in all fields', true);
+      setMsg('Fill in all required fields', true);
       return;
     }
     if (username.length < 3 || username.length > 20) {
@@ -192,7 +203,12 @@
       var res = await fetch('/api/auth?action=signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username, email: email, password: password }),
+        body: JSON.stringify({
+          username: username,
+          email: email,
+          password: password,
+          display_name: display_name || null,
+        }),
       });
       var data = await res.json();
 
@@ -202,7 +218,7 @@
         return;
       }
 
-      setMsg('Welcome, ' + data.user.username + '!', false);
+      setMsg('Welcome, ' + (data.user.display_name || data.user.username) + '!', false);
       window.location.href = '/';
     } catch (err) {
       setMsg('Network error', true);

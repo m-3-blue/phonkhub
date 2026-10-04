@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile — PhonkHub</title>
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --red: #ff9900;
+    --red-dim: #cb7603;
+    --white: #f0ece4;
+    --gray: #888;
+    --border: #222;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+  }
+
+  header {
+    position: relative;
+    background: #050505;
+    border-bottom: 1px solid #242424;
+  }
+
+  .header-main {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.15rem;
+    padding: 0.75rem 1.25rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .brand-lockup { display: inline-flex; align-items: center; justify-self: start; }
+
+  #logo {
+    display: block;
+    width: clamp(8rem, 14vw, 11.5rem);
+    height: auto;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    justify-self: end;
+  }
+
+  .action-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.15rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #383838;
+    border-radius: 999px;
+    color: #ddd;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .action-chip.accent {
+    background: var(--red);
+    border-color: var(--red);
+    color: #080808;
+  }
+
+  main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    width: 100%;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #999;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--red); }
+
+  .box {
+    background: rgba(13, 13, 13, 0.95);
+    border: 1px solid #2a2a2a;
+    border-top: 3px solid var(--red);
+    border-radius: 2px;
+    padding: 1.75rem;
+  }
+
+  .box h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    text-align: center;
+  }
+
+  .box .sub {
+    text-align: center;
+    color: #888;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.75rem;
+  }
+
+  label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 0.3rem;
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    background: #080808;
+    border: 1px solid #2a2a2a;
+    color: var(--white);
+    font: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 2px;
+    font-family: inherit;
+  }
+  input[type="text"]:focus, textarea:focus { border-color: var(--red-dim); }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .form-group { margin-bottom: 1.25rem; }
+
+  .char-count {
+    text-align: right;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: #666;
+    margin-top: 0.3rem;
+  }
+  .char-count.over { color: #ff5555; }
+
+  .section-divider {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    padding: 1.25rem 0 0.75rem;
+    border-top: 1px solid #1a1a1a;
+    margin-top: 0.5rem;
+  }
+
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .color-swatch {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    border: 2px solid #333;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .color-swatch input[type="color"] {
+    position: absolute;
+    inset: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .color-text {
+    flex: 1;
+    max-width: 160px;
+    padding: 0.7rem 0.9rem;
+    background: #080808;
+    border: 1px solid #2a2a2a;
+    color: var(--white);
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 2px;
+    text-transform: lowercase;
+  }
+  .color-text:focus { border-color: var(--red-dim); }
+  .color-text.invalid { border-color: #ff5555; }
+
+  .color-presets {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .color-preset {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #2a2a2a;
+    cursor: pointer;
+    padding: 0;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .color-preset:hover {
+    border-color: #fff;
+    transform: scale(1.1);
+  }
+
+  .color-hint {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: #666;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+  }
+  .color-hint.err { color: #ff5555; }
+
+  .social-row { margin-bottom: 1rem; }
+  .social-row label { display: flex; align-items: center; gap: 0.4rem; }
+
+  .social-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #333;
+    display: inline-block;
+  }
+  .social-row.filled .social-dot { background: var(--red); }
+
+  .save-btn {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--red);
+    border: 1px solid var(--red);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    border-radius: 2px;
+    margin-top: 1.5rem;
+  }
+  .save-btn:hover { opacity: 0.85; }
+  .save-btn:disabled { opacity: 0.4; cursor: wait; }
+
+  .status {
+    margin-top: 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    min-height: 1rem;
+  }
+  .status.ok { color: #6fdd6f; }
+  .status.err { color: #ff5555; }
+
+  .loading {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--gray);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .header-main { padding: 0.65rem 0.75rem; }
+    .box { padding: 1.25rem 1rem; }
+  }
+</style>
+</head>
+
+<body>
+  <header>
+    <div class="header-main">
+      <a class="brand-lockup" href="/" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <div></div>
+      <div class="header-actions" id="headerActions"></div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="loading">Loading…</div>
+  </main>
+
+<script>
+  var MAX_BIO = 200;
+  var MAX_DISPLAY = 40;
+  var DEFAULT_ACCENT = '#ff9900';
+
+  var PRESET_COLORS = [
+    '#ff9900', '#ff3d3d', '#ff5fa2', '#c77dff', '#7b8cff',
+    '#3dc6ff', '#3dff9b', '#c7ff3d', '#ffb13d', '#ff7a3d',
+  ];
+
+  var PLATFORMS = [
+    { key: 'discord', label: 'Discord' },
+    { key: 'youtube', label: 'YouTube' },
+    { key: 'soundcloud', label: 'SoundCloud' },
+    { key: 'twitter', label: 'Twitter / X' },
+    { key: 'instagram', label: 'Instagram' },
+    { key: 'spotify', label: 'Spotify' },
+  ];
+
+  var state = {
+    accent_color: DEFAULT_ACCENT,
+  };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function validateAccent(hex) {
+    if (typeof hex !== 'string') return 'Invalid format';
+    if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return 'Use format #rrggbb';
+
+    var r = parseInt(hex.substr(1, 2), 16);
+    var g = parseInt(hex.substr(3, 2), 16);
+    var b = parseInt(hex.substr(5, 2), 16);
+
+    var max = Math.max(r, g, b);
+    var min = Math.min(r, g, b);
+    var saturation = max === 0 ? 0 : (max - min) / max;
+
+    if (saturation < 0.25) return 'Too grey — pick something more colorful';
+    return null;
+  }
+
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+
+      if (data.user) {
+        var userChip = document.createElement('a');
+        userChip.className = 'action-chip';
+        userChip.href = '/@' + data.user.username;
+        userChip.textContent = data.user.display_name || data.user.username;
+
+        var logoutBtn = document.createElement('a');
+        logoutBtn.className = 'action-chip accent';
+        logoutBtn.href = '#';
+        logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) {
+          e.preventDefault();
+          await fetch('/api/auth?action=logout', { method: 'POST' });
+          window.location.href = '/';
+        });
+
+        actions.appendChild(userChip);
+        actions.appendChild(logoutBtn);
+      } else {
+        window.location.href = '/login';
+      }
+    } catch (err) {}
+  })();
+
+  (async function () {
+    var main = document.getElementById('main');
+
+    try {
+      var meRes = await fetch('/api/auth?action=me');
+      var meData = await meRes.json();
+      var myUsername = meData.user ? meData.user.username : '';
+
+      var res = await fetch('/api/profile');
+      if (res.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+      var data = await res.json();
+      var profile = data.profile || {};
+
+      state.accent_color = profile.accent_color || DEFAULT_ACCENT;
+
+      var socialRowsHtml = PLATFORMS.map(function (p) {
+        var value = (profile.socials && profile.socials[p.key]) || '';
+        return (
+          '<div class="social-row' + (value ? ' filled' : '') + '" data-platform="' + p.key + '">' +
+            '<label for="s_' + p.key + '"><span class="social-dot"></span>' + p.label + '</label>' +
+            '<input type="text" id="s_' + p.key + '" data-social="' + p.key + '" value="' + esc(value) + '" placeholder="your handle or URL">' +
+          '</div>'
+        );
+      }).join('');
+
+      var presetSwatches = PRESET_COLORS.map(function (c) {
+        return '<button type="button" class="color-preset" data-preset="' + c + '" style="background:' + c + ';" title="' + c + '"></button>';
+      }).join('');
+
+      main.innerHTML =
+        '<a class="back-link" href="/@' + esc(myUsername) + '">← Back to profile</a>' +
+        '<div class="box">' +
+          '<h1>Edit Profile</h1>' +
+          '<div class="sub">Customize how you appear on PhonkHub</div>' +
+
+          '<div class="section-divider">Theme</div>' +
+          '<div class="color-row">' +
+            '<button type="button" class="color-swatch" id="colorSwatch">' +
+              '<input type="color" id="colorPicker" value="' + esc(state.accent_color) + '">' +
+            '</button>' +
+            '<input type="text" class="color-text" id="colorText" value="' + esc(state.accent_color) + '" maxlength="7">' +
+          '</div>' +
+          '<div class="color-presets">' + presetSwatches + '</div>' +
+          '<div class="color-hint" id="colorHint">Accent color for your profile</div>' +
+
+          '<div class="section-divider">Basics</div>' +
+
+          '<div class="form-group">' +
+            '<label for="display_name">Display Name</label>' +
+            '<input type="text" id="display_name" maxlength="' + MAX_DISPLAY + '" value="' + esc(profile.display_name || '') + '" placeholder="Your display name">' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label for="bio">Bio</label>' +
+            '<textarea id="bio" maxlength="' + MAX_BIO + '" placeholder="Tell people about yourself...">' + esc(profile.bio || '') + '</textarea>' +
+            '<div class="char-count" id="bioCount">0 / ' + MAX_BIO + '</div>' +
+          '</div>' +
+
+          '<div class="section-divider">Social Links</div>' +
+          socialRowsHtml +
+
+          '<button class="save-btn" id="saveBtn">Save Changes</button>' +
+          '<div class="status" id="status"></div>' +
+        '</div>';
+
+      // ---- Color picker ----
+      var colorPicker = document.getElementById('colorPicker');
+      var colorText = document.getElementById('colorText');
+      var colorHint = document.getElementById('colorHint');
+      var colorSwatch = document.getElementById('colorSwatch');
+
+      function applyColor(hex, updatePicker) {
+        var err = validateAccent(hex);
+        if (err) {
+          colorHint.className = 'color-hint err';
+          colorHint.textContent = err;
+          colorText.classList.add('invalid');
+          return;
+        }
+        colorHint.className = 'color-hint';
+        colorHint.textContent = 'Accent color for your profile';
+        colorText.classList.remove('invalid');
+        state.accent_color = hex.toLowerCase();
+        colorSwatch.style.background = state.accent_color;
+        if (updatePicker) colorPicker.value = state.accent_color;
+      }
+
+      colorSwatch.style.background = state.accent_color;
+
+      colorPicker.addEventListener('input', function () {
+        colorText.value = this.value;
+        applyColor(this.value, false);
+      });
+
+      colorText.addEventListener('input', function () {
+        var v = this.value.trim();
+        if (!v.startsWith('#')) v = '#' + v;
+        v = v.toLowerCase();
+        if (v.length === 7) {
+          applyColor(v, true);
+        } else {
+          colorHint.className = 'color-hint';
+          colorHint.textContent = 'Type a 6-digit hex code';
+          colorText.classList.remove('invalid');
+        }
+      });
+
+      colorText.addEventListener('blur', function () {
+        var v = this.value.trim();
+        if (!v.startsWith('#')) v = '#' + v;
+        v = v.toLowerCase();
+        if (!/^#[0-9a-f]{6}$/.test(v)) {
+          this.value = state.accent_color;
+          colorHint.className = 'color-hint';
+          colorHint.textContent = 'Accent color for your profile';
+          colorText.classList.remove('invalid');
+        }
+      });
+
+      document.querySelectorAll('[data-preset]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var c = this.getAttribute('data-preset');
+          colorText.value = c;
+          applyColor(c, true);
+        });
+      });
+
+      // ---- Bio counter ----
+      var bioEl = document.getElementById('bio');
+      var bioCount = document.getElementById('bioCount');
+      function updateBioCount() {
+        var len = bioEl.value.length;
+        bioCount.textContent = len + ' / ' + MAX_BIO;
+        bioCount.classList.toggle('over', len > MAX_BIO);
+      }
+      bioEl.addEventListener('input', updateBioCount);
+      updateBioCount();
+
+      // ---- Social highlight ----
+      var socialInputs = document.querySelectorAll('[data-social]');
+      socialInputs.forEach(function (input) {
+        input.addEventListener('input', function () {
+          var row = input.closest('.social-row');
+          if (row) row.classList.toggle('filled', !!input.value.trim());
+        });
+      });
+
+      // ---- Save ----
+      document.getElementById('saveBtn').addEventListener('click', async function () {
+        var btn = this;
+        var statusEl = document.getElementById('status');
+
+        var socials = {};
+        socialInputs.forEach(function (input) {
+          var val = input.value.trim();
+          if (val) socials[input.getAttribute('data-social')] = val;
+        });
+
+        var payload = {
+          display_name: document.getElementById('display_name').value.trim(),
+          bio: bioEl.value.trim(),
+          socials: socials,
+          accent_color: state.accent_color,
+        };
+
+        btn.disabled = true;
+        statusEl.className = 'status';
+        statusEl.textContent = 'Saving…';
+
+        try {
+          var saveRes = await fetch('/api/profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          var saveData = await saveRes.json();
+
+          if (!saveRes.ok) {
+            statusEl.className = 'status err';
+            statusEl.textContent = saveData.error || 'Could not save';
+            btn.disabled = false;
+            return;
+          }
+
+          statusEl.className = 'status ok';
+          statusEl.textContent = 'Saved!';
+          setTimeout(function () { statusEl.textContent = ''; }, 2500);
+        } catch (err) {
+          statusEl.className = 'status err';
+          statusEl.textContent = 'Network error';
+        }
+
+        btn.disabled = false;
+      });
+    } catch (err) {
+      main.innerHTML = '<div class="loading">Could not load profile</div>';
+    }
+  })();
+</script>
+</body>
+</html>
