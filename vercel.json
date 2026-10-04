@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/track-:id", "destination": "/track.html" }
+    { "source": "/track-:id", "destination": "/track.html" },
+    { "source": "/signup", "destination": "/signup.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/@:username", "destination": "/profile.html" }
   ]
 }

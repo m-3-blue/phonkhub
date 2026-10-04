@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In — PhonkHub</title>
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --red: #ff9900;
+    --red-dim: #cb7603;
+    --white: #f0ece4;
+    --gray: #888;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+  }
+
+  .box {
+    width: 100%;
+    max-width: 380px;
+    background: rgba(13, 13, 13, 0.95);
+    border: 1px solid #2a2a2a;
+    border-top: 3px solid var(--red);
+    border-radius: 2px;
+    padding: 2.25rem 2rem 2rem;
+  }
+
+  .logo {
+    display: block;
+    width: clamp(9rem, 25vw, 12rem);
+    height: auto;
+    margin: 0 auto 1.5rem;
+  }
+
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--white);
+  }
+
+  label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 0.3rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    background: #080808;
+    border: 1px solid #2a2a2a;
+    color: var(--white);
+    font: inherit;
+    font-size: 0.9rem;
+    margin-bottom: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 2px;
+  }
+  input:focus { border-color: var(--red-dim); }
+  input::placeholder { color: #555; }
+
+  button {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--red);
+    border: 1px solid var(--red);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    border-radius: 2px;
+    margin-top: 0.25rem;
+  }
+  button:hover { opacity: 0.85; }
+  button:disabled { opacity: 0.4; cursor: wait; }
+
+  .msg {
+    margin-top: 0.85rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    min-height: 1rem;
+  }
+  .msg.err { color: #ff5555; }
+  .msg.ok { color: #6fdd6f; }
+
+  .alt {
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #1a1a1a;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+  }
+  .alt a {
+    color: var(--red);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .alt a:hover { text-decoration: underline; }
+</style>
+</head>
+
+<body>
+  <div class="box">
+    <img class="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub">
+    <h1>Log In</h1>
+
+    <label for="username">Username or Email</label>
+    <input type="text" id="username" placeholder="Enter username or email" autocomplete="username" autocapitalize="none" spellcheck="false">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+
+    <button id="submitBtn">Log In</button>
+    <div class="msg" id="msg"></div>
+
+    <div class="alt">
+      Don't have an account? <a href="/signup">Sign up</a>
+    </div>
+  </div>
+
+<script>
+  var msgEl = document.getElementById('msg');
+  var btn = document.getElementById('submitBtn');
+
+  function setMsg(text, isErr) {
+    msgEl.textContent = text;
+    msgEl.className = 'msg ' + (isErr ? 'err' : 'ok');
+  }
+
+  async function submit() {
+    var username = document.getElementById('username').value.trim();
+    var password = document.getElementById('password').value;
+
+    if (!username || !password) {
+      setMsg('Fill in all fields', true);
+      return;
+    }
+
+    btn.disabled = true;
+    setMsg('Logging in…', false);
+
+    try {
+      var res = await fetch('/api/auth?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, password: password }),
+      });
+      var data = await res.json();
+
+      if (!res.ok) {
+        setMsg(data.error || 'Login failed', true);
+        btn.disabled = false;
+        return;
+      }
+
+      setMsg('Welcome back, ' + data.user.username + '!', false);
+      window.location.href = '/';
+    } catch (err) {
+      setMsg('Network error', true);
+      btn.disabled = false;
+    }
+  }
+
+  btn.addEventListener('click', submit);
+  document.querySelectorAll('input').forEach(function (el) {
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') submit();
+    });
+  });
+</script>
+</body>
+</html>

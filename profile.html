@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — PhonkHub</title>
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --red: #ff9900;
+    --red-dim: #cb7603;
+    --white: #f0ece4;
+    --gray: #888;
+    --border: #222;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* -------- HEADER (same as homepage) -------- */
+  header {
+    position: relative;
+    background: #050505;
+    border-bottom: 1px solid #242424;
+  }
+
+  .header-main {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.15rem;
+    padding: 0.75rem 1.25rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+  }
+
+  #logo {
+    display: block;
+    width: clamp(8rem, 14vw, 11.5rem);
+    height: auto;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    justify-self: end;
+  }
+
+  .action-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.15rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #383838;
+    border-radius: 999px;
+    color: #ddd;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .action-chip.accent {
+    background: var(--red);
+    border-color: var(--red);
+    color: #080808;
+  }
+
+  /* -------- MAIN -------- */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    width: 100%;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #999;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--red); }
+
+  .profile-box {
+    background: rgba(13, 13, 13, 0.95);
+    border: 1px solid #2a2a2a;
+    border-top: 3px solid var(--red);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .banner {
+    height: 140px;
+    background:
+      linear-gradient(135deg, rgba(255, 153, 0, 0.15), transparent 60%),
+      linear-gradient(160deg, #181818, #0a0a0a);
+    position: relative;
+    border-bottom: 1px solid #1d1d1d;
+  }
+
+  .profile-body {
+    padding: 0 1.75rem 1.75rem;
+    position: relative;
+  }
+
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: #0a0a0a;
+    border: 3px solid var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--red);
+    margin-top: -48px;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .username {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    color: var(--white);
+  }
+
+  .joined {
+    color: #999;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .section-heading {
+    margin-bottom: 0.7rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #1d1d1d;
+    border-left: 3px solid var(--red);
+    background: rgba(13, 13, 13, 0.8);
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .empty-section {
+    padding: 2rem 1rem;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #666;
+    border: 1px dashed #1d1d1d;
+    border-radius: 2px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--gray);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  footer {
+    background: #000;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: #ccc;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+
+  .tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.68rem, 1.4vw, 0.82rem);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  @media (max-width: 480px) {
+    .header-main { padding: 0.65rem 0.75rem; }
+    .profile-body { padding: 0 1rem 1.5rem; }
+    .avatar { width: 80px; height: 80px; font-size: 2rem; margin-top: -40px; }
+    .username { font-size: 1.4rem; }
+  }
+</style>
+</head>
+
+<body>
+  <header>
+    <div class="header-main">
+      <a class="brand-lockup" href="/" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <div></div>
+      <div class="header-actions" id="headerActions"></div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="loading">Loading…</div>
+  </main>
+
+  <footer>
+    <p>
+      <span class="tagline">New Tracks Added Periodically</span><br />&nbsp;<br />
+      &copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists
+    </p>
+  </footer>
+
+<script>
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function formatDate(iso) {
+    var d = new Date(iso);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear();
+  }
+
+  function getUsernameFromPath() {
+    var match = window.location.pathname.match(/^\/@([a-zA-Z0-9_]+)/);
+    return match ? match[1] : null;
+  }
+
+  // ------ Header auth (same as homepage) ------
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+
+      if (data.user) {
+        var userChip = document.createElement('a');
+        userChip.className = 'action-chip';
+        userChip.href = '/@' + data.user.username;
+        userChip.textContent = '@' + data.user.username;
+
+        var logoutBtn = document.createElement('a');
+        logoutBtn.className = 'action-chip accent';
+        logoutBtn.href = '#';
+        logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) {
+          e.preventDefault();
+          await fetch('/api/auth?action=logout', { method: 'POST' });
+          window.location.href = '/';
+        });
+
+        actions.appendChild(userChip);
+        actions.appendChild(logoutBtn);
+      } else {
+        var loginLink = document.createElement('a');
+        loginLink.className = 'action-chip';
+        loginLink.href = '/login';
+        loginLink.textContent = 'Log In';
+
+        var signupLink = document.createElement('a');
+        signupLink.className = 'action-chip accent';
+        signupLink.href = '/signup';
+        signupLink.textContent = 'Sign Up';
+
+        actions.appendChild(loginLink);
+        actions.appendChild(signupLink);
+      }
+    } catch (err) {}
+  })();
+
+  // ------ Load profile ------
+  (async function () {
+    var main = document.getElementById('main');
+    var username = getUsernameFromPath();
+
+    if (!username) {
+      main.innerHTML = '<div class="loading">Invalid profile URL</div>';
+      return;
+    }
+
+    try {
+      var res = await fetch('/api/users?username=' + encodeURIComponent(username));
+      var data = await res.json();
+
+      if (!res.ok) {
+        main.innerHTML =
+          '<a class="back-link" href="/">← Back to home</a>' +
+          '<div class="empty-section">' + esc(data.error || 'User not found') + '</div>';
+        return;
+      }
+
+      var user = data.user;
+      var initial = user.username.charAt(0).toUpperCase();
+
+      document.title = '@' + user.username + ' — PhonkHub';
+
+      main.innerHTML =
+        '<a class="back-link" href="/">← Back to home</a>' +
+        '<div class="profile-box">' +
+          '<div class="banner"></div>' +
+          '<div class="profile-body">' +
+            '<div class="avatar">' + initial + '</div>' +
+            '<div class="username">@' + esc(user.username) + '</div>' +
+            '<div class="joined">Joined ' + formatDate(user.created_at) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="section-heading"><h2 class="section-title">Activity</h2></div>' +
+        '<div class="empty-section">No activity yet — votes and comments coming soon</div>';
+    } catch (err) {
+      main.innerHTML = '<div class="loading">Could not load profile</div>';
+    }
+  })();
+</script>
+</body>
+</html>

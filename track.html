@@ -41,54 +41,27 @@
     border-bottom: 1px solid #242424;
   }
 
-  .header-main, .nav-inner {
-    max-width: 1320px;
-    margin: 0 auto;
-  }
-
   .header-main {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 1.15rem;
     padding: 0.75rem 1.25rem;
+    max-width: 1300px;
+    margin: 0 auto;
   }
 
-  .brand-lockup { display: inline-flex; align-items: center; }
+  .brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+  }
 
   #logo {
     display: block;
     width: clamp(8rem, 14vw, 11.5rem);
     height: auto;
   }
-
-  .search-box {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    max-width: 32rem;
-    height: 2.35rem;
-    padding: 0 0.8rem;
-    border: 1px solid #303030;
-    border-radius: 999px;
-    background: #191919;
-    color: #aaa;
-    justify-self: center;
-    width: 100%;
-    pointer-events: none;
-  }
-  .search-box svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
-  .search-box input {
-    width: 100%;
-    border: 0;
-    outline: 0;
-    padding: 0 0.6rem;
-    background: transparent;
-    color: var(--white);
-    font: inherit;
-    pointer-events: none;
-  }
-  .search-box input::placeholder { color: #858585; }
 
   .header-actions {
     display: flex;
@@ -118,29 +91,6 @@
     border-color: var(--red);
     color: #080808;
   }
-
-  .primary-nav { border-top: 1px solid #181818; }
-  .nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(1rem, 3vw, 3rem);
-    overflow-x: auto;
-    padding: 0 1.25rem;
-  }
-  .nav-link {
-    position: relative;
-    flex: 0 0 auto;
-    padding: 0.75rem 0.1rem 0.68rem;
-    color: #d4d4d4;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
-  .nav-link:hover, .nav-link:focus-visible { color: var(--red); outline: none; }
 
   main {
     max-width: 1100px;
@@ -188,8 +138,6 @@
     align-items: flex-start;
     gap: 1rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid #1d1d1d;
-    margin-bottom: 2rem;
   }
 
   .rank {
@@ -219,6 +167,70 @@
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
+  }
+
+  .vote-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0 1.5rem;
+    border-bottom: 1px solid #1d1d1d;
+    margin-bottom: 2rem;
+  }
+
+  .vote-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.9rem;
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .vote-btn:hover:not(:disabled) {
+    border-color: var(--red-dim);
+    color: var(--red);
+  }
+  .vote-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .vote-btn.up.active {
+    background: rgba(255, 153, 0, 0.15);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .vote-btn.down.active {
+    background: rgba(120, 60, 60, 0.15);
+    border-color: #995555;
+    color: #ff7777;
+  }
+
+  .vote-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.75rem;
+    color: var(--white);
+    line-height: 1;
+    min-width: 3rem;
+    text-align: center;
+  }
+  .vote-score.positive { color: var(--red); }
+  .vote-score.negative { color: #ff7777; }
+
+  .vote-note {
+    margin-left: auto;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #666;
   }
 
   .section-title {
@@ -361,12 +373,6 @@
 
   @media (max-width: 780px) {
     .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
     .header-actions { gap: 0.35rem; }
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
     .track-list { grid-template-columns: 1fr; }
@@ -375,9 +381,9 @@
 
   @media (max-width: 480px) {
     .header-main { padding: 0.65rem 0.75rem; }
-    .header-actions .action-chip:first-child { display: none; }
-    .nav-inner { justify-content: flex-start; gap: 1.25rem; }
     .rank { font-size: 2.5rem; }
+    .vote-row { flex-wrap: wrap; }
+    .vote-note { width: 100%; margin-left: 0; text-align: center; margin-top: 0.5rem; }
   }
 </style>
 </head>
@@ -388,25 +394,9 @@
       <a class="brand-lockup" href="/" aria-label="PhonkHub home">
         <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
       </a>
-      <label class="search-box" role="search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
-        <input type="search" placeholder="Search PhonkHub" aria-label="Search tracks" readonly onfocus="this.blur()" />
-      </label>
-      <div class="header-actions">
-        <a class="action-chip accent" href="/">Featured</a>
-        <a class="action-chip" href="https://discord.gg/b7gQNCpjy4" target="_blank" rel="noopener noreferrer">Join Discord</a>
-      </div>
+      <div></div>
+      <div class="header-actions" id="headerActions"></div>
     </div>
-    <nav class="primary-nav" aria-label="Primary navigation">
-      <div class="nav-inner">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link">Featured</a>
-        <a class="nav-link">All Tracks</a>
-        <a class="nav-link">Genres</a>
-        <a class="nav-link">Community</a>
-        <a class="nav-link">About</a>
-      </div>
-    </nav>
   </header>
 
   <main id="main">
@@ -431,7 +421,6 @@
     });
   }
 
-  // Get the track ID from the URL: /track-5  ->  5
   function getTrackId() {
     var match = window.location.pathname.match(/^\/track-(\d+)/);
     return match ? match[1] : null;
@@ -454,16 +443,116 @@
     );
   }
 
-  function renderError(msg) {
-    document.getElementById('main').innerHTML =
-      '<div class="loading-msg">' + msg + '</div>';
+  // ---- Header auth ----
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+
+      if (data.user) {
+        var userChip = document.createElement('a');
+        userChip.className = 'action-chip';
+        userChip.href = '/@' + data.user.username;
+        userChip.textContent = '@' + data.user.username;
+
+        var logoutBtn = document.createElement('a');
+        logoutBtn.className = 'action-chip accent';
+        logoutBtn.href = '#';
+        logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) {
+          e.preventDefault();
+          await fetch('/api/auth?action=logout', { method: 'POST' });
+          window.location.href = '/';
+        });
+
+        actions.appendChild(userChip);
+        actions.appendChild(logoutBtn);
+      } else {
+        var loginLink = document.createElement('a');
+        loginLink.className = 'action-chip';
+        loginLink.href = '/login';
+        loginLink.textContent = 'Log In';
+
+        var signupLink = document.createElement('a');
+        signupLink.className = 'action-chip accent';
+        signupLink.href = '/signup';
+        signupLink.textContent = 'Sign Up';
+
+        actions.appendChild(loginLink);
+        actions.appendChild(signupLink);
+      }
+    } catch (err) {}
+  })();
+
+  // ---- Voting state ----
+  var currentUserVote = 0;
+  var voteScore = 0;
+  var loggedIn = false;
+  var currentTrackId = null;
+
+  function renderVotes() {
+    var scoreEl = document.getElementById('voteScore');
+    var upBtn = document.getElementById('upBtn');
+    var downBtn = document.getElementById('downBtn');
+    var noteEl = document.getElementById('voteNote');
+    if (!scoreEl) return;
+
+    scoreEl.textContent = voteScore;
+    scoreEl.className = 'vote-score' +
+      (voteScore > 0 ? ' positive' : voteScore < 0 ? ' negative' : '');
+
+    upBtn.classList.toggle('active', currentUserVote === 1);
+    downBtn.classList.toggle('active', currentUserVote === -1);
+
+    if (!loggedIn) {
+      upBtn.disabled = true;
+      downBtn.disabled = true;
+      noteEl.textContent = 'Log in to vote';
+    } else {
+      upBtn.disabled = false;
+      downBtn.disabled = false;
+      noteEl.textContent = '';
+    }
   }
 
+  async function castVote(value) {
+    if (!loggedIn) return;
+
+    var newValue = (currentUserVote === value) ? 0 : value;
+
+    try {
+      var res = await fetch('/api/votes?action=cast', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ track_id: parseInt(currentTrackId, 10), value: newValue }),
+      });
+      var data = await res.json();
+      if (!res.ok) return;
+      voteScore = data.score;
+      currentUserVote = data.userVote;
+      renderVotes();
+    } catch (err) {}
+  }
+
+  function attachVoteHandlers() {
+    var upBtn = document.getElementById('upBtn');
+    var downBtn = document.getElementById('downBtn');
+    if (!upBtn) return;
+    upBtn.onclick = function () { castVote(1); };
+    downBtn.onclick = function () { castVote(-1); };
+  }
+
+  // ---- Load track page (single request) ----
   var id = getTrackId();
   if (!id) {
-    renderError('Track not found');
+    document.getElementById('main').innerHTML = '<div class="loading-msg">Track not found</div>';
   } else {
-    fetch('/api/tracks?id=' + id)
+    currentTrackId = id;
+
+    fetch('/api/track-page?id=' + id)
       .then(function (r) {
         if (!r.ok) throw new Error('Track not found');
         return r.json();
@@ -471,6 +560,10 @@
       .then(function (data) {
         var t = data.track;
         var recs = data.recommended || [];
+
+        voteScore = data.score || 0;
+        currentUserVote = data.userVote || 0;
+        loggedIn = !!data.user;
 
         var html =
           '<a class="back-link" href="/">← Back to all tracks</a>' +
@@ -487,6 +580,12 @@
               '<div class="track-artist">' + esc(t.artist) + '</div>' +
             '</div>' +
           '</div>' +
+          '<div class="vote-row">' +
+            '<button class="vote-btn up" id="upBtn">▲</button>' +
+            '<div class="vote-score" id="voteScore">0</div>' +
+            '<button class="vote-btn down" id="downBtn">▼</button>' +
+            '<div class="vote-note" id="voteNote"></div>' +
+          '</div>' +
           '<div class="section-heading"><h2 class="section-title">Recommended</h2></div>' +
           '<div class="track-list">' +
             recs.map(buildCard).join('') +
@@ -494,9 +593,12 @@
 
         document.getElementById('main').innerHTML = html;
         document.title = t.title + ' — PhonkHub';
+
+        attachVoteHandlers();
+        renderVotes();
       })
       .catch(function () {
-        renderError('Track not found');
+        document.getElementById('main').innerHTML = '<div class="loading-msg">Track not found</div>';
       });
   }
 </script>
