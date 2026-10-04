@@ -1,13 +1,9 @@
 {
   "rewrites": [
-<<<<<<< HEAD
     { "source": "/track-:id", "destination": "/track.html" },
     { "source": "/signup", "destination": "/signup.html" },
     { "source": "/login", "destination": "/login.html" },
     { "source": "/@:username", "destination": "/profile.html" },
     { "source": "/edit-profile", "destination": "/edit-profile.html" }
-=======
-    { "source": "/track-:id", "destination": "/track.html" }
->>>>>>> cda5ac28fb9e42d6e6ebddc19d8e68eb16c3cf5b
   ]
 }
