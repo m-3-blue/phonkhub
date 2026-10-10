@@ -13,6 +13,29 @@ function now() {
   return new Date().toISOString();
 }
 
+function getClientIp(req) {
+  var fwd = req.headers['x-forwarded-for'];
+  if (typeof fwd === 'string' && fwd.length > 0) {
+    return fwd.split(',')[0].trim();
+  }
+  if (typeof req.headers['x-real-ip'] === 'string') {
+    return req.headers['x-real-ip'];
+  }
+  if (req.socket && req.socket.remoteAddress) {
+    return req.socket.remoteAddress;
+  }
+  return 'unknown';
+}
+
+async function isIpBanned(client, ip) {
+  if (!ip || ip === 'unknown') return false;
+  var result = await client.execute({
+    sql: 'SELECT 1 FROM banned_ips WHERE ip = ?',
+    args: [ip],
+  });
+  return result.rows.length > 0;
+}
+
 function getSessionToken(req) {
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
@@ -30,29 +53,26 @@ async function getCurrentUser(client, req) {
   if (!token) return null;
 
   const result = await client.execute({
-    sql: `SELECT u.id, u.username, s.expires_at
-          FROM sessions s
-          JOIN users u ON u.id = s.user_id
-          WHERE s.token = ?`,
-    args: [token],
+    sql: `SELECT u.id, u.username
+          FROM sessions s JOIN users u ON u.id = s.user_id
+          WHERE s.token = ? AND s.expires_at > ?`,
+    args: [token, now()],
   });
 
   if (result.rows.length === 0) return null;
-
-  const row = result.rows[0];
-  if (new Date(row.expires_at) < new Date()) {
-    await client.execute({ sql: 'DELETE FROM sessions WHERE token = ?', args: [token] });
-    return null;
-  }
-
-  return { id: row.id, username: row.username };
+  return { id: result.rows[0].id, username: result.rows[0].username };
 }
 
 export default async function handler(req, res) {
   const client = getClient();
   const action = req.query.action;
+  const ip = getClientIp(req);
 
   try {
+    if (await isIpBanned(client, ip)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
     // -------- GET VOTES FOR A TRACK (public) --------
     if (action === 'for-track' && req.method === 'GET') {
       const trackId = parseInt(req.query.track_id, 10);
@@ -65,7 +85,6 @@ export default async function handler(req, res) {
 
       const score = Number(scoreResult.rows[0].score) || 0;
 
-      // Also return the current user's vote on this track (if logged in)
       const user = await getCurrentUser(client, req);
       let userVote = 0;
 
@@ -82,7 +101,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ score, userVote });
     }
 
-    // -------- GET SCORES FOR MANY TRACKS (public, for homepage) --------
+    // -------- GET SCORES FOR MANY TRACKS (public) --------
     if (action === 'all' && req.method === 'GET') {
       const scores = await client.execute(
         'SELECT track_id, COALESCE(SUM(value), 0) AS score FROM votes GROUP BY track_id'
@@ -123,7 +142,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'value must be 1, -1, or 0' });
       }
 
-      // Make sure track exists
       const trackExists = await client.execute({
         sql: 'SELECT id FROM tracks WHERE id = ?',
         args: [trackId],
@@ -132,7 +150,6 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'Track not found' });
       }
 
-      // value === 0 means "remove my vote"
       if (val === 0) {
         await client.execute({
           sql: 'DELETE FROM votes WHERE user_id = ? AND track_id = ?',
@@ -140,14 +157,13 @@ export default async function handler(req, res) {
         });
       } else {
         await client.execute({
-          sql: `INSERT INTO votes (user_id, track_id, value, created_at)
-                VALUES (?, ?, ?, ?)
-                ON CONFLICT(user_id, track_id) DO UPDATE SET value = excluded.value, created_at = excluded.created_at`,
-          args: [user.id, trackId, val, now()],
+          sql: `INSERT INTO votes (user_id, track_id, value, ip, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(user_id, track_id) DO UPDATE SET value = excluded.value, ip = excluded.ip, created_at = excluded.created_at`,
+          args: [user.id, trackId, val, ip, now()],
         });
       }
 
-      // Return new score + this user's vote
       const newScore = await client.execute({
         sql: 'SELECT COALESCE(SUM(value), 0) AS score FROM votes WHERE track_id = ?',
         args: [trackId],

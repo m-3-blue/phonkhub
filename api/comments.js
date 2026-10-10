@@ -14,6 +14,29 @@ function now() {
   return new Date().toISOString();
 }
 
+function getClientIp(req) {
+  var fwd = req.headers['x-forwarded-for'];
+  if (typeof fwd === 'string' && fwd.length > 0) {
+    return fwd.split(',')[0].trim();
+  }
+  if (typeof req.headers['x-real-ip'] === 'string') {
+    return req.headers['x-real-ip'];
+  }
+  if (req.socket && req.socket.remoteAddress) {
+    return req.socket.remoteAddress;
+  }
+  return 'unknown';
+}
+
+async function isIpBanned(client, ip) {
+  if (!ip || ip === 'unknown') return false;
+  var result = await client.execute({
+    sql: 'SELECT 1 FROM banned_ips WHERE ip = ?',
+    args: [ip],
+  });
+  return result.rows.length > 0;
+}
+
 function getSessionToken(req) {
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
@@ -53,8 +76,14 @@ async function getCurrentUser(client, req) {
 export default async function handler(req, res) {
   const client = getClient();
   const action = req.query.action;
+  const ip = getClientIp(req);
 
   try {
+    // Block banned IPs from every action
+    if (await isIpBanned(client, ip)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
     // -------- LIST COMMENTS FOR A TRACK --------
     if (action === 'list' && req.method === 'GET') {
       const trackId = parseInt(req.query.track_id, 10);
@@ -70,7 +99,6 @@ export default async function handler(req, res) {
         args: [trackId],
       });
 
-      // Get all like counts for this track's comments
       const likesResult = await client.execute({
         sql: `SELECT cl.comment_id, COUNT(*) AS like_count
               FROM comment_likes cl
@@ -85,7 +113,6 @@ export default async function handler(req, res) {
         likeCounts[row.comment_id] = Number(row.like_count);
       }
 
-      // Who's logged in? (needed to know which comments they've liked)
       const user = await getCurrentUser(client, req);
 
       let userLikes = {};
@@ -178,8 +205,8 @@ export default async function handler(req, res) {
       }
 
       const result = await client.execute({
-        sql: 'INSERT INTO comments (track_id, user_id, parent_id, body, created_at) VALUES (?, ?, ?, ?, ?)',
-        args: [trackId, user.id, parentId, body.trim(), now()],
+        sql: 'INSERT INTO comments (track_id, user_id, parent_id, body, ip, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+        args: [trackId, user.id, parentId, body.trim(), ip, now()],
       });
 
       return res.status(200).json({
@@ -274,7 +301,6 @@ export default async function handler(req, res) {
       const commentId = parseInt(id, 10);
       if (!commentId) return res.status(400).json({ error: 'Missing id' });
 
-      // Check the comment exists
       const check = await client.execute({
         sql: 'SELECT id FROM comments WHERE id = ?',
         args: [commentId],
@@ -283,7 +309,6 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'Comment not found' });
       }
 
-      // Toggle
       const existing = await client.execute({
         sql: 'SELECT 1 FROM comment_likes WHERE user_id = ? AND comment_id = ?',
         args: [user.id, commentId],

@@ -20,6 +20,29 @@ function daysFromNow(days) {
   return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
 }
 
+function getClientIp(req) {
+  var fwd = req.headers['x-forwarded-for'];
+  if (typeof fwd === 'string' && fwd.length > 0) {
+    return fwd.split(',')[0].trim();
+  }
+  if (typeof req.headers['x-real-ip'] === 'string') {
+    return req.headers['x-real-ip'];
+  }
+  if (req.socket && req.socket.remoteAddress) {
+    return req.socket.remoteAddress;
+  }
+  return 'unknown';
+}
+
+async function isIpBanned(client, ip) {
+  if (!ip || ip === 'unknown') return false;
+  var result = await client.execute({
+    sql: 'SELECT 1 FROM banned_ips WHERE ip = ?',
+    args: [ip],
+  });
+  return result.rows.length > 0;
+}
+
 function isValidUsername(u) {
   return typeof u === 'string' && /^[a-zA-Z0-9_]{3,20}$/.test(u);
 }
@@ -56,10 +79,15 @@ function getSessionToken(req) {
 export default async function handler(req, res) {
   const action = req.query.action;
   const client = getClient();
+  const ip = getClientIp(req);
 
   try {
     // -------- SIGNUP --------
     if (action === 'signup' && req.method === 'POST') {
+      if (await isIpBanned(client, ip)) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+
       const { username, email, password, display_name } = req.body || {};
 
       if (!isValidUsername(username)) {
@@ -91,8 +119,8 @@ export default async function handler(req, res) {
         : username;
 
       const result = await client.execute({
-        sql: 'INSERT INTO users (username, email, password_hash, display_name, created_at) VALUES (?, ?, ?, ?, ?)',
-        args: [username, email, hash, finalDisplayName, now()],
+        sql: 'INSERT INTO users (username, email, password_hash, display_name, ip, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+        args: [username, email, hash, finalDisplayName, ip, now()],
       });
 
       const userId = Number(result.lastInsertRowid);
@@ -100,8 +128,8 @@ export default async function handler(req, res) {
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = daysFromNow(SESSION_DAYS);
       await client.execute({
-        sql: 'INSERT INTO sessions (token, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)',
-        args: [token, userId, now(), expiresAt],
+        sql: 'INSERT INTO sessions (token, user_id, ip, created_at, expires_at) VALUES (?, ?, ?, ?, ?)',
+        args: [token, userId, ip, now(), expiresAt],
       });
 
       setSessionCookie(res, token, expiresAt);
@@ -112,6 +140,10 @@ export default async function handler(req, res) {
 
     // -------- LOGIN --------
     if (action === 'login' && req.method === 'POST') {
+      if (await isIpBanned(client, ip)) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+
       const { username, password } = req.body || {};
 
       if (!username || !password) {
@@ -133,11 +165,16 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Invalid username or password' });
       }
 
+      await client.execute({
+        sql: 'UPDATE users SET ip = ? WHERE id = ?',
+        args: [ip, user.id],
+      });
+
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = daysFromNow(SESSION_DAYS);
       await client.execute({
-        sql: 'INSERT INTO sessions (token, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)',
-        args: [token, user.id, now(), expiresAt],
+        sql: 'INSERT INTO sessions (token, user_id, ip, created_at, expires_at) VALUES (?, ?, ?, ?, ?)',
+        args: [token, user.id, ip, now(), expiresAt],
       });
 
       setSessionCookie(res, token, expiresAt);
