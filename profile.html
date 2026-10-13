@@ -85,6 +85,33 @@
     color: #080808;
   }
 
+  .primary-nav { border-top: 1px solid #181818; width: 100%; }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 3rem);
+    overflow-x: auto;
+    padding: 0 1.25rem;
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  .nav-link {
+    position: relative;
+    flex: 0 0 auto;
+    padding: 0.75rem 0.1rem 0.68rem;
+    color: #d4d4d4;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-link:hover { color: var(--red); }
+
   main {
     max-width: 900px;
     margin: 0 auto;
@@ -491,6 +518,16 @@
       <div></div>
       <div class="header-actions" id="headerActions"></div>
     </div>
+
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <div class="nav-inner">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/forums">Forums</a>
+        <a class="nav-link">About</a>
+        <a class="nav-link">All Tracks</a>
+        <a class="nav-link">Genres</a>
+      </div>
+    </nav>
   </header>
 
   <main id="main">

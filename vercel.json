@@ -4,6 +4,10 @@
     { "source": "/signup", "destination": "/signup.html" },
     { "source": "/login", "destination": "/login.html" },
     { "source": "/@:username", "destination": "/profile.html" },
-    { "source": "/edit-profile", "destination": "/edit-profile.html" }
+    { "source": "/edit-profile", "destination": "/edit-profile.html" },
+    { "source": "/forums", "destination": "/forums.html" },
+    { "source": "/forums/new", "destination": "/forum-new.html" },
+    { "source": "/forums/thread-:id", "destination": "/forum-thread.html" },
+    { "source": "/forums/:slug", "destination": "/forum-category.html" }
   ]
 }

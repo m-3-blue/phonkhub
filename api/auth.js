@@ -134,7 +134,7 @@ export default async function handler(req, res) {
 
       setSessionCookie(res, token, expiresAt);
       return res.status(200).json({
-        user: { id: userId, username, display_name: finalDisplayName },
+        user: { id: userId, username, display_name: finalDisplayName, is_admin: false },
       });
     }
 
@@ -151,7 +151,7 @@ export default async function handler(req, res) {
       }
 
       const result = await client.execute({
-        sql: 'SELECT id, username, display_name, password_hash FROM users WHERE username = ? OR email = ?',
+        sql: 'SELECT id, username, display_name, password_hash, is_admin FROM users WHERE username = ? OR email = ?',
         args: [username, username],
       });
 
@@ -179,7 +179,12 @@ export default async function handler(req, res) {
 
       setSessionCookie(res, token, expiresAt);
       return res.status(200).json({
-        user: { id: user.id, username: user.username, display_name: user.display_name || user.username },
+        user: {
+          id: user.id,
+          username: user.username,
+          display_name: user.display_name || user.username,
+          is_admin: !!user.is_admin,
+        },
       });
     }
 
@@ -204,7 +209,7 @@ export default async function handler(req, res) {
       }
 
       const result = await client.execute({
-        sql: `SELECT u.id, u.username, u.display_name, s.expires_at
+        sql: `SELECT u.id, u.username, u.display_name, u.is_admin, s.expires_at
               FROM sessions s
               JOIN users u ON u.id = s.user_id
               WHERE s.token = ?`,
@@ -225,7 +230,12 @@ export default async function handler(req, res) {
       }
 
       return res.status(200).json({
-        user: { id: row.id, username: row.username, display_name: row.display_name || row.username },
+        user: {
+          id: row.id,
+          username: row.username,
+          display_name: row.display_name || row.username,
+          is_admin: !!row.is_admin,
+        },
       });
     }
 

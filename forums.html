@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forums — PhonkHub</title>
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --red: #ff9900;
+    --red-dim: #cb7603;
+    --white: #f0ece4;
+    --gray: #888;
+    --border: #222;
+    --sidebar-width: 220px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ========== SITE HEADER ========== */
+  header {
+    position: relative;
+    background: #050505;
+    border-bottom: 1px solid #242424;
+  }
+
+  .header-main {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.15rem;
+    padding: 0.75rem 1.25rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .brand-lockup { display: inline-flex; align-items: center; justify-self: start; }
+
+  #logo {
+    display: block;
+    width: clamp(8rem, 14vw, 11.5rem);
+    height: auto;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 32rem;
+    height: 2.35rem;
+    padding: 0 0.8rem;
+    border: 1px solid #303030;
+    border-radius: 999px;
+    background: #191919;
+    color: #aaa;
+    justify-self: center;
+    width: 100%;
+    pointer-events: none;
+  }
+  .search-box svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
+  .search-box input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    padding: 0 0.6rem;
+    background: transparent;
+    color: var(--white);
+    font: inherit;
+    pointer-events: none;
+  }
+  .search-box input::placeholder { color: #858585; }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    justify-self: end;
+  }
+
+  .action-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.15rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #383838;
+    border-radius: 999px;
+    color: #ddd;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .action-chip.accent { background: var(--red); border-color: var(--red); color: #080808; }
+
+  .primary-nav { border-top: 1px solid #181818; }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 3rem);
+    overflow-x: auto;
+    padding: 0 1.25rem;
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+  .nav-link {
+    position: relative;
+    flex: 0 0 auto;
+    padding: 0.75rem 0.1rem 0.68rem;
+    color: #d4d4d4;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-link:hover { color: var(--red); }
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    right: 0; bottom: 0; left: 0;
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* ========== FORUM LAYOUT ========== */
+  .forum-shell {
+    display: flex;
+    max-width: 1320px;
+    margin: 0 auto;
+    min-height: calc(100vh - 130px);
+  }
+
+  /* ========== SIDEBAR ========== */
+  .forum-sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: #050505;
+    border-right: 1px solid #1a1a1a;
+    padding: 1.5rem 1rem;
+  }
+
+  .sidebar-group {
+    margin-bottom: 1.5rem;
+  }
+  .sidebar-group-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #666;
+    padding: 0 0.75rem 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.75rem;
+    color: #bbb;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+  }
+  .sidebar-item:hover {
+    color: var(--white);
+    background: rgba(255, 153, 0, 0.05);
+  }
+  .sidebar-item.active {
+    color: var(--red);
+    background: rgba(255, 153, 0, 0.08);
+    border-left-color: var(--red);
+  }
+
+  .sidebar-item-count {
+    margin-left: auto;
+    font-size: 0.6rem;
+    color: #666;
+    background: #1a1a1a;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ========== MAIN CONTENT ========== */
+  .forum-main {
+    flex: 1;
+    padding: 2rem 2rem 4rem;
+    min-width: 0;
+  }
+
+  .forum-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .forum-sub {
+    color: #888;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .forum-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .forum-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .forum-section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .forum-section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, #1a1a1a, transparent);
+  }
+
+  .category-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(13, 13, 13, 0.85);
+    border: 1px solid #1d1d1d;
+    border-left: 3px solid var(--red-dim);
+    border-radius: 2px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    margin-bottom: 0.5rem;
+  }
+  .category-card:hover {
+    border-left-color: var(--red);
+    background: rgba(20, 20, 20, 0.95);
+    transform: translateX(2px);
+  }
+
+  .category-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+    color: var(--white);
+  }
+  .category-card:hover .category-name { color: var(--red); }
+
+  .category-desc {
+    font-size: 0.82rem;
+    color: #999;
+    line-height: 1.4;
+  }
+
+  .category-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-end;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .category-stat-num {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .loading-msg {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gray);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  footer {
+    background: #000;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: #ccc;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+  .tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.68rem, 1.4vw, 0.82rem);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  /* ========== MOBILE ========== */
+  @media (max-width: 780px) {
+    .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
+    .search-box {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      max-width: none;
+      justify-self: stretch;
+    }
+    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+
+    .forum-shell { flex-direction: column; }
+
+    .forum-sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 1rem;
+    }
+
+    .sidebar-group { margin-bottom: 1rem; }
+
+    .forum-main { padding: 1.5rem 1rem 3rem; }
+
+    .category-card { grid-template-columns: 1fr; }
+    .category-stats { flex-direction: row; gap: 1rem; align-items: flex-start; }
+  }
+</style>
+</head>
+
+<body>
+  <header>
+    <div class="header-main">
+      <a class="brand-lockup" href="/" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <label class="search-box" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+        <input type="search" placeholder="Search PhonkHub" aria-label="Search tracks" readonly onfocus="this.blur()" />
+      </label>
+      <div class="header-actions" id="headerActions"></div>
+    </div>
+
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <div class="nav-inner">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link active" href="/forums">Forums</a>
+        <a class="nav-link">About</a>
+        <a class="nav-link">All Tracks</a>
+        <a class="nav-link">Genres</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="forum-shell">
+    <aside class="forum-sidebar" id="forumSidebar">
+      <div class="loading-msg" style="padding:1rem 0;">Loading…</div>
+    </aside>
+
+    <main class="forum-main">
+      <h1 class="forum-title">Forums</h1>
+      <div class="forum-sub">Discuss, share, and suggest</div>
+
+      <div id="forumContent">
+        <div class="loading-msg">Loading categories…</div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>
+      <span class="tagline">New Tracks Added Periodically</span><br />&nbsp;<br />
+      &copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists
+    </p>
+  </footer>
+
+<script>
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function timeAgo(iso) {
+    if (!iso) return null;
+    var then = new Date(iso).getTime();
+    var now = Date.now();
+    var sec = Math.floor((now - then) / 1000);
+    if (sec < 5) return 'just now';
+    if (sec < 60) return sec + 's ago';
+    var min = Math.floor(sec / 60);
+    if (min < 60) return min + 'm ago';
+    var hr = Math.floor(min / 60);
+    if (hr < 24) return hr + 'h ago';
+    var day = Math.floor(hr / 24);
+    if (day < 30) return day + 'd ago';
+    var mon = Math.floor(day / 30);
+    if (mon < 12) return mon + 'mo ago';
+    return Math.floor(mon / 12) + 'y ago';
+  }
+
+  // ---- Header auth ----
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+
+      if (data.user) {
+        var userChip = document.createElement('a');
+        userChip.className = 'action-chip';
+        userChip.href = '/@' + data.user.username;
+        userChip.textContent = data.user.display_name || data.user.username;
+
+        var logoutBtn = document.createElement('a');
+        logoutBtn.className = 'action-chip accent';
+        logoutBtn.href = '#';
+        logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) {
+          e.preventDefault();
+          await fetch('/api/auth?action=logout', { method: 'POST' });
+          window.location.href = '/';
+        });
+
+        actions.appendChild(userChip);
+        actions.appendChild(logoutBtn);
+      } else {
+        var loginLink = document.createElement('a');
+        loginLink.className = 'action-chip';
+        loginLink.href = '/login';
+        loginLink.textContent = 'Log In';
+
+        var signupLink = document.createElement('a');
+        signupLink.className = 'action-chip accent';
+        signupLink.href = '/signup';
+        signupLink.textContent = 'Sign Up';
+
+        actions.appendChild(loginLink);
+        actions.appendChild(signupLink);
+      }
+    } catch (err) {}
+  })();
+
+  // ---- Load categories ----
+  (async function () {
+    var sidebarEl = document.getElementById('forumSidebar');
+    var contentEl = document.getElementById('forumContent');
+
+    try {
+      var res = await fetch('/api/forums?action=categories');
+      var data = await res.json();
+      var categories = data.categories || [];
+
+      if (categories.length === 0) {
+        sidebarEl.innerHTML = '';
+        contentEl.innerHTML = '<div class="loading-msg">No categories yet</div>';
+        return;
+      }
+
+      // Group them
+      var moderation = categories.filter(function (c) { return c.group_name === 'moderation'; });
+      var discussion = categories.filter(function (c) { return c.group_name === 'discussion'; });
+
+      // ---- SIDEBAR ----
+      function sidebarGroupHtml(title, cats) {
+        return (
+          '<div class="sidebar-group">' +
+            '<div class="sidebar-group-title">' + title + '</div>' +
+            cats.map(function (c) {
+              return (
+                '<a class="sidebar-item" href="/forums/' + esc(c.slug) + '">' +
+                  esc(c.name) +
+                  (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') +
+                '</a>'
+              );
+            }).join('') +
+          '</div>'
+        );
+      }
+
+      sidebarEl.innerHTML =
+        sidebarGroupHtml('Moderation', moderation) +
+        sidebarGroupHtml('Discussion', discussion);
+
+      // ---- MAIN CONTENT ----
+      function categoryCardHtml(c) {
+        return (
+          '<a class="category-card" href="/forums/' + esc(c.slug) + '">' +
+            '<div>' +
+              '<div class="category-name">' + esc(c.name) + '</div>' +
+              '<div class="category-desc">' + esc(c.description || '') + '</div>' +
+            '</div>' +
+            '<div class="category-stats">' +
+              '<div><span class="category-stat-num">' + (c.thread_count || 0) + '</span> threads</div>' +
+              '<div><span class="category-stat-num">' + (c.reply_count || 0) + '</span> replies</div>' +
+            '</div>' +
+          '</a>'
+        );
+      }
+
+      function sectionHtml(title, cats) {
+        if (cats.length === 0) return '';
+        return (
+          '<div class="forum-section">' +
+            '<div class="forum-section-header">' +
+              '<div class="forum-section-title">' + title + '</div>' +
+              '<div class="forum-section-line"></div>' +
+            '</div>' +
+            cats.map(categoryCardHtml).join('') +
+          '</div>'
+        );
+      }
+
+      contentEl.innerHTML =
+        sectionHtml('Moderation', moderation) +
+        sectionHtml('Discussion', discussion);
+    } catch (err) {
+      document.getElementById('forumContent').innerHTML =
+        '<div class="loading-msg">Could not load forums</div>';
+      document.getElementById('forumSidebar').innerHTML = '';
+    }
+  })();
+</script>
+</body>
+</html>

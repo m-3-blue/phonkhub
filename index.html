@@ -80,30 +80,6 @@
     justify-self: start;
   }
 
-  .discord-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.15rem;
-    height: 2.15rem;
-    flex: 0 0 auto;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.35), rgba(64, 78, 237, 0.35));
-    border: 1px solid rgba(88, 101, 242, 0.35);
-    color: #fff;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .discord-btn:hover {
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5));
-    transform: translateY(-1px);
-  }
-  .discord-btn svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    display: block;
-  }
-
   #logo {
     display: block;
     width: clamp(8rem, 14vw, 11.5rem);
@@ -127,11 +103,7 @@
     pointer-events: none;
     cursor: default;
   }
-  .search-box svg {
-    width: 1rem;
-    height: 1rem;
-    flex: 0 0 auto;
-  }
+  .search-box svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
   .search-box input {
     width: 100%;
     border: 0;
@@ -143,9 +115,7 @@
     pointer-events: none;
     cursor: default;
   }
-  .search-box input::placeholder {
-    color: #858585;
-  }
+  .search-box input::placeholder { color: #858585; }
 
   .header-actions {
     display: flex;
@@ -170,16 +140,9 @@
     text-decoration: none;
     text-transform: uppercase;
   }
-  .action-chip.accent {
-    background: var(--red);
-    border-color: var(--red);
-    color: #080808;
-  }
+  .action-chip.accent { background: var(--red); border-color: var(--red); color: #080808; }
 
-  .primary-nav {
-    border-top: 1px solid #181818;
-    width: 100%;
-  }
+  .primary-nav { border-top: 1px solid #181818; width: 100%; }
 
   .nav-inner {
     display: flex;
@@ -206,30 +169,18 @@
     text-decoration: none;
     text-transform: uppercase;
   }
-  .nav-link:hover,
-  .nav-link:focus-visible {
-    color: var(--red);
-    outline: none;
-  }
+  .nav-link:hover, .nav-link:focus-visible { color: var(--red); outline: none; }
   .nav-link.active::after {
     content: '';
     position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    right: 0; bottom: 0; left: 0;
     height: 2px;
     background: var(--red);
   }
 
   @keyframes logoIn {
-    from {
-      opacity: 0;
-      transform: translateY(-20px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .content-frame {
@@ -250,13 +201,8 @@
     width: 100%;
   }
 
-  .track-section {
-    margin-bottom: 2.75rem;
-  }
-
-  .track-section:first-of-type {
-    margin-top: 215px;
-  }
+  .track-section { margin-bottom: 2.75rem; }
+  .track-section:first-of-type { margin-top: 215px; }
 
   .section-heading {
     display: flex;
@@ -270,7 +216,7 @@
     background: rgba(13, 13, 13, 0.8);
     backdrop-filter: blur(4px);
   }
-   .section-title {
+  .section-title {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: clamp(1rem, 2vw, 1.35rem);
     font-weight: 700;
@@ -338,22 +284,18 @@
   }
   .thumb-wrap img {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
     transition: transform 0.25s;
   }
-  .track-card:hover .thumb-wrap img {
-    transform: scale(1.04);
-  }
+  .track-card:hover .thumb-wrap img { transform: scale(1.04); }
   .thumb-wrap::after {
     content: '▶';
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 3rem;
     height: 3rem;
@@ -369,9 +311,7 @@
     transition: opacity 0.2s;
     pointer-events: none;
   }
-  .track-card:hover .thumb-wrap::after {
-    opacity: 1;
-  }
+  .track-card:hover .thumb-wrap::after { opacity: 1; }
 
   .track-header {
     display: flex;
@@ -391,17 +331,9 @@
     flex-shrink: 0;
     opacity: 0.8;
   }
-  .track-card:first-child .rank {
-    opacity: 1;
-    text-shadow: 0 0 16px rgba(255, 153, 0, 0.5);
-  }
+  .track-card:first-child .rank { opacity: 1; text-shadow: 0 0 16px rgba(255, 153, 0, 0.5); }
 
-  .track-meta {
-    display: flex;
-    flex: 1;
-    min-width: 0;
-    flex-direction: column;
-  }
+  .track-meta { display: flex; flex: 1; min-width: 0; flex-direction: column; }
   .track-title {
     order: 2;
     font-family: 'Barlow Condensed', sans-serif;
@@ -461,7 +393,6 @@
     border-top: 1px solid var(--border);
     margin-top: 0;
   }
-
   .tagline {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: clamp(0.68rem, 1.4vw, 0.82rem);
@@ -481,10 +412,7 @@
   }
 
   @media (max-width: 780px) {
-    .header-main {
-      grid-template-columns: auto 1fr auto;
-      gap: 0.7rem;
-    }
+    .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
     .search-box {
       grid-column: 1 / -1;
       grid-row: 2;
@@ -494,11 +422,8 @@
     .header-actions { gap: 0.35rem; }
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
 
-    .section-heading {
-      padding: 0.7rem 0;
-    }
-    .featured-list,
-    .track-list {
+    .section-heading { padding: 0.7rem 0; }
+    .featured-list, .track-list {
       grid-template-columns: repeat(2, 1fr);
       padding: 0 30px;
     }
@@ -507,18 +432,12 @@
   }
 
   @media (max-width: 480px) {
-    .header-main {
-      padding: 0.65rem 0.75rem;
-      grid-template-columns: auto 1fr auto;
-    }
+    .header-main { padding: 0.65rem 0.75rem; grid-template-columns: auto 1fr auto; }
     .header-actions .action-chip:first-child { display: none; }
     .nav-inner { justify-content: flex-start; gap: 1.25rem; }
 
-    .section-heading {
-      padding: 0.7rem 0;
-    }
-    .featured-list,
-    .track-list {
+    .section-heading { padding: 0.7rem 0; }
+    .featured-list, .track-list {
       grid-template-columns: 1fr;
       padding: 0 8px;
       gap: 0.85rem;
@@ -531,46 +450,15 @@
       border-color: #2a2a2a;
       transform: none;
     }
-    .track-card:hover {
-      transform: none;
-      border-color: var(--red-dim);
-    }
+    .track-card:hover { transform: none; border-color: var(--red-dim); }
 
-    .track-header {
-      padding: 1rem 1rem 1.1rem;
-      gap: 0.9rem;
-      border-top: 1px solid #282828;
-    }
+    .track-header { padding: 1rem 1rem 1.1rem; gap: 0.9rem; border-top: 1px solid #282828; }
 
-    .rank {
-      font-size: 2.2rem;
-      opacity: 1;
-      min-width: 2.2rem;
-    }
-
-    .track-title {
-      font-size: 1.25rem;
-      line-height: 1.15;
-      letter-spacing: 0.05em;
-    }
-
-    .track-artist {
-      font-size: 0.85rem;
-      margin-bottom: 0.3rem;
-      color: #bbb;
-    }
-
-    .track-badge {
-      display: inline-block;
-      font-size: 0.7rem;
-      padding: 0.3rem 0.6rem;
-    }
-
-    .section-heading {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
+    .rank { font-size: 2.2rem; opacity: 1; min-width: 2.2rem; }
+    .track-title { font-size: 1.25rem; line-height: 1.15; letter-spacing: 0.05em; }
+    .track-artist { font-size: 0.85rem; margin-bottom: 0.3rem; color: #bbb; }
+    .track-badge { display: inline-block; font-size: 0.7rem; padding: 0.3rem 0.6rem; }
+    .section-heading { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
 
     main { padding: 0 0.5rem 2rem; }
   }
@@ -584,9 +472,6 @@
         <a class="brand-lockup" aria-label="PhonkHub home">
           <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
         </a>
-        <a class="discord-btn" href="https://discord.gg/b7gQNCpjy4" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord" title="Join our Discord">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.029ZM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg>
-        </a>
       </div>
       <label class="search-box" role="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
@@ -597,12 +482,11 @@
 
     <nav class="primary-nav" aria-label="Primary navigation">
       <div class="nav-inner">
-        <a class="nav-link active">Home</a>
-        <a class="nav-link">Featured</a>
+        <a class="nav-link active" href="/">Home</a>
+        <a class="nav-link" href="/forums">Forums</a>
+        <a class="nav-link">About</a>
         <a class="nav-link">All Tracks</a>
         <a class="nav-link">Genres</a>
-        <a class="nav-link">Community</a>
-        <a class="nav-link">About</a>
       </div>
     </nav>
   </header>
