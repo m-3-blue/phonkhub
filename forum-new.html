@@ -43,14 +43,14 @@
     margin: 0 auto;
   }
 
-  .brand-lockup { display: inline-flex; align-items: center; justify-self: start; }
-
-    .brand-group {
+  .brand-group {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
     justify-self: start;
   }
+
+  .brand-lockup { display: inline-flex; align-items: center; }
 
   .discord-btn {
     display: inline-flex;
@@ -452,12 +452,19 @@
   }
 
   @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
+    .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
+    .brand-group { grid-column: 1; }
     .search-box {
       grid-column: 1 / -1;
       grid-row: 2;
       max-width: none;
       justify-self: stretch;
+    }
+    .header-actions {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+      gap: 0.35rem;
     }
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
 
@@ -541,7 +548,6 @@
     return params.get('sub');
   }
 
-  // ---- Header auth ----
   (async function () {
     var actions = document.getElementById('headerActions');
     if (!actions) return;
@@ -585,7 +591,6 @@
     } catch (err) {}
   })();
 
-  // ---- Load sidebar ----
   (async function () {
     var sidebarEl = document.getElementById('forumSidebar');
     try {
@@ -620,11 +625,9 @@
     }
   })();
 
-  // ---- Load form ----
   (async function () {
     var main = document.getElementById('forumMain');
 
-    // Ensure we know if the user is logged in (don't rely on the other IIFE finishing first)
     if (!currentUser) {
       try {
         var meRes = await fetch('/api/auth?action=me');

@@ -27,6 +27,7 @@
     min-height: 100vh;
   }
 
+  /* HEADER */
   header {
     position: relative;
     background: #050505;
@@ -43,20 +44,14 @@
     margin: 0 auto;
   }
 
-  .brand-lockup { display: inline-flex; align-items: center; justify-self: start; }
-
-  #logo {
-    display: block;
-    width: clamp(8rem, 14vw, 11.5rem);
-    height: auto;
-  }
-
   .brand-group {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
     justify-self: start;
   }
+
+  .brand-lockup { display: inline-flex; align-items: center; }
 
   .discord-btn {
     display: inline-flex;
@@ -80,6 +75,12 @@
     width: 1.25rem;
     height: 1.25rem;
     display: block;
+  }
+
+  #logo {
+    display: block;
+    width: clamp(8rem, 14vw, 11.5rem);
+    height: auto;
   }
 
   .search-box {
@@ -168,6 +169,7 @@
     background: var(--red);
   }
 
+  /* LAYOUT */
   .forum-shell {
     display: flex;
     max-width: 1320px;
@@ -238,6 +240,7 @@
     min-width: 0;
   }
 
+  /* CONTENT */
   .forum-header {
     display: flex;
     align-items: flex-start;
@@ -295,6 +298,7 @@
   }
   .new-thread-btn:hover { opacity: 0.85; }
 
+  /* THREADS */
   .thread-list {
     display: flex;
     flex-direction: column;
@@ -410,25 +414,47 @@
     color: var(--red);
   }
 
+  /* MOBILE HEADER FIX */
   @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
+    .header-main { 
+      grid-template-columns: auto 1fr; 
+      gap: 0.5rem; 
+    }
+    .brand-group { 
+      grid-column: 1; 
+    }
     .search-box {
       grid-column: 1 / -1;
       grid-row: 2;
       max-width: none;
       justify-self: stretch;
     }
-    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+    .header-actions {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+      gap: 0.35rem;
+    }
+    .action-chip { 
+      padding: 0.35rem 0.55rem; 
+      font-size: 0.62rem; 
+    }
 
-    .forum-shell { flex-direction: column; }
+    .forum-shell { 
+      flex-direction: column; 
+    }
     .forum-sidebar {
       width: 100%;
       border-right: none;
       border-bottom: 1px solid #1a1a1a;
       padding: 1rem;
     }
-    .sidebar-group { margin-bottom: 1rem; }
-    .forum-main { padding: 1.5rem 1rem 3rem; }
+    .sidebar-group { 
+      margin-bottom: 1rem; 
+    }
+    .forum-main { 
+      padding: 1.5rem 1rem 3rem; 
+    }
   }
 </style>
 </head>

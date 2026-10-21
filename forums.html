@@ -27,7 +27,6 @@
     min-height: 100vh;
   }
 
-  /* ========== SITE HEADER ========== */
   header {
     position: relative;
     background: #050505;
@@ -44,14 +43,14 @@
     margin: 0 auto;
   }
 
-  .brand-lockup { display: inline-flex; align-items: center; justify-self: start; }
-
-    .brand-group {
+  .brand-group {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
     justify-self: start;
   }
+
+  .brand-lockup { display: inline-flex; align-items: center; }
 
   .discord-btn {
     display: inline-flex;
@@ -169,7 +168,6 @@
     background: var(--red);
   }
 
-  /* ========== FORUM LAYOUT ========== */
   .forum-shell {
     display: flex;
     max-width: 1320px;
@@ -177,7 +175,6 @@
     min-height: calc(100vh - 130px);
   }
 
-  /* ========== SIDEBAR ========== */
   .forum-sidebar {
     width: var(--sidebar-width);
     flex-shrink: 0;
@@ -186,9 +183,7 @@
     padding: 1.5rem 1rem;
   }
 
-  .sidebar-group {
-    margin-bottom: 1.5rem;
-  }
+  .sidebar-group { margin-bottom: 1.5rem; }
   .sidebar-group-title {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 0.65rem;
@@ -216,10 +211,7 @@
     border-left: 2px solid transparent;
     transition: color 0.15s, background 0.15s, border-color 0.15s;
   }
-  .sidebar-item:hover {
-    color: var(--white);
-    background: rgba(255, 153, 0, 0.05);
-  }
+  .sidebar-item:hover { color: var(--white); background: rgba(255, 153, 0, 0.05); }
   .sidebar-item.active {
     color: var(--red);
     background: rgba(255, 153, 0, 0.08);
@@ -235,8 +227,11 @@
     border-radius: 999px;
     letter-spacing: 0.05em;
   }
+  .sidebar-item.active .sidebar-item-count {
+    background: rgba(255, 153, 0, 0.15);
+    color: var(--red);
+  }
 
-  /* ========== MAIN CONTENT ========== */
   .forum-main {
     flex: 1;
     padding: 2rem 2rem 4rem;
@@ -260,9 +255,7 @@
     margin-bottom: 2rem;
   }
 
-  .forum-section {
-    margin-bottom: 2.5rem;
-  }
+  .forum-section { margin-bottom: 2.5rem; }
 
   .forum-section-header {
     display: flex;
@@ -370,28 +363,31 @@
     color: var(--red);
   }
 
-  /* ========== MOBILE ========== */
   @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
+    .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
+    .brand-group { grid-column: 1; }
     .search-box {
       grid-column: 1 / -1;
       grid-row: 2;
       max-width: none;
       justify-self: stretch;
     }
+    .header-actions {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+      gap: 0.35rem;
+    }
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
 
     .forum-shell { flex-direction: column; }
-
     .forum-sidebar {
       width: 100%;
       border-right: none;
       border-bottom: 1px solid #1a1a1a;
       padding: 1rem;
     }
-
     .sidebar-group { margin-bottom: 1rem; }
-
     .forum-main { padding: 1.5rem 1rem 3rem; }
 
     .category-card { grid-template-columns: 1fr; }
@@ -401,7 +397,7 @@
 </head>
 
 <body>
-    <header>
+  <header>
     <div class="header-main">
       <div class="brand-group">
         <a class="brand-lockup" href="/" aria-label="PhonkHub home">
@@ -458,25 +454,6 @@
     });
   }
 
-  function timeAgo(iso) {
-    if (!iso) return null;
-    var then = new Date(iso).getTime();
-    var now = Date.now();
-    var sec = Math.floor((now - then) / 1000);
-    if (sec < 5) return 'just now';
-    if (sec < 60) return sec + 's ago';
-    var min = Math.floor(sec / 60);
-    if (min < 60) return min + 'm ago';
-    var hr = Math.floor(min / 60);
-    if (hr < 24) return hr + 'h ago';
-    var day = Math.floor(hr / 24);
-    if (day < 30) return day + 'd ago';
-    var mon = Math.floor(day / 30);
-    if (mon < 12) return mon + 'mo ago';
-    return Math.floor(mon / 12) + 'y ago';
-  }
-
-  // ---- Header auth ----
   (async function () {
     var actions = document.getElementById('headerActions');
     if (!actions) return;
@@ -519,7 +496,6 @@
     } catch (err) {}
   })();
 
-  // ---- Load categories ----
   (async function () {
     var sidebarEl = document.getElementById('forumSidebar');
     var contentEl = document.getElementById('forumContent');
@@ -535,11 +511,9 @@
         return;
       }
 
-      // Group them
       var moderation = categories.filter(function (c) { return c.group_name === 'moderation'; });
       var discussion = categories.filter(function (c) { return c.group_name === 'discussion'; });
 
-      // ---- SIDEBAR ----
       function sidebarGroupHtml(title, cats) {
         return (
           '<div class="sidebar-group">' +
@@ -560,7 +534,6 @@
         sidebarGroupHtml('Moderation', moderation) +
         sidebarGroupHtml('Discussion', discussion);
 
-      // ---- MAIN CONTENT ----
       function categoryCardHtml(c) {
         return (
           '<a class="category-card" href="/forums/' + esc(c.slug) + '">' +
