@@ -579,9 +579,7 @@
     justify-content: center;
     padding: 1.25rem;
   }
-  .modal-overlay.open {
-    display: flex;
-  }
+  .modal-overlay.open { display: flex; }
   .modal-box {
     background: #0d0d0d;
     border: 1px solid #2a2a2a;
@@ -924,6 +922,16 @@
     var main = document.getElementById('main');
     var username = getUsernameFromPath();
     if (!username) { main.innerHTML = '<div class="loading">Invalid profile URL</div>'; return; }
+
+    // Ensure currentUser is known before rendering (avoids follow button race condition)
+    if (!currentUser) {
+      try {
+        var meRes = await fetch('/api/auth?action=me');
+        var meData = await meRes.json();
+        currentUser = meData.user;
+      } catch (e) {}
+    }
+
     try {
       var res = await fetch('/api/users?username=' + encodeURIComponent(username));
       var data = await res.json();
