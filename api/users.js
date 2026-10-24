@@ -1,5 +1,6 @@
 import { createClient } from '@libsql/client';
 
+const SESSION_COOKIE = 'ph_session';
 const DEFAULT_ACCENT = '#ff9900';
 
 function getClient() {
@@ -7,6 +8,35 @@ function getClient() {
     url: process.env.TURSO_DATABASE_URL,
     authToken: process.env.TURSO_AUTH_TOKEN,
   });
+}
+
+function now() {
+  return new Date().toISOString();
+}
+
+function getSessionToken(req) {
+  const raw = req.headers.cookie || '';
+  const parts = raw.split(';');
+  for (const part of parts) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === SESSION_COOKIE) {
+      return rest.join('=') || null;
+    }
+  }
+  return null;
+}
+
+async function getCurrentUser(client, req) {
+  const token = getSessionToken(req);
+  if (!token) return null;
+
+  const result = await client.execute({
+    sql: `SELECT u.id, u.username FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ? AND s.expires_at > ?`,
+    args: [token, now()],
+  });
+
+  if (result.rows.length === 0) return null;
+  return { id: result.rows[0].id, username: result.rows[0].username };
 }
 
 export default async function handler(req, res) {
@@ -23,7 +53,10 @@ export default async function handler(req, res) {
 
   try {
     const userResult = await client.execute({
-      sql: 'SELECT id, username, display_name, bio, socials, accent_color, created_at FROM users WHERE username = ?',
+      sql: `SELECT id, username, display_name, bio, socials, accent_color, created_at,
+              (SELECT COUNT(*) FROM follows WHERE following_id = users.id) AS follower_count,
+              (SELECT COUNT(*) FROM follows WHERE follower_id = users.id) AS following_count
+            FROM users WHERE username = ?`,
       args: [username],
     });
 
@@ -70,6 +103,17 @@ export default async function handler(req, res) {
 
     const counts = countsResult.rows[0] || { comment_count: 0, vote_count: 0 };
 
+    // Check if requester follows this user
+    const requester = await getCurrentUser(client, req);
+    let isFollowing = false;
+    if (requester && requester.id !== user.id) {
+      const followCheck = await client.execute({
+        sql: 'SELECT 1 FROM follows WHERE follower_id = ? AND following_id = ?',
+        args: [requester.id, user.id],
+      });
+      isFollowing = followCheck.rows.length > 0;
+    }
+
     return res.status(200).json({
       user: {
         id: user.id,
@@ -79,6 +123,9 @@ export default async function handler(req, res) {
         socials: socials,
         accent_color: user.accent_color || DEFAULT_ACCENT,
         created_at: user.created_at,
+        follower_count: Number(user.follower_count) || 0,
+        following_count: Number(user.following_count) || 0,
+        is_following: isFollowing,
       },
       votes: votesResult.rows,
       comments: commentsResult.rows,

@@ -434,77 +434,54 @@
     text-transform: uppercase;
   }
 
+  /* NOTIFICATION CSS */
+  .notif-wrapper { position: relative; display: inline-block; }
+  .notif-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s; position: relative; }
+  .notif-btn:hover { color: var(--white); }
+  .notif-badge { position: absolute; top: 0; right: 0; background: var(--red); color: #000; font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 700; padding: 0.1rem 0.3rem; border-radius: 999px; transform: translate(25%, -25%); display: none; }
+  .notif-badge.show { display: block; }
+  .notif-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 320px; background: #0d0d0d; border: 1px solid #2a2a2a; border-top: 3px solid var(--red); border-radius: 2px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: none; z-index: 1000; max-height: 400px; overflow-y: auto; }
+  .notif-dropdown.open { display: block; }
+  .notif-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid #1a1a1a; background: #050505; }
+  .notif-header-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); }
+  .notif-mark-read { background: none; border: none; color: var(--red); font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.05em; cursor: pointer; }
+  .notif-mark-read:hover { text-decoration: underline; }
+  .notif-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; border-bottom: 1px solid #1a1a1a; text-decoration: none; transition: background 0.15s; }
+  .notif-item:hover { background: #1a1a1a; }
+  .notif-item.unread { background: rgba(255, 153, 0, 0.05); }
+  .notif-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #1a1a1a; color: #888; flex-shrink: 0; font-size: 0.8rem; }
+  .notif-item.unread .notif-icon { background: var(--red); color: #000; }
+  .notif-text { font-family: 'Barlow', sans-serif; font-size: 0.85rem; color: #ddd; line-height: 1.4; }
+  .notif-text strong { color: var(--white); font-weight: 600; }
+  .notif-time { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: #666; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .notif-empty { padding: 2rem 1rem; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em; }
+
   @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr auto; gap: 0.7rem; }
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
-    .header-actions { gap: 0.35rem; }
+    .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
+    .brand-group { grid-column: 1; }
+    .search-box { grid-column: 1 / -1; grid-row: 2; max-width: none; justify-self: stretch; }
+    .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
 
     .section-heading { padding: 0.7rem 0; }
-    .featured-list, .track-list {
-      grid-template-columns: repeat(2, 1fr);
-      padding: 0 30px;
-    }
+    .featured-list, .track-list { grid-template-columns: repeat(2, 1fr); padding: 0 30px; }
     .content-frame { min-height: auto; }
     main { padding: 0 0.75rem 3rem; }
   }
 
   @media (max-width: 480px) {
-    .header-main {
-      padding: 0.65rem 0.75rem;
-      grid-template-columns: auto 1fr;
-      gap: 0.5rem;
-    }
-    
-    .brand-group { grid-column: 1; }
-
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
-
-    .header-actions {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
-      gap: 0.35rem;
-    }
-
-    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
-
+    .header-main { padding: 0.65rem 0.75rem; }
     .nav-inner { justify-content: flex-start; gap: 1.25rem; }
-
     .section-heading { padding: 0.7rem 0; }
-    .featured-list, .track-list {
-      grid-template-columns: 1fr;
-      padding: 0 8px;
-      gap: 0.85rem;
-    }
-
-    .track-card {
-      border-radius: 6px;
-      background: rgba(5, 5, 5, 0.92);
-      backdrop-filter: blur(4px);
-      border-color: #2a2a2a;
-      transform: none;
-    }
+    .featured-list, .track-list { grid-template-columns: 1fr; padding: 0 8px; gap: 0.85rem; }
+    .track-card { border-radius: 6px; background: rgba(5, 5, 5, 0.92); backdrop-filter: blur(4px); border-color: #2a2a2a; transform: none; }
     .track-card:hover { transform: none; border-color: var(--red-dim); }
-
     .track-header { padding: 1rem 1rem 1.1rem; gap: 0.9rem; border-top: 1px solid #282828; }
-
     .rank { font-size: 2.2rem; opacity: 1; min-width: 2.2rem; }
     .track-title { font-size: 1.25rem; line-height: 1.15; letter-spacing: 0.05em; }
     .track-artist { font-size: 0.85rem; margin-bottom: 0.3rem; color: #bbb; }
     .track-badge { display: inline-block; font-size: 0.7rem; padding: 0.3rem 0.6rem; }
     .section-heading { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
-
     main { padding: 0 0.5rem 2rem; }
   }
 </style>
@@ -569,87 +546,100 @@
   </footer>
 
 <script>
-  function thumbUrl(youtubeId) {
-    return 'https://i.ytimg.com/vi/' + youtubeId + '/hqdefault.jpg';
-  }
+  // ---- Notification System ----
+  (async function () {
+    var actionsEl = document.getElementById('headerActions');
+    if (!actionsEl) return;
+    try {
+      var authRes = await fetch('/api/auth?action=me');
+      var authData = await authRes.json();
+      if (!authData.user) return;
 
-  function esc(str) {
-    return String(str).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+      var wrapper = document.createElement('div');
+      wrapper.className = 'notif-wrapper';
+      wrapper.innerHTML = `
+        <button class="notif-btn" id="notifBtn" aria-label="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span class="notif-badge" id="notifBadge">0</span>
+        </button>
+        <div class="notif-dropdown" id="notifDropdown">
+          <div class="notif-header">
+            <span class="notif-header-title">Notifications</span>
+            <button class="notif-mark-read" id="markReadBtn">Mark all as read</button>
+          </div>
+          <div id="notifList"></div>
+        </div>
+      `;
+      actionsEl.insertBefore(wrapper, actionsEl.firstChild);
+
+      var btn = document.getElementById('notifBtn');
+      var dropdown = document.getElementById('notifDropdown');
+      var badge = document.getElementById('notifBadge');
+      var list = document.getElementById('notifList');
+      var markReadBtn = document.getElementById('markReadBtn');
+
+      btn.addEventListener('click', function (e) { e.stopPropagation(); dropdown.classList.toggle('open'); });
+      document.addEventListener('click', function (e) { if (!wrapper.contains(e.target)) dropdown.classList.remove('open'); });
+
+      async function loadNotifications() {
+        try {
+          var res = await fetch('/api/notifications');
+          if (!res.ok) return;
+          var data = await res.json();
+          if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
+          if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
+
+          var icons = { follow: '👤', reply: '💬', mention: '@' };
+          list.innerHTML = data.notifications.map(function(n) {
+            var isUnread = !n.is_read;
+            var actorName = n.actor_display_name || n.actor_username;
+            var text = n.type === 'follow' ? '<strong>' + actorName + '</strong> followed you' : n.type === 'reply' ? '<strong>' + actorName + '</strong> replied to your comment' : '<strong>' + actorName + '</strong> mentioned you';
+            var mins = Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000);
+            var timeStr = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
+
+            return `<a href="${n.link}" class="notif-item ${isUnread ? 'unread' : ''}"><div class="notif-icon">${icons[n.type] || '🔔'}</div><div class="notif-text">${text}<span class="notif-time">${timeStr}</span></div></a>`;
+          }).join('');
+        } catch (err) {}
+      }
+      markReadBtn.addEventListener('click', async function() { await fetch('/api/notifications?action=read-all', { method: 'POST' }); loadNotifications(); });
+      loadNotifications();
+      setInterval(loadNotifications, 30000);
+    } catch (err) {}
+  })();
+</script>
+
+<script>
+  function thumbUrl(youtubeId) { return 'https://i.ytimg.com/vi/' + youtubeId + '/hqdefault.jpg'; }
+  function esc(str) { return String(str).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
   function buildCard(track, badges, score) {
     var badgeHtml = '';
-    if (badges && badges.length) {
-      for (var i = 0; i < badges.length; i++) {
-        badgeHtml += '<span class="track-badge">' + badges[i] + '</span>';
-      }
-    }
-
+    if (badges && badges.length) { for (var i = 0; i < badges.length; i++) { badgeHtml += '<span class="track-badge">' + badges[i] + '</span>'; } }
     var scoreHtml = '';
-    if (score !== undefined && score !== null && score !== 0) {
-      var cls = score > 0 ? 'pos' : 'neg';
-      scoreHtml = '<span class="track-score ' + cls + '">' + score + '</span>';
-    }
+    if (score !== undefined && score !== null && score !== 0) { var cls = score > 0 ? 'pos' : 'neg'; scoreHtml = '<span class="track-score ' + cls + '">' + score + '</span>'; }
 
     return (
       '<a class="track-card" href="/track-' + track.id + '">' +
-        '<div class="thumb-wrap">' +
-          '<img loading="lazy" src="' + thumbUrl(track.youtube_id) + '" alt="' + esc(track.title) + '">' +
-        '</div>' +
-        '<div class="track-header">' +
-          '<span class="rank">' + track.id + '</span>' +
-          '<div class="track-meta">' +
-            '<div class="track-title">' + esc(track.title) + '</div>' +
-            '<div class="track-artist">' + esc(track.artist) + '</div>' +
-          '</div>' +
-          scoreHtml +
-          badgeHtml +
-        '</div>' +
-      '</a>'
+        '<div class="thumb-wrap"><img loading="lazy" src="' + thumbUrl(track.youtube_id) + '" alt="' + esc(track.title) + '"></div>' +
+        '<div class="track-header"><span class="rank">' + track.id + '</span><div class="track-meta"><div class="track-title">' + esc(track.title) + '</div><div class="track-artist">' + esc(track.artist) + '</div></div>' + scoreHtml + badgeHtml + '</div></a>'
     );
   }
 
   (async function () {
     var actions = document.getElementById('headerActions');
     if (!actions) return;
-
     try {
       var res = await fetch('/api/auth?action=me');
       var data = await res.json();
-
       if (data.user) {
-        var userChip = document.createElement('a');
-        userChip.className = 'action-chip';
-        userChip.href = '/@' + data.user.username;
-        userChip.textContent = data.user.display_name || data.user.username;
-
-        var logoutBtn = document.createElement('a');
-        logoutBtn.className = 'action-chip accent';
-        logoutBtn.href = '#';
-        logoutBtn.textContent = 'Log Out';
-        logoutBtn.addEventListener('click', async function (e) {
-          e.preventDefault();
-          await fetch('/api/auth?action=logout', { method: 'POST' });
-          window.location.reload();
-        });
-
-        actions.appendChild(userChip);
-        actions.appendChild(logoutBtn);
+        var userChip = document.createElement('a'); userChip.className = 'action-chip'; userChip.href = '/@' + data.user.username; userChip.textContent = data.user.display_name || data.user.username;
+        var logoutBtn = document.createElement('a'); logoutBtn.className = 'action-chip accent'; logoutBtn.href = '#'; logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); window.location.reload(); });
+        actions.appendChild(userChip); actions.appendChild(logoutBtn);
       } else {
-        var loginLink = document.createElement('a');
-        loginLink.className = 'action-chip';
-        loginLink.href = '/login';
-        loginLink.textContent = 'Log In';
-
-        var signupLink = document.createElement('a');
-        signupLink.className = 'action-chip accent';
-        signupLink.href = '/signup';
-        signupLink.textContent = 'Sign Up';
-
-        actions.appendChild(loginLink);
-        actions.appendChild(signupLink);
+        var loginLink = document.createElement('a'); loginLink.className = 'action-chip'; loginLink.href = '/login'; loginLink.textContent = 'Log In';
+        var signupLink = document.createElement('a'); signupLink.className = 'action-chip accent'; signupLink.href = '/signup'; signupLink.textContent = 'Sign Up';
+        actions.appendChild(loginLink); actions.appendChild(signupLink);
       }
     } catch (err) {}
   })();
@@ -659,23 +649,12 @@
     .then(function (data) {
       var tracks = data.tracks || [];
       var scores = data.scores || {};
-
       var featured = tracks.slice(0, 3);
       var rest = tracks.slice(3);
-
       var featuredEl = document.getElementById('featuredList');
       var listEl = document.getElementById('trackList');
-
-      if (!tracks.length) {
-        featuredEl.innerHTML = '<div class="loading-msg">No tracks yet</div>';
-        listEl.innerHTML = '<div class="loading-msg">No tracks yet</div>';
-        return;
-      }
-
-      featuredEl.innerHTML = featured.map(function (t) {
-        return buildCard(t, ['Top'], scores[t.id] || 0);
-      }).join('');
-
+      if (!tracks.length) { featuredEl.innerHTML = '<div class="loading-msg">No tracks yet</div>'; listEl.innerHTML = '<div class="loading-msg">No tracks yet</div>'; return; }
+      featuredEl.innerHTML = featured.map(function (t) { return buildCard(t, ['Top'], scores[t.id] || 0); }).join('');
       listEl.innerHTML = rest.map(function (t, i) {
         var badges = [];
         if (i < 3) badges.push('New');
@@ -683,13 +662,7 @@
         return buildCard(t, badges, scores[t.id] || 0);
       }).join('');
     })
-    .catch(function (err) {
-      document.getElementById('featuredList').innerHTML =
-        '<div class="loading-msg">Could not load tracks</div>';
-      document.getElementById('trackList').innerHTML =
-        '<div class="loading-msg">Could not load tracks</div>';
-      console.error(err);
-    });
+    .catch(function (err) { document.getElementById('featuredList').innerHTML = '<div class="loading-msg">Could not load tracks</div>'; document.getElementById('trackList').innerHTML = '<div class="loading-msg">Could not load tracks</div>'; });
 </script>
 
 <script>

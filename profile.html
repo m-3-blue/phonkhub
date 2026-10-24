@@ -234,6 +234,66 @@
     text-transform: uppercase;
   }
 
+  /* Stats Row */
+  .profile-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .stat-link {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888;
+    transition: color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .stat-link:hover { color: var(--white); }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  /* Follow Button */
+  .follow-btn {
+    position: absolute;
+    top: 3.5rem;
+    right: 1.75rem;
+    padding: 0.55rem 1.2rem;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .follow-btn:hover { opacity: 0.85; }
+  .follow-btn.following {
+    background: transparent;
+    color: var(--white);
+    border-color: #444;
+  }
+  .follow-btn.following:hover {
+    border-color: #ff5555;
+    color: #ff5555;
+  }
+  .follow-btn:disabled { opacity: 0.5; cursor: wait; }
+
   .edit-profile-btn {
     position: absolute;
     top: 3.5rem;
@@ -507,6 +567,122 @@
     font-size: 0.75rem;
   }
 
+  /* Modal CSS */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+  }
+  .modal-overlay.open {
+    display: flex;
+  }
+  .modal-box {
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    border-top: 3px solid var(--accent);
+    border-radius: 2px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #1d1d1d;
+  }
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--red); }
+  .modal-body {
+    padding: 0.5rem;
+    overflow-y: auto;
+  }
+  .user-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .user-list-item:hover { background: #1a1a1a; }
+  .user-list-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #111;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .user-list-info { min-width: 0; }
+  .user-list-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+  .user-list-handle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* NOTIFICATION CSS */
+  .notif-wrapper { position: relative; display: inline-block; }
+  .notif-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s; position: relative; }
+  .notif-btn:hover { color: var(--white); }
+  .notif-badge { position: absolute; top: 0; right: 0; background: var(--red); color: #000; font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 700; padding: 0.1rem 0.3rem; border-radius: 999px; transform: translate(25%, -25%); display: none; }
+  .notif-badge.show { display: block; }
+  .notif-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 320px; background: #0d0d0d; border: 1px solid #2a2a2a; border-top: 3px solid var(--red); border-radius: 2px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: none; z-index: 1000; max-height: 400px; overflow-y: auto; }
+  .notif-dropdown.open { display: block; }
+  .notif-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid #1a1a1a; background: #050505; }
+  .notif-header-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); }
+  .notif-mark-read { background: none; border: none; color: var(--red); font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.05em; cursor: pointer; }
+  .notif-mark-read:hover { text-decoration: underline; }
+  .notif-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; border-bottom: 1px solid #1a1a1a; text-decoration: none; transition: background 0.15s; }
+  .notif-item:hover { background: #1a1a1a; }
+  .notif-item.unread { background: rgba(255, 153, 0, 0.05); }
+  .notif-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #1a1a1a; color: #888; flex-shrink: 0; font-size: 0.8rem; }
+  .notif-item.unread .notif-icon { background: var(--red); color: #000; }
+  .notif-text { font-family: 'Barlow', sans-serif; font-size: 0.85rem; color: #ddd; line-height: 1.4; }
+  .notif-text strong { color: var(--white); font-weight: 600; }
+  .notif-time { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: #666; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .notif-empty { padding: 2rem 1rem; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em; }
+
   footer {
     background: #000;
     text-align: center;
@@ -528,18 +704,8 @@
   @media (max-width: 780px) {
     .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
     .brand-group { grid-column: 1; }
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
-    .header-actions {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
-      gap: 0.35rem;
-    }
+    .search-box { grid-column: 1 / -1; grid-row: 2; max-width: none; justify-self: stretch; }
+    .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
   }
 
@@ -549,7 +715,8 @@
     .avatar { width: 80px; height: 80px; font-size: 2rem; margin-top: -40px; }
     .display-name { font-size: 1.4rem; }
     .vote-item { grid-template-columns: 2rem 1fr auto; gap: 0.5rem; padding: 0.6rem 0.7rem; }
-    .edit-profile-btn { top: 3rem; right: 1rem; padding: 0.45rem 0.8rem; font-size: 0.62rem; }
+    .edit-profile-btn, .follow-btn { top: 3rem; right: 1rem; padding: 0.45rem 0.8rem; font-size: 0.62rem; }
+    .profile-stats { gap: 1rem; }
   }
 </style>
 </head>
@@ -591,36 +758,96 @@
     </p>
   </footer>
 
+  <!-- Modal -->
+  <div class="modal-overlay" id="userListModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Followers</div>
+        <button class="modal-close" id="modalCloseBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
 <script>
-  var PLATFORM_LABELS = {
-    discord: 'Discord',
-    youtube: 'YouTube',
-    soundcloud: 'SoundCloud',
-    twitter: 'Twitter',
-    instagram: 'Instagram',
-    spotify: 'Spotify',
-  };
+  // ---- Notification System ----
+  (async function () {
+    var actionsEl = document.getElementById('headerActions');
+    if (!actionsEl) return;
+    try {
+      var authRes = await fetch('/api/auth?action=me');
+      var authData = await authRes.json();
+      if (!authData.user) return;
+
+      var wrapper = document.createElement('div');
+      wrapper.className = 'notif-wrapper';
+      wrapper.innerHTML = `
+        <button class="notif-btn" id="notifBtn" aria-label="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span class="notif-badge" id="notifBadge">0</span>
+        </button>
+        <div class="notif-dropdown" id="notifDropdown">
+          <div class="notif-header">
+            <span class="notif-header-title">Notifications</span>
+            <button class="notif-mark-read" id="markReadBtn">Mark all as read</button>
+          </div>
+          <div id="notifList"></div>
+        </div>
+      `;
+      actionsEl.insertBefore(wrapper, actionsEl.firstChild);
+
+      var btn = document.getElementById('notifBtn');
+      var dropdown = document.getElementById('notifDropdown');
+      var badge = document.getElementById('notifBadge');
+      var list = document.getElementById('notifList');
+      var markReadBtn = document.getElementById('markReadBtn');
+
+      btn.addEventListener('click', function (e) { e.stopPropagation(); dropdown.classList.toggle('open'); });
+      document.addEventListener('click', function (e) { if (!wrapper.contains(e.target)) dropdown.classList.remove('open'); });
+
+      async function loadNotifications() {
+        try {
+          var res = await fetch('/api/notifications');
+          if (!res.ok) return;
+          var data = await res.json();
+          if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
+          if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
+
+          var icons = { follow: '👤', reply: '💬', mention: '@' };
+          list.innerHTML = data.notifications.map(function(n) {
+            var isUnread = !n.is_read;
+            var actorName = n.actor_display_name || n.actor_username;
+            var text = n.type === 'follow' ? '<strong>' + actorName + '</strong> followed you' : n.type === 'reply' ? '<strong>' + actorName + '</strong> replied to your comment' : '<strong>' + actorName + '</strong> mentioned you';
+            var mins = Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000);
+            var timeStr = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
+
+            return `<a href="${n.link}" class="notif-item ${isUnread ? 'unread' : ''}"><div class="notif-icon">${icons[n.type] || '🔔'}</div><div class="notif-text">${text}<span class="notif-time">${timeStr}</span></div></a>`;
+          }).join('');
+        } catch (err) {}
+      }
+      markReadBtn.addEventListener('click', async function() { await fetch('/api/notifications?action=read-all', { method: 'POST' }); loadNotifications(); });
+      loadNotifications();
+      setInterval(loadNotifications, 30000);
+    } catch (err) {}
+  })();
+
+  var PLATFORM_LABELS = { discord: 'Discord', youtube: 'YouTube', soundcloud: 'SoundCloud', twitter: 'Twitter', instagram: 'Instagram', spotify: 'Spotify' };
 
   function socialHref(platform, value) {
     var v = value.trim();
     if (/^https?:\/\//i.test(v)) return v;
-
     switch (platform) {
-      case 'discord':    return null;
-      case 'youtube':    return 'https://youtube.com/' + (v.startsWith('@') ? v : '@' + v);
+      case 'discord': return null;
+      case 'youtube': return 'https://youtube.com/' + (v.startsWith('@') ? v : '@' + v);
       case 'soundcloud': return 'https://soundcloud.com/' + v.replace(/^@/, '');
-      case 'twitter':    return 'https://x.com/' + v.replace(/^@/, '');
-      case 'instagram':  return 'https://instagram.com/' + v.replace(/^@/, '');
-      case 'spotify':    return 'https://open.spotify.com/user/' + v.replace(/^@/, '');
-      default:           return null;
+      case 'twitter': return 'https://x.com/' + v.replace(/^@/, '');
+      case 'instagram': return 'https://instagram.com/' + v.replace(/^@/, '');
+      case 'spotify': return 'https://open.spotify.com/user/' + v.replace(/^@/, '');
+      default: return null;
     }
   }
 
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
   function formatDate(iso) {
     var d = new Date(iso);
@@ -629,218 +856,137 @@
   }
 
   function timeAgo(iso) {
-    var then = new Date(iso).getTime();
-    var now = Date.now();
-    var sec = Math.floor((now - then) / 1000);
-    if (sec < 5) return 'just now';
-    if (sec < 60) return sec + 's ago';
-    var min = Math.floor(sec / 60);
-    if (min < 60) return min + 'm ago';
-    var hr = Math.floor(min / 60);
-    if (hr < 24) return hr + 'h ago';
-    var day = Math.floor(hr / 24);
-    if (day < 30) return day + 'd ago';
-    var mon = Math.floor(day / 30);
-    if (mon < 12) return mon + 'mo ago';
+    var then = new Date(iso).getTime(), now = Date.now(), sec = Math.floor((now - then) / 1000);
+    if (sec < 5) return 'just now'; if (sec < 60) return sec + 's ago';
+    var min = Math.floor(sec / 60); if (min < 60) return min + 'm ago';
+    var hr = Math.floor(min / 60); if (hr < 24) return hr + 'h ago';
+    var day = Math.floor(hr / 24); if (day < 30) return day + 'd ago';
+    var mon = Math.floor(day / 30); if (mon < 12) return mon + 'mo ago';
     return Math.floor(mon / 12) + 'y ago';
   }
 
-  function getUsernameFromPath() {
-    var match = window.location.pathname.match(/^\/@([a-zA-Z0-9_]+)/);
-    return match ? match[1] : null;
-  }
-
-  function hexToRgbString(hex) {
-    var r = parseInt(hex.substr(1, 2), 16);
-    var g = parseInt(hex.substr(3, 2), 16);
-    var b = parseInt(hex.substr(5, 2), 16);
-    return r + ', ' + g + ', ' + b;
-  }
+  function getUsernameFromPath() { var match = window.location.pathname.match(/^\/@([a-zA-Z0-9_]+)/); return match ? match[1] : null; }
+  function hexToRgbString(hex) { var r = parseInt(hex.substr(1, 2), 16), g = parseInt(hex.substr(3, 2), 16), b = parseInt(hex.substr(5, 2), 16); return r + ', ' + g + ', ' + b; }
 
   var currentUser = null;
 
   (async function () {
     var actions = document.getElementById('headerActions');
     if (!actions) return;
-
     try {
       var res = await fetch('/api/auth?action=me');
       var data = await res.json();
       currentUser = data.user;
-
       if (data.user) {
-        var userChip = document.createElement('a');
-        userChip.className = 'action-chip';
-        userChip.href = '/@' + data.user.username;
-        userChip.textContent = data.user.display_name || data.user.username;
-
-        var logoutBtn = document.createElement('a');
-        logoutBtn.className = 'action-chip accent';
-        logoutBtn.href = '#';
-        logoutBtn.textContent = 'Log Out';
-        logoutBtn.addEventListener('click', async function (e) {
-          e.preventDefault();
-          await fetch('/api/auth?action=logout', { method: 'POST' });
-          window.location.href = '/';
-        });
-
-        actions.appendChild(userChip);
-        actions.appendChild(logoutBtn);
+        var userChip = document.createElement('a'); userChip.className = 'action-chip'; userChip.href = '/@' + data.user.username; userChip.textContent = data.user.display_name || data.user.username;
+        var logoutBtn = document.createElement('a'); logoutBtn.className = 'action-chip accent'; logoutBtn.href = '#'; logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); window.location.href = '/'; });
+        actions.appendChild(userChip); actions.appendChild(logoutBtn);
       } else {
-        var loginLink = document.createElement('a');
-        loginLink.className = 'action-chip';
-        loginLink.href = '/login';
-        loginLink.textContent = 'Log In';
-
-        var signupLink = document.createElement('a');
-        signupLink.className = 'action-chip accent';
-        signupLink.href = '/signup';
-        signupLink.textContent = 'Sign Up';
-
-        actions.appendChild(loginLink);
-        actions.appendChild(signupLink);
+        var loginLink = document.createElement('a'); loginLink.className = 'action-chip'; loginLink.href = '/login'; loginLink.textContent = 'Log In';
+        var signupLink = document.createElement('a'); signupLink.className = 'action-chip accent'; signupLink.href = '/signup'; signupLink.textContent = 'Sign Up';
+        actions.appendChild(loginLink); actions.appendChild(signupLink);
       }
     } catch (err) {}
   })();
 
+  var modal = document.getElementById('userListModal');
+  var modalTitle = document.getElementById('modalTitle');
+  var modalBody = document.getElementById('modalBody');
+
+  function closeModal() { modal.classList.remove('open'); }
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+
+  async function openModal(type, username) {
+    modalTitle.textContent = type === 'followers' ? 'Followers' : 'Following';
+    modalBody.innerHTML = '<div style="padding: 1rem; text-align: center; color: #888;">Loading…</div>';
+    modal.classList.add('open');
+    try {
+      var res = await fetch('/api/follow?action=' + type + '&username=' + encodeURIComponent(username));
+      var data = await res.json();
+      if (!res.ok) throw new Error('Failed to load');
+      if (data.users.length === 0) {
+        modalBody.innerHTML = '<div style="padding: 2rem 1rem; text-align: center; color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em;">No users yet</div>';
+        return;
+      }
+      modalBody.innerHTML = data.users.map(function(u) {
+        var displayName = u.display_name || u.username;
+        var initial = displayName.charAt(0).toUpperCase();
+        return '<a href="/@' + esc(u.username) + '" class="user-list-item"><div class="user-list-avatar">' + initial + '</div><div class="user-list-info"><div class="user-list-name">' + esc(displayName) + '</div><div class="user-list-handle">@' + esc(u.username) + '</div></div></a>';
+      }).join('');
+    } catch (err) {
+      modalBody.innerHTML = '<div style="padding: 1rem; text-align: center; color: #ff5555;">Error loading list</div>';
+    }
+  }
+
   (async function () {
     var main = document.getElementById('main');
     var username = getUsernameFromPath();
-
-    if (!username) {
-      main.innerHTML = '<div class="loading">Invalid profile URL</div>';
-      return;
-    }
-
+    if (!username) { main.innerHTML = '<div class="loading">Invalid profile URL</div>'; return; }
     try {
       var res = await fetch('/api/users?username=' + encodeURIComponent(username));
       var data = await res.json();
+      if (!res.ok) { main.innerHTML = '<a class="back-link" href="/">← Back to home</a><div class="empty-section">' + esc(data.error || 'User not found') + '</div>'; return; }
 
-      if (!res.ok) {
-        main.innerHTML =
-          '<a class="back-link" href="/">← Back to home</a>' +
-          '<div class="empty-section">' + esc(data.error || 'User not found') + '</div>';
-        return;
-      }
-
-      var user = data.user;
-      var votes = data.votes || [];
-      var comments = data.comments || [];
-      var counts = data.counts || { comments: 0, votes: 0 };
-
+      var user = data.user, votes = data.votes || [], comments = data.comments || [], counts = data.counts || { comments: 0, votes: 0 };
       var displayName = user.display_name || user.username;
       var isOwnProfile = currentUser && currentUser.username === user.username;
-
       var accent = user.accent_color || '#ff9900';
+
       document.documentElement.style.setProperty('--accent', accent);
       document.documentElement.style.setProperty('--accent-rgb', hexToRgbString(accent));
-
       document.title = displayName + ' (@' + user.username + ') — PhonkHub';
 
       var commentsCountHtml = counts.comments > 0 ? '<span class="tab-count">' + counts.comments + '</span>' : '';
       var votesCountHtml = counts.votes > 0 ? '<span class="tab-count">' + counts.votes + '</span>' : '';
 
-      var commentsHtml;
-      if (comments.length === 0) {
-        commentsHtml = '<div class="empty-section">No comments yet</div>';
-      } else {
-        commentsHtml = comments.map(function (c) {
-          return (
-            '<div class="post-item">' +
-              '<div class="post-context">on <a href="/track-' + c.track_id + '">' + esc(c.track_title) + '</a></div>' +
-              '<div class="post-body">' + esc(c.body) + '</div>' +
-              '<div class="post-time">' + timeAgo(c.created_at) + '</div>' +
-            '</div>'
-          );
-        }).join('');
-      }
+      var commentsHtml = comments.length === 0 ? '<div class="empty-section">No comments yet</div>' : comments.map(function (c) {
+        return '<div class="post-item"><div class="post-context">on <a href="/track-' + c.track_id + '">' + esc(c.track_title) + '</a></div><div class="post-body">' + esc(c.body) + '</div><div class="post-time">' + timeAgo(c.created_at) + '</div></div>';
+      }).join('');
 
-      var votesHtml;
-      if (votes.length === 0) {
-        votesHtml = '<div class="empty-section">No votes yet</div>';
-      } else {
-        votesHtml = votes.map(function (v) {
-          var arrow = v.value > 0 ? '▲' : '▼';
-          var cls = v.value > 0 ? 'up' : 'down';
-          return (
-            '<a class="vote-item" href="/track-' + v.id + '">' +
-              '<div class="vote-arrow ' + cls + '">' + arrow + '</div>' +
-              '<div class="vote-info">' +
-                '<div class="vote-title">' + esc(v.title) + '</div>' +
-                '<div class="vote-artist">' + esc(v.artist) + '</div>' +
-              '</div>' +
-              '<div class="vote-time">' + timeAgo(v.voted_at) + '</div>' +
-            '</a>'
-          );
-        }).join('');
-      }
+      var votesHtml = votes.length === 0 ? '<div class="empty-section">No votes yet</div>' : votes.map(function (v) {
+        var arrow = v.value > 0 ? '▲' : '▼', cls = v.value > 0 ? 'up' : 'down';
+        return '<a class="vote-item" href="/track-' + v.id + '"><div class="vote-arrow ' + cls + '">' + arrow + '</div><div class="vote-info"><div class="vote-title">' + esc(v.title) + '</div><div class="vote-artist">' + esc(v.artist) + '</div></div><div class="vote-time">' + timeAgo(v.voted_at) + '</div></a>';
+      }).join('');
 
       var aboutHtml = '';
-
-      if (user.bio) {
-        aboutHtml += '<div class="bio-box">' + esc(user.bio) + '</div>';
-      }
-
+      if (user.bio) aboutHtml += '<div class="bio-box">' + esc(user.bio) + '</div>';
       if (user.socials && Object.keys(user.socials).length > 0) {
         var socialHtml = Object.keys(user.socials).map(function (key) {
-          var value = user.socials[key];
-          var label = PLATFORM_LABELS[key] || key;
-          var href = socialHref(key, value);
-
-          if (href) {
-            return (
-              '<a class="social-link" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' +
-                '<span class="platform">' + label + '</span>' +
-                '<span class="value">' + esc(value) + '</span>' +
-              '</a>'
-            );
-          } else {
-            return (
-              '<span class="social-link">' +
-                '<span class="platform">' + label + '</span>' +
-                '<span class="value">' + esc(value) + '</span>' +
-              '</span>'
-            );
-          }
+          var value = user.socials[key], label = PLATFORM_LABELS[key] || key, href = socialHref(key, value);
+          if (href) return '<a class="social-link" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer"><span class="platform">' + label + '</span><span class="value">' + esc(value) + '</span></a>';
+          else return '<span class="social-link"><span class="platform">' + label + '</span><span class="value">' + esc(value) + '</span></span>';
         }).join('');
-
         aboutHtml += '<div class="socials-list">' + socialHtml + '</div>';
       }
 
-      aboutHtml +=
-        '<div class="about-row">' +
-          '<div class="about-label">Joined</div>' +
-          '<div class="about-value">' + formatDate(user.created_at) + '</div>' +
-        '</div>' +
-        '<div class="about-row">' +
-          '<div class="about-label">Comments</div>' +
-          '<div class="about-value">' + counts.comments + '</div>' +
-        '</div>' +
-        '<div class="about-row">' +
-          '<div class="about-label">Votes Cast</div>' +
-          '<div class="about-value">' + counts.votes + '</div>' +
-        '</div>';
+      aboutHtml += '<div class="about-row"><div class="about-label">Joined</div><div class="about-value">' + formatDate(user.created_at) + '</div></div><div class="about-row"><div class="about-label">Comments</div><div class="about-value">' + counts.comments + '</div></div><div class="about-row"><div class="about-label">Votes Cast</div><div class="about-value">' + counts.votes + '</div></div>';
 
-      if (!user.bio && (!user.socials || Object.keys(user.socials).length === 0)) {
-        aboutHtml =
-          '<div class="empty-section" style="margin-bottom: 1rem;">No bio or social links yet</div>' +
-          aboutHtml;
+      if (!user.bio && (!user.socials || Object.keys(user.socials).length === 0)) aboutHtml = '<div class="empty-section" style="margin-bottom: 1rem;">No bio or social links yet</div>' + aboutHtml;
+
+      var actionBtnHtml = '';
+      if (isOwnProfile) {
+        actionBtnHtml = '<a class="edit-profile-btn" href="/edit-profile">Edit Profile</a>';
+      } else if (currentUser) {
+        var followClass = user.is_following ? ' following' : '', followText = user.is_following ? 'Following' : 'Follow';
+        actionBtnHtml = '<button class="follow-btn' + followClass + '" id="followBtn" data-id="' + user.id + '" data-state="' + (user.is_following ? '1' : '0') + '">' + followText + '</button>';
       }
-
-      var editBtnHtml = isOwnProfile
-        ? '<a class="edit-profile-btn" href="/edit-profile">Edit Profile</a>'
-        : '';
 
       main.innerHTML =
         '<a class="back-link" href="/">← Back to home</a>' +
         '<div class="profile-box">' +
           '<div class="banner"></div>' +
           '<div class="profile-body">' +
-            editBtnHtml +
+            actionBtnHtml +
             '<div class="avatar">' + esc(displayName.charAt(0).toUpperCase()) + '</div>' +
             '<div class="display-name">' + esc(displayName) + '</div>' +
             '<div class="handle">@' + esc(user.username) + '</div>' +
-            '<div class="joined">Joined ' + formatDate(user.created_at) + '</div>' +
+            '<div class="profile-stats">' +
+              '<button class="stat-link" onclick="openModal(\'followers\', \'' + esc(user.username) + '\')"><span class="stat-num" id="followerCount">' + user.follower_count + '</span> Followers</button>' +
+              '<button class="stat-link" onclick="openModal(\'following\', \'' + esc(user.username) + '\')"><span class="stat-num">' + user.following_count + '</span> Following</button>' +
+            '</div>' +
+            '<div class="joined" style="margin-top: 0.5rem;">Joined ' + formatDate(user.created_at) + '</div>' +
           '</div>' +
         '</div>' +
         '<div class="tabs">' +
@@ -852,20 +998,33 @@
         '<div class="tab-panel" data-panel="votes">' + votesHtml + '</div>' +
         '<div class="tab-panel" data-panel="about">' + aboutHtml + '</div>';
 
-      var tabs = main.querySelectorAll('.tab');
-      var panels = main.querySelectorAll('.tab-panel');
+      var followBtn = document.getElementById('followBtn');
+      if (followBtn) {
+        followBtn.addEventListener('click', async function () {
+          var targetId = parseInt(this.getAttribute('data-id'), 10), isFollowing = this.getAttribute('data-state') === '1';
+          this.disabled = true;
+          try {
+            var res = await fetch('/api/follow?action=toggle', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ target_id: targetId }) });
+            var data = await res.json();
+            if (!res.ok) { alert(data.error || 'Failed to follow'); this.disabled = false; return; }
+            if (data.following) { this.classList.add('following'); this.textContent = 'Following'; this.setAttribute('data-state', '1'); }
+            else { this.classList.remove('following'); this.textContent = 'Follow'; this.setAttribute('data-state', '0'); }
+            document.getElementById('followerCount').textContent = data.followerCount;
+          } catch (err) { alert('Network error'); }
+          this.disabled = false;
+        });
+      }
+
+      var tabs = main.querySelectorAll('.tab'), panels = main.querySelectorAll('.tab-panel');
       tabs.forEach(function (tab) {
         tab.addEventListener('click', function () {
-          tabs.forEach(function (t) { t.classList.remove('active'); });
-          panels.forEach(function (p) { p.classList.remove('active'); });
+          tabs.forEach(function (t) { t.classList.remove('active'); }); panels.forEach(function (p) { p.classList.remove('active'); });
           tab.classList.add('active');
           var panel = main.querySelector('.tab-panel[data-panel="' + tab.getAttribute('data-tab') + '"]');
           if (panel) panel.classList.add('active');
         });
       });
-    } catch (err) {
-      main.innerHTML = '<div class="loading">Could not load profile</div>';
-    }
+    } catch (err) { main.innerHTML = '<div class="loading">Could not load profile</div>'; }
   })();
 </script>
 </body>
