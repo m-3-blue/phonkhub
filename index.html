@@ -249,14 +249,14 @@
     text-transform: uppercase;
   }
 
-  .featured-list {
+  .track-grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     padding: 0 70px;
   }
 
-  .track-list {
+  .track-grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.55rem;
@@ -424,14 +424,25 @@
     color: var(--red);
   }
 
+  /* UPDATED LOADING MESSAGE */
   .loading-msg {
     grid-column: 1 / -1;
     text-align: center;
-    padding: 2rem;
-    color: var(--gray);
+    padding: 3rem;
+    margin-top: 215px; /* Pushes it down below the background art */
+    color: var(--red);
     font-family: 'Barlow Condensed', sans-serif;
-    letter-spacing: 0.2em;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(255, 153, 0, 0.4);
+    animation: pulseLoad 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulseLoad {
+    0%, 100% { opacity: 0.5; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1.02); }
   }
 
   /* NOTIFICATION CSS */
@@ -464,16 +475,28 @@
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
 
     .section-heading { padding: 0.7rem 0; }
-    .featured-list, .track-list { grid-template-columns: repeat(2, 1fr); padding: 0 30px; }
+    .track-grid-3, .track-grid-4 { grid-template-columns: repeat(2, 1fr); padding: 0 30px; }
     .content-frame { min-height: auto; }
     main { padding: 0 0.75rem 3rem; }
+
+    /* FIX: Make dropdown span the screen instead of floating off-edge */
+    .notif-dropdown {
+      position: fixed;
+      top: 60px; 
+      left: 10px;
+      right: 10px;
+      width: auto;
+      max-width: none;
+    }
+
+    .loading-msg { margin-top: 100px; } /* adjust for mobile */
   }
 
   @media (max-width: 480px) {
     .header-main { padding: 0.65rem 0.75rem; }
     .nav-inner { justify-content: flex-start; gap: 1.25rem; }
     .section-heading { padding: 0.7rem 0; }
-    .featured-list, .track-list { grid-template-columns: 1fr; padding: 0 8px; gap: 0.85rem; }
+    .track-grid-3, .track-grid-4 { grid-template-columns: 1fr; padding: 0 8px; gap: 0.85rem; }
     .track-card { border-radius: 6px; background: rgba(5, 5, 5, 0.92); backdrop-filter: blur(4px); border-color: #2a2a2a; transform: none; }
     .track-card:hover { transform: none; border-color: var(--red-dim); }
     .track-header { padding: 1rem 1rem 1.1rem; gap: 0.9rem; border-top: 1px solid #282828; }
@@ -517,24 +540,8 @@
   </header>
 
   <div class="content-frame">
-    <main>
-      <section class="track-section" aria-labelledby="featured-heading">
-        <div class="section-heading">
-          <h2 class="section-title" id="featured-heading">Featured</h2>
-        </div>
-        <div class="featured-list" id="featuredList">
-          <div class="loading-msg">Loading…</div>
-        </div>
-      </section>
-
-      <section class="track-section" aria-labelledby="all-tracks-heading">
-        <div class="section-heading">
-          <h2 class="section-title" id="all-tracks-heading">All Tracks</h2>
-        </div>
-        <div class="track-list" id="trackList">
-          <div class="loading-msg">Loading…</div>
-        </div>
-      </section>
+    <main id="mainContent">
+      <div class="loading-msg">Loading...</div>
     </main>
   </div>
 
@@ -612,16 +619,23 @@
   function thumbUrl(youtubeId) { return 'https://i.ytimg.com/vi/' + youtubeId + '/hqdefault.jpg'; }
   function esc(str) { return String(str).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
-  function buildCard(track, badges, score) {
+  function buildCard(track, score, displayRank) {
     var badgeHtml = '';
-    if (badges && badges.length) { for (var i = 0; i < badges.length; i++) { badgeHtml += '<span class="track-badge">' + badges[i] + '</span>'; } }
+    var displayTags = track.tags ? track.tags.split(',') : [];
+    if (displayTags.length) { 
+      for (var i = 0; i < displayTags.length; i++) { 
+        var tag = displayTags[i].trim();
+        if (tag) badgeHtml += '<span class="track-badge">' + tag + '</span>'; 
+      } 
+    }
+
     var scoreHtml = '';
     if (score !== undefined && score !== null && score !== 0) { var cls = score > 0 ? 'pos' : 'neg'; scoreHtml = '<span class="track-score ' + cls + '">' + score + '</span>'; }
 
     return (
-      '<a class="track-card" href="/track-' + track.id + '">' +
+      '<a class="track-card" href="/track/' + track.youtube_id + '">' +
         '<div class="thumb-wrap"><img loading="lazy" src="' + thumbUrl(track.youtube_id) + '" alt="' + esc(track.title) + '"></div>' +
-        '<div class="track-header"><span class="rank">' + track.id + '</span><div class="track-meta"><div class="track-title">' + esc(track.title) + '</div><div class="track-artist">' + esc(track.artist) + '</div></div>' + scoreHtml + badgeHtml + '</div></a>'
+        '<div class="track-header"><span class="rank">' + displayRank + '</span><div class="track-meta"><div class="track-title">' + esc(track.title) + '</div><div class="track-artist">' + esc(track.artist) + '</div></div>' + scoreHtml + badgeHtml + '</div></a>'
     );
   }
 
@@ -645,24 +659,47 @@
   })();
 
   fetch('/api/home')
-    .then(function (r) { return r.json(); })
-    .then(function (data) {
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
       var tracks = data.tracks || [];
       var scores = data.scores || {};
-      var featured = tracks.slice(0, 3);
-      var rest = tracks.slice(3);
-      var featuredEl = document.getElementById('featuredList');
-      var listEl = document.getElementById('trackList');
-      if (!tracks.length) { featuredEl.innerHTML = '<div class="loading-msg">No tracks yet</div>'; listEl.innerHTML = '<div class="loading-msg">No tracks yet</div>'; return; }
-      featuredEl.innerHTML = featured.map(function (t) { return buildCard(t, ['Top'], scores[t.id] || 0); }).join('');
-      listEl.innerHTML = rest.map(function (t, i) {
-        var badges = [];
-        if (i < 3) badges.push('New');
-        if (i < 5) badges.push('Hot');
-        return buildCard(t, badges, scores[t.id] || 0);
-      }).join('');
+      var categories = data.categories || [];
+
+      if (categories.length === 0) {
+        categories = [
+          { name: 'Featured', slug: 'featured' },
+          { name: 'All Tracks', slug: 'all' }
+        ];
+      }
+
+      var mainEl = document.getElementById('mainContent');
+      mainEl.innerHTML = '';
+
+      categories.forEach(function(cat, index) {
+        var isFeatured = index === 0;
+        
+        var catTracks = tracks.filter(function(t) { return (t.category || 'all') === cat.slug; });
+        if (catTracks.length === 0) return; 
+
+        var gridClass = isFeatured ? 'track-grid-3' : 'track-grid-4';
+
+        var sectionHtml = '<section class="track-section">' +
+          '<div class="section-heading"><h2 class="section-title">' + esc(cat.name) + '</h2></div>' +
+          '<div class="' + gridClass + '">';
+
+        sectionHtml += catTracks.map(function(t, i) {
+          var displayRank = t.position;
+          return buildCard(t, scores[t.id] || 0, displayRank);
+        }).join('');
+
+        sectionHtml += '</div></section>';
+        mainEl.innerHTML += sectionHtml;
+      });
     })
-    .catch(function (err) { document.getElementById('featuredList').innerHTML = '<div class="loading-msg">Could not load tracks</div>'; document.getElementById('trackList').innerHTML = '<div class="loading-msg">Could not load tracks</div>'; });
+    .catch(function(err) {
+      document.getElementById('mainContent').innerHTML = '<div class="loading-msg">Could not load tracks</div>';
+      console.error(err);
+    });
 </script>
 
 <script>

@@ -43,820 +43,179 @@
     margin: 0 auto;
   }
 
-  .brand-group {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    justify-self: start;
-  }
-
+  .brand-group { display: inline-flex; align-items: center; gap: 0.6rem; justify-self: start; }
   .brand-lockup { display: inline-flex; align-items: center; }
 
   .discord-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.15rem;
-    height: 2.15rem;
-    flex: 0 0 auto;
-    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.15rem; height: 2.15rem; flex: 0 0 auto; border-radius: 50%;
     background: linear-gradient(135deg, rgba(88, 101, 242, 0.35), rgba(64, 78, 237, 0.35));
-    border: 1px solid rgba(88, 101, 242, 0.35);
-    color: #fff;
-    text-decoration: none;
+    border: 1px solid rgba(88, 101, 242, 0.35); color: #fff; text-decoration: none;
     transition: background 0.2s, transform 0.2s;
   }
-  .discord-btn:hover {
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5));
-    transform: translateY(-1px);
-  }
-  .discord-btn svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    display: block;
-  }
+  .discord-btn:hover { background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5)); transform: translateY(-1px); }
+  .discord-btn svg { width: 1.25rem; height: 1.25rem; display: block; }
 
-  #logo {
-    display: block;
-    width: clamp(8rem, 14vw, 11.5rem);
-    height: auto;
-  }
+  #logo { display: block; width: clamp(8rem, 14vw, 11.5rem); height: auto; }
 
   .search-box {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    max-width: 32rem;
-    height: 2.35rem;
-    padding: 0 0.8rem;
-    border: 1px solid #303030;
-    border-radius: 999px;
-    background: #191919;
-    color: #aaa;
-    justify-self: center;
-    width: 100%;
-    pointer-events: none;
+    display: flex; align-items: center; min-width: 0; max-width: 32rem; height: 2.35rem;
+    padding: 0 0.8rem; border: 1px solid #303030; border-radius: 999px; background: #191919;
+    color: #aaa; justify-self: center; width: 100%; pointer-events: none;
   }
   .search-box svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
-  .search-box input {
-    width: 100%;
-    border: 0;
-    outline: 0;
-    padding: 0 0.6rem;
-    background: transparent;
-    color: var(--white);
-    font: inherit;
-    pointer-events: none;
-  }
+  .search-box input { width: 100%; border: 0; outline: 0; padding: 0 0.6rem; background: transparent; color: var(--white); font: inherit; pointer-events: none; }
   .search-box input::placeholder { color: #858585; }
 
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    justify-self: end;
-  }
+  .header-actions { display: flex; align-items: center; gap: 0.65rem; justify-self: end; }
 
   .action-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    min-height: 2.15rem;
-    padding: 0.4rem 0.8rem;
-    border: 1px solid #383838;
-    border-radius: 999px;
-    color: #ddd;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2.15rem; padding: 0.4rem 0.8rem;
+    border: 1px solid #383838; border-radius: 999px; color: #ddd;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.08em; text-decoration: none; text-transform: uppercase;
   }
   .action-chip.accent { background: var(--red); border-color: var(--red); color: #080808; }
 
   .primary-nav { border-top: 1px solid #181818; }
   .nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(1rem, 3vw, 3rem);
-    overflow-x: auto;
-    padding: 0 1.25rem;
-    width: 100%;
-    max-width: 1320px;
-    margin: 0 auto;
+    display: flex; align-items: center; justify-content: center; gap: clamp(1rem, 3vw, 3rem);
+    overflow-x: auto; padding: 0 1.25rem; width: 100%; max-width: 1320px; margin: 0 auto;
   }
   .nav-link {
-    position: relative;
-    flex: 0 0 auto;
-    padding: 0.75rem 0.1rem 0.68rem;
-    color: #d4d4d4;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-decoration: none;
-    text-transform: uppercase;
+    position: relative; flex: 0 0 auto; padding: 0.75rem 0.1rem 0.68rem; color: #d4d4d4;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.1em; text-decoration: none; text-transform: uppercase;
   }
   .nav-link:hover { color: var(--red); }
-  .nav-link.active::after {
-    content: '';
-    position: absolute;
-    right: 0; bottom: 0; left: 0;
-    height: 2px;
-    background: var(--red);
-  }
+  .nav-link.active::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: var(--red); }
 
-  .forum-shell {
-    display: flex;
-    max-width: 1320px;
-    margin: 0 auto;
-    min-height: calc(100vh - 130px);
-  }
-
-  .forum-sidebar {
-    width: var(--sidebar-width);
-    flex-shrink: 0;
-    background: #050505;
-    border-right: 1px solid #1a1a1a;
-    padding: 1.5rem 1rem;
-  }
-
+  .forum-shell { display: flex; max-width: 1320px; margin: 0 auto; min-height: calc(100vh - 130px); }
+  .forum-sidebar { width: var(--sidebar-width); flex-shrink: 0; background: #050505; border-right: 1px solid #1a1a1a; padding: 1.5rem 1rem; }
   .sidebar-group { margin-bottom: 1.5rem; }
-  .sidebar-group-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #666;
-    padding: 0 0.75rem 0.5rem;
-    margin-bottom: 0.25rem;
-  }
-
+  .sidebar-group-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #666; padding: 0 0.75rem 0.5rem; margin-bottom: 0.25rem; }
   .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.55rem 0.75rem;
-    color: #bbb;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 2px;
-    border-left: 2px solid transparent;
-    transition: color 0.15s, background 0.15s, border-color 0.15s;
+    display: flex; align-items: center; gap: 0.55rem; padding: 0.55rem 0.75rem; color: #bbb;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+    border-radius: 2px; border-left: 2px solid transparent; transition: color 0.15s, background 0.15s, border-color 0.15s;
   }
   .sidebar-item:hover { color: var(--white); background: rgba(255, 153, 0, 0.05); }
-  .sidebar-item.active {
-    color: var(--red);
-    background: rgba(255, 153, 0, 0.08);
-    border-left-color: var(--red);
-  }
+  .sidebar-item.active { color: var(--red); background: rgba(255, 153, 0, 0.08); border-left-color: var(--red); }
+  .sidebar-item-count { margin-left: auto; font-size: 0.6rem; color: #666; background: #1a1a1a; padding: 0.1rem 0.4rem; border-radius: 999px; letter-spacing: 0.05em; }
+  .sidebar-item.active .sidebar-item-count { background: rgba(255, 153, 0, 0.15); color: var(--red); }
 
-  .sidebar-item-count {
-    margin-left: auto;
-    font-size: 0.6rem;
-    color: #666;
-    background: #1a1a1a;
-    padding: 0.1rem 0.4rem;
-    border-radius: 999px;
-    letter-spacing: 0.05em;
-  }
-  .sidebar-item.active .sidebar-item-count {
-    background: rgba(255, 153, 0, 0.15);
-    color: var(--red);
-  }
+  .forum-main { flex: 1; padding: 2rem 2rem 4rem; min-width: 0; }
 
-  .forum-main {
-    flex: 1;
-    padding: 2rem 2rem 4rem;
-    min-width: 0;
-  }
-
-  .breadcrumb {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #777;
-    margin-bottom: 1.5rem;
-  }
+  .breadcrumb { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777; margin-bottom: 1.5rem; }
   .breadcrumb a { color: var(--red); text-decoration: none; }
   .breadcrumb a:hover { text-decoration: underline; }
   .breadcrumb-sep { color: #333; margin: 0 0.5rem; }
 
-  .thread-post {
-    background: rgba(13, 13, 13, 0.95);
-    border: 1px solid #2a2a2a;
-    border-top: 3px solid var(--red);
-    border-radius: 2px;
-    padding: 1.5rem 1.75rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .thread-post-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1.15;
-    text-transform: uppercase;
-    margin-bottom: 0.85rem;
-    color: var(--white);
-  }
-
-  .thread-post-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: center;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #777;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #1d1d1d;
-    margin-bottom: 1.25rem;
-  }
-
-  .post-author {
-    color: var(--red);
-    font-weight: 700;
-    text-decoration: none;
-  }
+  .thread-post { background: rgba(13, 13, 13, 0.95); border: 1px solid #2a2a2a; border-top: 3px solid var(--red); border-radius: 2px; padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; }
+  .thread-post-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: 0.04em; line-height: 1.15; text-transform: uppercase; margin-bottom: 0.85rem; color: var(--white); }
+  .thread-post-meta { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #777; padding-bottom: 1rem; border-bottom: 1px solid #1d1d1d; margin-bottom: 1.25rem; }
+  .post-author { color: var(--red); font-weight: 700; text-decoration: none; }
   .post-author:hover { text-decoration: underline; }
+  .thread-post-body { font-size: 0.92rem; line-height: 1.6; color: #ddd; white-space: pre-wrap; word-wrap: break-word; }
 
-  .thread-post-body {
-    font-size: 0.92rem;
-    line-height: 1.6;
-    color: #ddd;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  .vote-widget {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    margin-top: 1.25rem;
-    padding-top: 1rem;
-    border-top: 1px solid #1d1d1d;
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .vote-btn-sm {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: transparent;
-    border: 1px solid #2a2a2a;
-    color: var(--white);
-    font-size: 0.85rem;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
-  }
+  .vote-widget { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #1d1d1d; width: 100%; flex-wrap: wrap; }
+  .vote-btn-sm { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; background: transparent; border: 1px solid #2a2a2a; color: var(--white); font-size: 0.85rem; cursor: pointer; border-radius: 2px; transition: border-color 0.15s, color 0.15s, background 0.15s; }
   .vote-btn-sm:hover:not(:disabled) { border-color: var(--red-dim); color: var(--red); }
   .vote-btn-sm:disabled { cursor: not-allowed; opacity: 0.5; }
   .vote-btn-sm.up.active { background: rgba(255, 153, 0, 0.15); border-color: var(--red); color: var(--red); }
   .vote-btn-sm.down.active { background: rgba(120, 60, 60, 0.15); border-color: #995555; color: #ff7777; }
 
-  .vote-count {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    color: var(--white);
-    line-height: 1;
-    min-width: 2.5rem;
-    text-align: center;
-  }
+  .vote-count { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--white); line-height: 1; min-width: 2.5rem; text-align: center; }
   .vote-count.positive { color: var(--red); }
   .vote-count.negative { color: #ff7777; }
 
-  .vote-widget-actions {
-    margin-left: auto;
-    display: flex;
-    gap: 0.85rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .vote-widget-actions button {
-    background: transparent;
-    border: none;
-    padding: 0;
-    color: #777;
-    font-family: inherit;
-    font-size: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    cursor: pointer;
-    transition: color 0.15s;
-  }
+  .vote-widget-actions { margin-left: auto; display: flex; gap: 0.85rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .vote-widget-actions button { background: transparent; border: none; padding: 0; color: #777; font-family: inherit; font-size: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; transition: color 0.15s; }
   .vote-widget-actions button:hover { color: var(--red); }
   .vote-widget-actions button.delete-btn:hover { color: #ff5555; }
 
-  .reactions-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    align-items: center;
-    margin-top: 0.65rem;
-  }
-
-  .reaction-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.2rem 0.55rem 0.2rem 0.3rem;
-    background: #0d0d0d;
-    border: 1px solid #2a2a2a;
-    border-radius: 999px;
-    color: #ccc;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s;
-    position: relative;
-    user-select: none;
-  }
-  .reaction-chip:hover {
-    border-color: var(--red-dim);
-    background: #131313;
-  }
+  .reactions-row { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; margin-top: 0.65rem; }
+  .reaction-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.55rem 0.2rem 0.3rem; background: #0d0d0d; border: 1px solid #2a2a2a; border-radius: 999px; color: #ccc; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; transition: background 0.15s, border-color 0.15s, transform 0.1s; position: relative; user-select: none; }
+  .reaction-chip:hover { border-color: var(--red-dim); background: #131313; }
   .reaction-chip:active { transform: scale(0.96); }
-  .reaction-chip.reacted {
-    background: rgba(255, 153, 0, 0.12);
-    border-color: var(--red);
-    color: var(--red);
-  }
-
-  .reaction-chip img {
-    width: 18px;
-    height: 18px;
-    display: block;
-  }
-
-  .reaction-chip .reaction-count {
-    padding-left: 0.15rem;
-  }
-
-  .reaction-chip .reaction-tooltip {
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: #0a0a0a;
-    border: 1px solid #333;
-    border-radius: 3px;
-    padding: 0.4rem 0.6rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #bbb;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s;
-    z-index: 10;
-    max-width: 240px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .reaction-chip.reacted { background: rgba(255, 153, 0, 0.12); border-color: var(--red); color: var(--red); }
+  .reaction-chip img { width: 18px; height: 18px; display: block; }
+  .reaction-chip .reaction-count { padding-left: 0.15rem; }
+  .reaction-chip .reaction-tooltip { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #0a0a0a; border: 1px solid #333; border-radius: 3px; padding: 0.4rem 0.6rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; color: #bbb; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 10; max-width: 240px; overflow: hidden; text-overflow: ellipsis; }
   .reaction-chip:hover .reaction-tooltip { opacity: 1; }
 
-  .add-reaction-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    background: #0d0d0d;
-    border: 1px solid #2a2a2a;
-    border-radius: 999px;
-    color: #777;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    position: relative;
-  }
-  .add-reaction-btn:hover {
-    border-color: var(--red-dim);
-    color: var(--red);
-    background: #131313;
-  }
-  .add-reaction-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
+  .add-reaction-btn { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; padding: 0; background: #0d0d0d; border: 1px solid #2a2a2a; border-radius: 999px; color: #777; font-size: 0.9rem; cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; position: relative; }
+  .add-reaction-btn:hover { border-color: var(--red-dim); color: var(--red); background: #131313; }
+  .add-reaction-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .emoji-picker {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 0;
-    z-index: 100;
-    background: #0a0a0a;
-    border: 1px solid #2a2a2a;
-    border-radius: 4px;
-    padding: 0.5rem;
-    display: none;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.25rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-    min-width: 240px;
-  }
-  .emoji-picker.open {
-    display: grid;
-  }
-
-  .emoji-picker-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.1s, border-color 0.1s, transform 0.1s;
-  }
-  .emoji-picker-item:hover {
-    background: #1a1a1a;
-    border-color: var(--red-dim);
-    transform: scale(1.1);
-  }
-  .emoji-picker-item img {
-    width: 24px;
-    height: 24px;
-    display: block;
-  }
-  .emoji-picker-item.reacted {
-    background: rgba(255, 153, 0, 0.15);
-    border-color: var(--red);
-  }
-
-  .reactions-wrapper {
-    position: relative;
-    display: inline-block;
-  }
+  .emoji-picker { position: absolute; bottom: calc(100% + 8px); left: 0; z-index: 100; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 0.5rem; display: none; grid-template-columns: repeat(6, 1fr); gap: 0.25rem; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); min-width: 240px; }
+  .emoji-picker.open { display: grid; }
+  .emoji-picker-item { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; background: transparent; border: 1px solid transparent; border-radius: 4px; cursor: pointer; transition: background 0.1s, border-color 0.1s, transform 0.1s; }
+  .emoji-picker-item:hover { background: #1a1a1a; border-color: var(--red-dim); transform: scale(1.1); }
+  .emoji-picker-item img { width: 24px; height: 24px; display: block; }
+  .emoji-picker-item.reacted { background: rgba(255, 153, 0, 0.15); border-color: var(--red); }
+  .reactions-wrapper { position: relative; display: inline-block; }
 
   .replies-section { margin-top: 2rem; }
+  .replies-heading { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #1a1a1a; }
+  .replies-heading-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); }
 
-  .replies-heading {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #1a1a1a;
-  }
-  .replies-heading-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--red);
-  }
-
-  .reply-form-box {
-    background: rgba(13, 13, 13, 0.95);
-    border: 1px solid #2a2a2a;
-    border-top: 3px solid var(--red);
-    border-radius: 2px;
-    padding: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .reply-form-box textarea {
-    width: 100%;
-    min-height: 80px;
-    padding: 0.75rem 0.9rem;
-    background: #080808;
-    border: 1px solid #2a2a2a;
-    color: var(--white);
-    font: inherit;
-    font-size: 0.9rem;
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.2s;
-    border-radius: 2px;
-    font-family: inherit;
-  }
+  .reply-form-box { background: rgba(13, 13, 13, 0.95); border: 1px solid #2a2a2a; border-top: 3px solid var(--red); border-radius: 2px; padding: 1.25rem; margin-bottom: 1.5rem; }
+  .reply-form-box textarea { width: 100%; min-height: 80px; padding: 0.75rem 0.9rem; background: #080808; border: 1px solid #2a2a2a; color: var(--white); font: inherit; font-size: 0.9rem; resize: vertical; outline: none; transition: border-color 0.2s; border-radius: 2px; font-family: inherit; }
   .reply-form-box textarea:focus { border-color: var(--red-dim); }
-
-  .reply-form-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 0.75rem;
-  }
-
-  .reply-form-actions button {
-    padding: 0.65rem 1.5rem;
-    background: var(--red);
-    border: 1px solid var(--red);
-    color: #080808;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: opacity 0.2s;
-  }
+  .reply-form-actions { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem; }
+  .reply-form-actions button { padding: 0.65rem 1.5rem; background: var(--red); border: 1px solid var(--red); color: #080808; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: opacity 0.2s; }
   .reply-form-actions button:hover { opacity: 0.85; }
   .reply-form-actions button:disabled { opacity: 0.4; cursor: wait; }
-
-  .reply-char-count {
-    margin-left: auto;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #666;
-  }
+  .reply-char-count { margin-left: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #666; }
   .reply-char-count.over { color: #ff5555; }
-
-  .reply-form-status {
-    margin-top: 0.6rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    min-height: 1rem;
-  }
+  .reply-form-status { margin-top: 0.6rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; min-height: 1rem; }
   .reply-form-status.err { color: #ff5555; }
 
-  .login-prompt {
-    padding: 1.5rem;
-    text-align: center;
-    background: rgba(13, 13, 13, 0.95);
-    border: 1px dashed #1d1d1d;
-    border-radius: 2px;
-    margin-bottom: 1.5rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #888;
-  }
+  .login-prompt { padding: 1.5rem; text-align: center; background: rgba(13, 13, 13, 0.95); border: 1px dashed #1d1d1d; border-radius: 2px; margin-bottom: 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: #888; }
   .login-prompt a { color: var(--red); text-decoration: none; }
   .login-prompt a:hover { text-decoration: underline; }
 
-  .reply {
-    background: rgba(13, 13, 13, 0.7);
-    border: 1px solid #1d1d1d;
-    border-radius: 2px;
-    padding: 0.9rem 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .reply-header {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    margin-bottom: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .reply-author {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: var(--red);
-    text-decoration: none;
-    text-transform: uppercase;
-  }
+  .reply { background: rgba(13, 13, 13, 0.7); border: 1px solid #1d1d1d; border-radius: 2px; padding: 0.9rem 1rem; margin-bottom: 0.5rem; }
+  .reply-header { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .reply-author { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: var(--red); text-decoration: none; text-transform: uppercase; }
   .reply-author:hover { text-decoration: underline; }
-
-  .reply-time {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: #666;
-    text-transform: uppercase;
-  }
-
-  .reply-edited {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    color: #555;
-    text-transform: uppercase;
-    font-style: italic;
-  }
-
-  .reply-body {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #ddd;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  .reply-body a.mention {
-    color: var(--red);
-    text-decoration: none;
-    font-weight: 700;
-  }
+  .reply-time { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.1em; color: #666; text-transform: uppercase; }
+  .reply-edited { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; letter-spacing: 0.1em; color: #555; text-transform: uppercase; font-style: italic; }
+  .reply-body { font-size: 0.9rem; line-height: 1.5; color: #ddd; white-space: pre-wrap; word-wrap: break-word; }
+  .reply-body a.mention { color: var(--red); text-decoration: none; font-weight: 700; }
   .reply-body a.mention:hover { text-decoration: underline; }
-
-  .reply-actions {
-    display: flex;
-    gap: 0.85rem;
-    margin-top: 0.6rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .reply-actions button {
-    background: transparent;
-    border: none;
-    padding: 0;
-    color: #777;
-    font-family: inherit;
-    font-size: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    cursor: pointer;
-    transition: color 0.15s;
-  }
+  .reply-actions { display: flex; gap: 0.85rem; margin-top: 0.6rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; align-items: center; flex-wrap: wrap; }
+  .reply-actions button { background: transparent; border: none; padding: 0; color: #777; font-family: inherit; font-size: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; transition: color 0.15s; }
   .reply-actions button:hover { color: var(--red); }
   .reply-actions button.delete-btn:hover { color: #ff5555; }
 
-  .reply-score-inline {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    color: var(--red);
-  }
+  .reply-score-inline { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: var(--red); }
   .reply-score-inline.negative { color: #ff7777; }
-  .reply-score-inline button {
-    background: transparent;
-    border: none;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-    padding: 0;
-    transition: opacity 0.15s;
-  }
+  .reply-score-inline button { background: transparent; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0; transition: opacity 0.15s; }
   .reply-score-inline button:hover:not(:disabled) { opacity: 0.7; }
   .reply-score-inline button:disabled { cursor: not-allowed; opacity: 0.5; }
   .reply-score-inline button.active { color: var(--red); }
   .reply-score-inline button.down.active { color: #ff7777; }
 
-  .reply-children {
-    margin-top: 0.6rem;
-    padding-left: 1.25rem;
-    border-left: 2px solid #1d1d1d;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .reply-children.deep {
-    padding-left: 0.5rem;
-    border-left-color: #161616;
-  }
+  .reply-children { margin-top: 0.6rem; padding-left: 1.25rem; border-left: 2px solid #1d1d1d; display: flex; flex-direction: column; gap: 0.5rem; }
+  .reply-children.deep { padding-left: 0.5rem; border-left-color: #161616; }
 
-  .inline-reply-form {
-    margin-top: 0.6rem;
-    display: none;
-  }
+  .inline-reply-form { margin-top: 0.6rem; display: none; }
   .inline-reply-form.open { display: block; }
-
-  .inline-reply-form textarea {
-    width: 100%;
-    min-height: 50px;
-    padding: 0.6rem 0.75rem;
-    background: #080808;
-    border: 1px solid #2a2a2a;
-    color: var(--white);
-    font: inherit;
-    font-size: 0.85rem;
-    resize: vertical;
-    outline: none;
-    border-radius: 2px;
-    font-family: inherit;
-  }
+  .inline-reply-form textarea { width: 100%; min-height: 50px; padding: 0.6rem 0.75rem; background: #080808; border: 1px solid #2a2a2a; color: var(--white); font: inherit; font-size: 0.85rem; resize: vertical; outline: none; border-radius: 2px; font-family: inherit; }
   .inline-reply-form textarea:focus { border-color: var(--red-dim); }
+  .inline-reply-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+  .inline-reply-actions button { padding: 0.45rem 1rem; background: var(--red); border: 1px solid var(--red); color: #080808; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; border-radius: 2px; }
+  .inline-reply-actions button.ghost { background: transparent; color: var(--white); border-color: #444; }
 
-  .inline-reply-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-  .inline-reply-actions button {
-    padding: 0.45rem 1rem;
-    background: var(--red);
-    border: 1px solid var(--red);
-    color: #080808;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 2px;
-  }
-  .inline-reply-actions button.ghost {
-    background: transparent;
-    color: var(--white);
-    border-color: #444;
-  }
+  .no-replies { text-align: center; padding: 2rem 1rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: #555; }
+  .loading-msg { text-align: center; padding: 3rem 1rem; color: var(--gray); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.75rem; }
+  footer { background: #000; text-align: center; padding: 2rem; font-size: 0.75rem; color: #ccc; letter-spacing: 0.1em; border-top: 1px solid var(--border); }
+  .tagline { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(0.68rem, 1.4vw, 0.82rem); letter-spacing: 0.32em; text-transform: uppercase; color: var(--red); }
 
-  .no-replies {
-    text-align: center;
-    padding: 2rem 1rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #555;
-  }
-
-  .loading-msg {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--gray);
-    font-family: 'Barlow Condensed', sans-serif;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-  }
-
-  footer {
-    background: #000;
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.75rem;
-    color: #ccc;
-    letter-spacing: 0.1em;
-    border-top: 1px solid var(--border);
-  }
-  .tagline {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: clamp(0.68rem, 1.4vw, 0.82rem);
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: var(--red);
-  }
-
-  @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
-    .brand-group { grid-column: 1; }
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
-    .header-actions {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
-      gap: 0.35rem;
-    }
-    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
-
-    .forum-shell { flex-direction: column; }
-    .forum-sidebar {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 1rem;
-    }
-    .sidebar-group { margin-bottom: 1rem; }
-    .forum-main { padding: 1.5rem 1rem 3rem; }
-    .reply-children { padding-left: 0.75rem; }
-    .emoji-picker { left: auto; right: 0; }
-  }
-
-    /* NOTIFICATION CSS */
+  /* NOTIFICATION CSS */
   .notif-wrapper { position: relative; display: inline-block; }
   .notif-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s; position: relative; }
   .notif-btn:hover { color: var(--white); }
@@ -878,6 +237,44 @@
   .notif-time { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: #666; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
   .notif-empty { padding: 2rem 1rem; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em; }
 
+  @media (max-width: 780px) {
+    /* Header Layout Fix */
+    .header-main { 
+      grid-template-columns: 1fr auto; 
+      gap: 0.5rem; 
+      padding: 0.65rem 0.75rem;
+    }
+    .brand-group { grid-column: 1; grid-row: 1; }
+    .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
+    
+    /* Force the search bar to drop to row 2 and span full width */
+    .search-box { 
+      grid-column: 1 / -1; 
+      grid-row: 2; 
+      max-width: none; 
+      justify-self: stretch; 
+      margin-top: 0.25rem;
+    }
+    
+    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+
+    /* Mobile Notification Dropdown Fix */
+    .notif-dropdown {
+      position: fixed;
+      top: 60px; 
+      left: 10px;
+      right: 10px;
+      width: auto;
+      max-width: none;
+    }
+    
+    .forum-shell { flex-direction: column; }
+    .forum-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #1a1a1a; padding: 1rem; }
+    .sidebar-group { margin-bottom: 1rem; }
+    .forum-main { padding: 1.5rem 1rem 3rem; }
+    .reply-children { padding-left: 0.75rem; }
+    .emoji-picker { left: auto; right: 0; }
+  }
 </style>
 </head>
 
@@ -914,7 +311,6 @@
     <aside class="forum-sidebar" id="forumSidebar">
       <div class="loading-msg" style="padding:1rem 0;">Loading…</div>
     </aside>
-
     <main class="forum-main" id="forumMain">
       <div class="loading-msg">Loading thread…</div>
     </main>
@@ -928,696 +324,6 @@
   </footer>
 
 <script>
-  var MAX_REPLY = 200;
-  var currentUser = null;
-  var threadData = null;
-  var userVotes = {};
-  var threadId = null;
-
-  var EMOJI_SET = {};
-  var reactionsCache = {};
-  var reactionsPending = {};
-
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-
-  function renderBody(raw) {
-    var safe = esc(raw);
-    return safe.replace(/(^|[^a-zA-Z0-9_])@([a-zA-Z0-9_]{3,20})\b/g, function (m, prefix, username) {
-      return prefix + '<a class="mention" href="/@' + username + '">@' + username + '</a>';
-    });
-  }
-
-  function timeAgo(iso) {
-    if (!iso) return '—';
-    var then = new Date(iso).getTime();
-    var now = Date.now();
-    var sec = Math.floor((now - then) / 1000);
-    if (sec < 5) return 'just now';
-    if (sec < 60) return sec + 's ago';
-    var min = Math.floor(sec / 60);
-    if (min < 60) return min + 'm ago';
-    var hr = Math.floor(min / 60);
-    if (hr < 24) return hr + 'h ago';
-    var day = Math.floor(hr / 24);
-    if (day < 30) return day + 'd ago';
-    var mon = Math.floor(day / 30);
-    if (mon < 12) return mon + 'mo ago';
-    return Math.floor(mon / 12) + 'y ago';
-  }
-
-  function getThreadIdFromPath() {
-    var match = window.location.pathname.match(/^\/forums\/thread-(\d+)/);
-    return match ? parseInt(match[1], 10) : null;
-  }
-
-  function reactionsHtmlFor(type, id) {
-    var key = type + ':' + id;
-    var reactions = reactionsCache[key] || {};
-
-    var emojis = Object.keys(reactions);
-
-    var chips = emojis.map(function (emoji) {
-      var r = reactions[emoji];
-      var reactedClass = r.userReacted ? ' reacted' : '';
-      var tooltip = r.users.join(', ');
-      return (
-        '<span class="reaction-chip' + reactedClass + '" data-react-toggle="1" data-react-type="' + type + '" data-react-id="' + id + '" data-react-emoji="' + emoji + '">' +
-          '<img src="' + EMOJI_SET[emoji] + '" alt="' + emoji + '">' +
-          '<span class="reaction-count">' + r.count + '</span>' +
-          '<span class="reaction-tooltip">' + esc(tooltip) + '</span>' +
-        '</span>'
-      );
-    }).join('');
-
-    var addBtn = '';
-    if (currentUser) {
-      addBtn =
-        '<div class="reactions-wrapper">' +
-          '<button class="add-reaction-btn" data-react-open="1" data-react-type="' + type + '" data-react-id="' + id + '" title="Add reaction">☺</button>' +
-          '<div class="emoji-picker" data-react-picker="' + type + ':' + id + '">' +
-            Object.keys(EMOJI_SET).map(function (emoji) {
-              var userReacted = reactions[emoji] && reactions[emoji].userReacted;
-              return (
-                '<button class="emoji-picker-item' + (userReacted ? ' reacted' : '') + '" data-react-pick="1" data-react-type="' + type + '" data-react-id="' + id + '" data-react-emoji="' + emoji + '">' +
-                  '<img src="' + EMOJI_SET[emoji] + '" alt="' + emoji + '">' +
-                '</button>'
-              );
-            }).join('') +
-          '</div>' +
-        '</div>';
-    }
-
-    if (!chips && !addBtn) return '';
-
-    return '<div class="reactions-row" data-react-key="' + key + '">' + chips + addBtn + '</div>';
-  }
-
-  (async function () {
-    var actions = document.getElementById('headerActions');
-    if (!actions) return;
-    try {
-      var res = await fetch('/api/auth?action=me');
-      var data = await res.json();
-      currentUser = data.user;
-
-      if (data.user) {
-        var userChip = document.createElement('a');
-        userChip.className = 'action-chip';
-        userChip.href = '/@' + data.user.username;
-        userChip.textContent = data.user.display_name || data.user.username;
-
-        var logoutBtn = document.createElement('a');
-        logoutBtn.className = 'action-chip accent';
-        logoutBtn.href = '#';
-        logoutBtn.textContent = 'Log Out';
-        logoutBtn.addEventListener('click', async function (e) {
-          e.preventDefault();
-          await fetch('/api/auth?action=logout', { method: 'POST' });
-          window.location.href = '/';
-        });
-
-        actions.appendChild(userChip);
-        actions.appendChild(logoutBtn);
-      } else {
-        var loginLink = document.createElement('a');
-        loginLink.className = 'action-chip';
-        loginLink.href = '/login';
-        loginLink.textContent = 'Log In';
-
-        var signupLink = document.createElement('a');
-        signupLink.className = 'action-chip accent';
-        signupLink.href = '/signup';
-        signupLink.textContent = 'Sign Up';
-
-        actions.appendChild(loginLink);
-        actions.appendChild(signupLink);
-      }
-    } catch (err) {}
-  })();
-
-  (async function () {
-    var sidebarEl = document.getElementById('forumSidebar');
-    try {
-      var res = await fetch('/api/forums?action=categories');
-      var data = await res.json();
-      var categories = data.categories || [];
-
-      var moderation = categories.filter(function (c) { return c.group_name === 'moderation'; });
-      var discussion = categories.filter(function (c) { return c.group_name === 'discussion'; });
-
-      function sidebarGroupHtml(title, cats) {
-        return (
-          '<div class="sidebar-group">' +
-            '<div class="sidebar-group-title">' + title + '</div>' +
-            cats.map(function (c) {
-              return (
-                '<a class="sidebar-item" href="/forums/' + esc(c.slug) + '">' +
-                  esc(c.name) +
-                  (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') +
-                '</a>'
-              );
-            }).join('') +
-          '</div>'
-        );
-      }
-
-      sidebarEl.innerHTML =
-        sidebarGroupHtml('Moderation', moderation) +
-        sidebarGroupHtml('Discussion', discussion);
-    } catch (err) {
-      sidebarEl.innerHTML = '';
-    }
-  })();
-
-  async function loadThread() {
-    var main = document.getElementById('forumMain');
-    threadId = getThreadIdFromPath();
-
-    if (!threadId) {
-      main.innerHTML = '<div class="loading-msg">Invalid thread URL</div>';
-      return;
-    }
-
-    try {
-      var res = await fetch('/api/forums?action=thread&id=' + threadId);
-      if (!res.ok) {
-        main.innerHTML = '<div class="loading-msg">Thread not found</div>';
-        return;
-      }
-      var data = await res.json();
-      threadData = data.thread;
-      threadData.replies = data.replies || [];
-      userVotes = data.userVotes || {};
-
-      document.title = threadData.title + ' — PhonkHub Forums';
-
-      var allIds = [threadId];
-      var allReplyIds = [];
-
-      function collectReplyIds(list) {
-        for (var i = 0; i < list.length; i++) {
-          allReplyIds.push(list[i].id);
-          if (list[i].replies && list[i].replies.length) {
-            collectReplyIds(list[i].replies);
-          }
-        }
-      }
-      collectReplyIds(threadData.replies);
-
-      await loadReactions(allIds, allReplyIds);
-
-      renderThread();
-    } catch (err) {
-      main.innerHTML = '<div class="loading-msg">Could not load thread</div>';
-    }
-  }
-
-  async function loadReactions(threadIds, replyIds) {
-    reactionsCache = {};
-    try {
-      if (threadIds.length > 0) {
-        var r1 = await fetch('/api/react?target_type=thread&ids=' + threadIds.join(','));
-        var d1 = await r1.json();
-        if (d1.emojis) EMOJI_SET = d1.emojis;
-        Object.keys(d1.reactions || {}).forEach(function (tid) {
-          reactionsCache['thread:' + tid] = d1.reactions[tid];
-        });
-      }
-      if (replyIds.length > 0) {
-        var r2 = await fetch('/api/react?target_type=reply&ids=' + replyIds.join(','));
-        var d2 = await r2.json();
-        if (d2.emojis) EMOJI_SET = d2.emojis;
-        Object.keys(d2.reactions || {}).forEach(function (rid) {
-          reactionsCache['reply:' + rid] = d2.reactions[rid];
-        });
-      }
-    } catch (err) {
-      console.error('Reactions load failed:', err);
-    }
-  }
-
-  function renderThread() {
-    var main = document.getElementById('forumMain');
-    var t = threadData;
-
-    var displayName = t.user.display_name || t.user.username;
-    var editedTag = t.edited_at ? ' · <span style="font-style:italic;color:#555;">edited</span>' : '';
-
-    var threadVote = userVotes['thread:' + t.id] || 0;
-    var upActive = threadVote === 1 ? ' active' : '';
-    var downActive = threadVote === -1 ? ' active' : '';
-    var scoreClass = t.score > 0 ? ' positive' : t.score < 0 ? ' negative' : '';
-
-    var voteWidgetHtml =
-      '<div class="vote-widget">' +
-        '<button class="vote-btn-sm up' + upActive + '" data-vote-type="thread" data-vote-id="' + t.id + '" data-vote-value="1">▲</button>' +
-        '<div class="vote-count' + scoreClass + '" data-score-for="thread:' + t.id + '">' + t.score + '</div>' +
-        '<button class="vote-btn-sm down' + downActive + '" data-vote-type="thread" data-vote-id="' + t.id + '" data-vote-value="-1">▼</button>' +
-        '<div class="vote-widget-actions">' +
-          (currentUser && currentUser.id === t.user.id ? '<button data-edit-thread="' + t.id + '">Edit</button><button class="delete-btn" data-delete-thread="' + t.id + '">Delete</button>' : '') +
-        '</div>' +
-      '</div>' +
-      reactionsHtmlFor('thread', t.id);
-
-    var replyFormHtml;
-    if (currentUser) {
-      replyFormHtml =
-        '<div class="reply-form-box" id="replyFormBox">' +
-          '<textarea id="topReplyBody" placeholder="Write a reply…" maxlength="' + MAX_REPLY + '"></textarea>' +
-          '<div class="reply-form-actions">' +
-            '<button id="topReplySubmit">Post Reply</button>' +
-            '<div class="reply-char-count" id="topReplyCount">0 / ' + MAX_REPLY + '</div>' +
-          '</div>' +
-          '<div class="reply-form-status" id="topReplyStatus"></div>' +
-        '</div>';
-    } else {
-      replyFormHtml =
-        '<div class="login-prompt">' +
-          '<a href="/login">Log in</a> or <a href="/signup">sign up</a> to reply' +
-        '</div>';
-    }
-
-    var repliesHtml;
-    if (!t.replies || t.replies.length === 0) {
-      repliesHtml = '<div class="no-replies">No replies yet. Be the first.</div>';
-    } else {
-      repliesHtml = t.replies.map(function (r) { return renderReply(r, 0); }).join('');
-    }
-
-    main.innerHTML =
-      '<div class="breadcrumb">' +
-        '<a href="/forums">Forums</a>' +
-        '<span class="breadcrumb-sep">/</span>' +
-        '<a href="/forums/' + esc(t.category.slug) + '">' + esc(t.category.name) + '</a>' +
-      '</div>' +
-
-      '<div class="thread-post">' +
-        '<div class="thread-post-title">' + esc(t.title) + '</div>' +
-        '<div class="thread-post-meta">' +
-          '<span>by <a class="post-author" href="/@' + esc(t.user.username) + '">' + esc(displayName) + '</a></span>' +
-          '<span>' + timeAgo(t.created_at) + '</span>' +
-          editedTag +
-        '</div>' +
-        '<div class="thread-post-body">' + renderBody(t.body) + '</div>' +
-        voteWidgetHtml +
-      '</div>' +
-
-      '<div class="replies-section">' +
-        '<div class="replies-heading">' +
-          '<div class="replies-heading-title">Replies</div>' +
-        '</div>' +
-        replyFormHtml +
-        '<div id="replyList">' + repliesHtml + '</div>' +
-      '</div>';
-
-    attachThreadHandlers();
-    attachTopReplyForm();
-  }
-
-  function renderReply(r, depth) {
-    var childrenHtml = '';
-    if (r.replies && r.replies.length) {
-      childrenHtml = '<div class="' + (depth >= 3 ? 'reply-children deep' : 'reply-children') + '">' +
-        r.replies.map(function (child) { return renderReply(child, depth + 1); }).join('') +
-      '</div>';
-    }
-
-    var isOwn = currentUser && currentUser.id === r.user.id;
-    var vote = userVotes['reply:' + r.id] || 0;
-    var upActive = vote === 1 ? ' active' : '';
-    var downActive = vote === -1 ? ' active' : '';
-    var scoreClass = r.score > 0 ? '' : r.score < 0 ? ' negative' : '';
-
-    var displayName = r.user.display_name || r.user.username;
-    var editedTag = r.edited_at ? '<span class="reply-edited">(edited)</span>' : '';
-
-    var actionsHtml = '';
-    if (currentUser) {
-      actionsHtml += '<button data-reply-to="' + r.id + '">Reply</button>';
-    }
-    if (isOwn) {
-      actionsHtml += '<button data-delete-reply="' + r.id + '">Delete</button>';
-    }
-
-    return (
-      '<div class="reply" data-reply-id="' + r.id + '">' +
-        '<div class="reply-header">' +
-          '<a class="reply-author" href="/@' + esc(r.user.username) + '">' + esc(displayName) + '</a>' +
-          '<span class="reply-time">' + timeAgo(r.created_at) + '</span>' +
-          editedTag +
-        '</div>' +
-        '<div class="reply-body">' + renderBody(r.body) + '</div>' +
-        '<div class="reply-actions">' +
-          '<div class="reply-score-inline' + scoreClass + '" data-score-for="reply:' + r.id + '">' +
-            '<button class="up' + upActive + '" data-vote-type="reply" data-vote-id="' + r.id + '" data-vote-value="1"' + (currentUser ? '' : ' disabled') + '>▲</button>' +
-            '<span class="reply-score-num">' + r.score + '</span>' +
-            '<button class="down' + downActive + '" data-vote-type="reply" data-vote-id="' + r.id + '" data-vote-value="-1"' + (currentUser ? '' : ' disabled') + '>▼</button>' +
-          '</div>' +
-          actionsHtml +
-        '</div>' +
-        reactionsHtmlFor('reply', r.id) +
-        '<div class="inline-reply-form" data-inline-reply-form="' + r.id + '">' +
-          '<textarea placeholder="Reply to ' + esc(displayName) + '…" maxlength="' + MAX_REPLY + '" data-inline-reply-body="' + r.id + '"></textarea>' +
-          '<div class="inline-reply-actions">' +
-            '<button data-inline-reply-submit="' + r.id + '">Post Reply</button>' +
-            '<button class="ghost" data-inline-reply-cancel="' + r.id + '">Cancel</button>' +
-          '</div>' +
-        '</div>' +
-        childrenHtml +
-      '</div>'
-    );
-  }
-
-  async function castVote(type, id, value) {
-    if (!currentUser) return;
-
-    var key = type + ':' + id;
-    var current = userVotes[key] || 0;
-    var newValue = current === value ? 0 : value;
-
-    try {
-      var res = await fetch('/api/forum-vote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ target_type: type, target_id: id, value: newValue }),
-      });
-      var data = await res.json();
-      if (!res.ok) return;
-
-      userVotes[key] = data.userVote;
-
-      var scoreEl = document.querySelector('[data-score-for="' + key + '"]');
-      if (scoreEl) {
-        if (scoreEl.classList.contains('vote-count')) {
-          scoreEl.textContent = data.score;
-          scoreEl.className = 'vote-count' + (data.score > 0 ? ' positive' : data.score < 0 ? ' negative' : '');
-        } else {
-          var numSpan = scoreEl.querySelector('.reply-score-num');
-          if (numSpan) numSpan.textContent = data.score;
-          scoreEl.className = 'reply-score-inline' + (data.score > 0 ? '' : data.score < 0 ? ' negative' : '');
-        }
-      }
-
-      var upBtn = document.querySelector('[data-vote-type="' + type + '"][data-vote-id="' + id + '"][data-vote-value="1"]');
-      var downBtn = document.querySelector('[data-vote-type="' + type + '"][data-vote-id="' + id + '"][data-vote-value="-1"]');
-      if (upBtn) upBtn.classList.toggle('active', data.userVote === 1);
-      if (downBtn) downBtn.classList.toggle('active', data.userVote === -1);
-    } catch (err) {}
-  }
-
-  async function toggleReaction(type, id, emoji) {
-    if (!currentUser) return;
-
-    var key = type + ':' + id;
-    var pendingKey = key + ':' + emoji;
-
-    if (reactionsPending[pendingKey]) return;
-    reactionsPending[pendingKey] = true;
-
-    var reactions = reactionsCache[key] || (reactionsCache[key] = {});
-
-    var existing = reactions[emoji];
-    var wasReacted = existing && existing.userReacted;
-
-    if (wasReacted) {
-      existing.userReacted = false;
-      existing.count = Math.max(0, existing.count - 1);
-      existing.users = existing.users.filter(function (u) { return u !== currentUser.username; });
-      if (existing.count === 0) {
-        delete reactions[emoji];
-      }
-    } else {
-      if (!reactions[emoji]) {
-        reactions[emoji] = { count: 0, users: [], userReacted: false };
-      }
-      reactions[emoji].count++;
-      reactions[emoji].users.push(currentUser.username);
-      reactions[emoji].userReacted = true;
-    }
-
-    updateReactionsRowInPlace(type, id);
-
-    try {
-      var res = await fetch('/api/react', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ target_type: type, target_id: id, emoji: emoji }),
-      });
-      var data = await res.json();
-      if (!res.ok) {
-        await loadThread();
-        return;
-      }
-      reactionsCache[key] = data.reactions;
-      updateReactionsRowInPlace(type, id);
-    } catch (err) {
-      await loadThread();
-    } finally {
-      delete reactionsPending[pendingKey];
-    }
-  }
-
-  function updateReactionsRowInPlace(type, id) {
-    var key = type + ':' + id;
-    var row = document.querySelector('.reactions-row[data-react-key="' + key + '"]');
-    if (!row) return;
-
-    var picker = row.querySelector('.emoji-picker');
-    var pickerWasOpen = picker && picker.classList.contains('open');
-
-    var tmp = document.createElement('div');
-    tmp.innerHTML = reactionsHtmlFor(type, id);
-    var newRow = tmp.firstChild;
-    if (!newRow) return;
-
-    if (pickerWasOpen) {
-      var newPicker = newRow.querySelector('.emoji-picker');
-      if (newPicker) newPicker.classList.add('open');
-    }
-
-    row.parentNode.replaceChild(newRow, row);
-  }
-
-  function attachThreadHandlers() {
-    var main = document.getElementById('forumMain');
-    if (main.dataset.wired) return;
-    main.dataset.wired = '1';
-
-    main.addEventListener('click', function (e) {
-      var voteBtn = e.target.closest('[data-vote-type]');
-      var replyToBtn = e.target.closest('[data-reply-to]');
-      var inlineReplySubmit = e.target.closest('[data-inline-reply-submit]');
-      var inlineReplyCancel = e.target.closest('[data-inline-reply-cancel]');
-      var deleteReply = e.target.closest('[data-delete-reply]');
-      var deleteThread = e.target.closest('[data-delete-thread]');
-      var reactToggle = e.target.closest('[data-react-toggle]');
-      var reactOpen = e.target.closest('[data-react-open]');
-      var reactPick = e.target.closest('[data-react-pick]');
-
-      if (voteBtn && !voteBtn.disabled) {
-        castVote(
-          voteBtn.getAttribute('data-vote-type'),
-          parseInt(voteBtn.getAttribute('data-vote-id'), 10),
-          parseInt(voteBtn.getAttribute('data-vote-value'), 10)
-        );
-        return;
-      }
-
-      if (reactToggle) {
-        toggleReaction(
-          reactToggle.getAttribute('data-react-type'),
-          parseInt(reactToggle.getAttribute('data-react-id'), 10),
-          reactToggle.getAttribute('data-react-emoji')
-        );
-        return;
-      }
-
-      if (reactPick) {
-        toggleReaction(
-          reactPick.getAttribute('data-react-type'),
-          parseInt(reactPick.getAttribute('data-react-id'), 10),
-          reactPick.getAttribute('data-react-emoji')
-        );
-        return;
-      }
-
-      if (reactOpen) {
-        var openType = reactOpen.getAttribute('data-react-type');
-        var openId = reactOpen.getAttribute('data-react-id');
-        var picker = main.querySelector('[data-react-picker="' + openType + ':' + openId + '"]');
-
-        main.querySelectorAll('.emoji-picker.open').forEach(function (p) {
-          if (p !== picker) p.classList.remove('open');
-        });
-
-        if (picker) picker.classList.toggle('open');
-        e.stopPropagation();
-        return;
-      }
-
-      if (!e.target.closest('.emoji-picker')) {
-        main.querySelectorAll('.emoji-picker.open').forEach(function (p) {
-          p.classList.remove('open');
-        });
-      }
-
-      if (replyToBtn) {
-        var rid = replyToBtn.getAttribute('data-reply-to');
-        var form = main.querySelector('[data-inline-reply-form="' + rid + '"]');
-        if (form) {
-          form.classList.toggle('open');
-          if (form.classList.contains('open')) {
-            var ta = form.querySelector('textarea');
-            if (ta) ta.focus();
-          }
-        }
-      }
-
-      if (inlineReplyCancel) {
-        var cid = inlineReplyCancel.getAttribute('data-inline-reply-cancel');
-        var cform = main.querySelector('[data-inline-reply-form="' + cid + '"]');
-        if (cform) {
-          cform.classList.remove('open');
-          var cta = cform.querySelector('textarea');
-          if (cta) cta.value = '';
-        }
-      }
-
-      if (inlineReplySubmit) {
-        var sid = inlineReplySubmit.getAttribute('data-inline-reply-submit');
-        var sform = main.querySelector('[data-inline-reply-form="' + sid + '"]');
-        if (sform) {
-          var sta = sform.querySelector('textarea');
-          var body = sta ? sta.value.trim() : '';
-          if (body) submitReply(sid, body, sta);
-        }
-      }
-
-      if (deleteReply) {
-        if (confirm('Delete this reply? Any nested replies will also be deleted.')) {
-          doDelete('delete-reply', parseInt(deleteReply.getAttribute('data-delete-reply'), 10));
-        }
-      }
-
-      if (deleteThread) {
-        if (confirm('Delete this thread? All replies will also be deleted. This cannot be undone.')) {
-          doDelete('delete-thread', parseInt(deleteThread.getAttribute('data-delete-thread'), 10));
-        }
-      }
-    });
-  }
-
-  function attachTopReplyForm() {
-    var form = document.getElementById('replyFormBox');
-    if (!form) return;
-
-    var ta = document.getElementById('topReplyBody');
-    var countEl = document.getElementById('topReplyCount');
-    var statusEl = document.getElementById('topReplyStatus');
-    var btn = document.getElementById('topReplySubmit');
-
-    function updateCount() {
-      var len = ta.value.length;
-      countEl.textContent = len + ' / ' + MAX_REPLY;
-      countEl.classList.toggle('over', len > MAX_REPLY);
-    }
-    ta.addEventListener('input', updateCount);
-    updateCount();
-
-    btn.addEventListener('click', async function () {
-      var body = ta.value.trim();
-      if (!body) {
-        statusEl.textContent = 'Write something first';
-        statusEl.className = 'reply-form-status err';
-        return;
-      }
-      if (body.length > MAX_REPLY) {
-        statusEl.textContent = 'Max ' + MAX_REPLY + ' characters';
-        statusEl.className = 'reply-form-status err';
-        return;
-      }
-
-      btn.disabled = true;
-      statusEl.textContent = 'Posting…';
-      statusEl.className = 'reply-form-status';
-
-      try {
-        var res = await fetch('/api/forum-post?action=create-reply', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ thread_id: threadId, body: body }),
-        });
-        if (!res.ok) {
-          var err = await res.json();
-          statusEl.textContent = err.error || 'Failed';
-          statusEl.className = 'reply-form-status err';
-          btn.disabled = false;
-          return;
-        }
-        ta.value = '';
-        updateCount();
-        statusEl.textContent = '';
-        await loadThread();
-      } catch (err) {
-        statusEl.textContent = 'Network error';
-        statusEl.className = 'reply-form-status err';
-      }
-      btn.disabled = false;
-    });
-  }
-
-  async function submitReply(parentId, body, ta) {
-    if (body.length > MAX_REPLY) { alert('Max ' + MAX_REPLY + ' characters'); return; }
-
-    try {
-      var res = await fetch('/api/forum-post?action=create-reply', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ thread_id: threadId, parent_id: parseInt(parentId, 10), body: body }),
-      });
-      if (!res.ok) {
-        var err = await res.json();
-        alert(err.error || 'Could not post reply');
-        return;
-      }
-      if (ta) ta.value = '';
-      await loadThread();
-    } catch (err) {
-      alert('Network error');
-    }
-  }
-
-  async function doDelete(action, id) {
-    try {
-      var res = await fetch('/api/forum-post?action=' + action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id }),
-      });
-      if (!res.ok) {
-        var err = await res.json();
-        alert(err.error || 'Could not delete');
-        return;
-      }
-
-      if (action === 'delete-thread') {
-        window.location.href = '/forums';
-      } else {
-        await loadThread();
-      }
-    } catch (err) {
-      alert('Network error');
-    }
-  }
-
-  loadThread();
-</script>
-
-<script>
   // ---- Notification System ----
   (async function () {
     var actionsEl = document.getElementById('headerActions');
@@ -1626,7 +332,6 @@
       var authRes = await fetch('/api/auth?action=me');
       var authData = await authRes.json();
       if (!authData.user) return;
-
       var wrapper = document.createElement('div');
       wrapper.className = 'notif-wrapper';
       wrapper.innerHTML = `
@@ -1643,16 +348,13 @@
         </div>
       `;
       actionsEl.insertBefore(wrapper, actionsEl.firstChild);
-
       var btn = document.getElementById('notifBtn');
       var dropdown = document.getElementById('notifDropdown');
       var badge = document.getElementById('notifBadge');
       var list = document.getElementById('notifList');
       var markReadBtn = document.getElementById('markReadBtn');
-
       btn.addEventListener('click', function (e) { e.stopPropagation(); dropdown.classList.toggle('open'); });
       document.addEventListener('click', function (e) { if (!wrapper.contains(e.target)) dropdown.classList.remove('open'); });
-
       async function loadNotifications() {
         try {
           var res = await fetch('/api/notifications');
@@ -1660,7 +362,6 @@
           var data = await res.json();
           if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
           if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
-
           var icons = { follow: '👤', reply: '💬', mention: '@' };
           list.innerHTML = data.notifications.map(function(n) {
             var isUnread = !n.is_read;
@@ -1668,16 +369,319 @@
             var text = n.type === 'follow' ? '<strong>' + actorName + '</strong> followed you' : n.type === 'reply' ? '<strong>' + actorName + '</strong> replied to your comment' : '<strong>' + actorName + '</strong> mentioned you';
             var mins = Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000);
             var timeStr = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
-
             return `<a href="${n.link}" class="notif-item ${isUnread ? 'unread' : ''}"><div class="notif-icon">${icons[n.type] || '🔔'}</div><div class="notif-text">${text}<span class="notif-time">${timeStr}</span></div></a>`;
           }).join('');
         } catch (err) {}
       }
       markReadBtn.addEventListener('click', async function() { await fetch('/api/notifications?action=read-all', { method: 'POST' }); loadNotifications(); });
-      loadNotifications();
-      setInterval(loadNotifications, 30000);
+      loadNotifications(); setInterval(loadNotifications, 30000);
     } catch (err) {}
   })();
+</script>
+
+<script>
+  var MAX_REPLY = 200;
+  var currentUser = null;
+  var threadData = null;
+  var userVotes = {};
+  var threadId = null;
+  var EMOJI_SET = {};
+  var reactionsCache = {};
+  var reactionsPending = {};
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function renderBody(raw) { var safe = esc(raw); return safe.replace(/(^|[^a-zA-Z0-9_])@([a-zA-Z0-9_]{3,20})\b/g, function (m, prefix, username) { return prefix + '<a class="mention" href="/@' + username + '">@' + username + '</a>'; }); }
+  function timeAgo(iso) { if (!iso) return '—'; var then = new Date(iso).getTime(); var now = Date.now(); var sec = Math.floor((now - then) / 1000); if (sec < 5) return 'just now'; if (sec < 60) return sec + 's ago'; var min = Math.floor(sec / 60); if (min < 60) return min + 'm ago'; var hr = Math.floor(min / 60); if (hr < 24) return hr + 'h ago'; var day = Math.floor(hr / 24); if (day < 30) return day + 'd ago'; var mon = Math.floor(day / 30); if (mon < 12) return mon + 'mo ago'; return Math.floor(mon / 12) + 'y ago'; }
+  function getThreadIdFromPath() { var match = window.location.pathname.match(/^\/forums\/thread-(\d+)/); return match ? parseInt(match[1], 10) : null; }
+
+  function reactionsHtmlFor(type, id) {
+    var key = type + ':' + id;
+    var reactions = reactionsCache[key] || {};
+    var emojis = Object.keys(reactions);
+    var chips = emojis.map(function (emoji) {
+      var r = reactions[emoji];
+      var reactedClass = r.userReacted ? ' reacted' : '';
+      var tooltip = r.users.join(', ');
+      return '<span class="reaction-chip' + reactedClass + '" data-react-toggle="1" data-react-type="' + type + '" data-react-id="' + id + '" data-react-emoji="' + emoji + '">' +
+          '<img src="' + EMOJI_SET[emoji] + '" alt="' + emoji + '">' +
+          '<span class="reaction-count">' + r.count + '</span>' +
+          '<span class="reaction-tooltip">' + esc(tooltip) + '</span>' +
+        '</span>';
+    }).join('');
+    var addBtn = '';
+    if (currentUser) {
+      addBtn = '<div class="reactions-wrapper"><button class="add-reaction-btn" data-react-open="1" data-react-type="' + type + '" data-react-id="' + id + '" title="Add reaction">☺</button>' +
+          '<div class="emoji-picker" data-react-picker="' + type + ':' + id + '">' +
+            Object.keys(EMOJI_SET).map(function (emoji) {
+              var userReacted = reactions[emoji] && reactions[emoji].userReacted;
+              return '<button class="emoji-picker-item' + (userReacted ? ' reacted' : '') + '" data-react-pick="1" data-react-type="' + type + '" data-react-id="' + id + '" data-react-emoji="' + emoji + '">' +
+                  '<img src="' + EMOJI_SET[emoji] + '" alt="' + emoji + '">' +
+                '</button>';
+            }).join('') +
+          '</div></div>';
+    }
+    if (!chips && !addBtn) return '';
+    return '<div class="reactions-row" data-react-key="' + key + '">' + chips + addBtn + '</div>';
+  }
+
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+      currentUser = data.user;
+      if (data.user) {
+        var userChip = document.createElement('a'); userChip.className = 'action-chip'; userChip.href = '/@' + data.user.username; userChip.textContent = data.user.display_name || data.user.username;
+        var logoutBtn = document.createElement('a'); logoutBtn.className = 'action-chip accent'; logoutBtn.href = '#'; logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); window.location.href = '/'; });
+        actions.appendChild(userChip); actions.appendChild(logoutBtn);
+      } else {
+        var loginLink = document.createElement('a'); loginLink.className = 'action-chip'; loginLink.href = '/login'; loginLink.textContent = 'Log In';
+        var signupLink = document.createElement('a'); signupLink.className = 'action-chip accent'; signupLink.href = '/signup'; signupLink.textContent = 'Sign Up';
+        actions.appendChild(loginLink); actions.appendChild(signupLink);
+      }
+    } catch (err) {}
+  })();
+
+  (async function () {
+    var sidebarEl = document.getElementById('forumSidebar');
+    try {
+      var catRes = await fetch('/api/forums?action=categories');
+      var catData = await catRes.json();
+      var categories = catData.categories || [];
+      var grpRes = await fetch('/api/forums?action=groups');
+      var grpData = await grpRes.json();
+      var groups = grpData.groups || [];
+
+      function sidebarGroupHtml(group, cats) {
+        if (cats.length === 0) return '';
+        return (
+          '<div class="sidebar-group">' +
+            '<div class="sidebar-group-title">' + esc(group.label) + '</div>' +
+            cats.map(function (c) {
+              return '<a class="sidebar-item" href="/forums/' + esc(c.slug) + '">' + esc(c.name) + (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') + '</a>';
+            }).join('') +
+          '</div>'
+        );
+      }
+      sidebarEl.innerHTML = groups.map(function(g) {
+        var groupCats = categories.filter(function(c) { return c.group_name === g.name; });
+        return sidebarGroupHtml(g, groupCats);
+      }).join('');
+    } catch (err) { sidebarEl.innerHTML = ''; }
+  })();
+
+  async function loadThread() {
+    var main = document.getElementById('forumMain');
+    threadId = getThreadIdFromPath();
+    if (!threadId) { main.innerHTML = '<div class="loading-msg">Invalid thread URL</div>'; return; }
+    try {
+      var res = await fetch('/api/forums?action=thread&id=' + threadId);
+      if (!res.ok) { main.innerHTML = '<div class="loading-msg">Thread not found</div>'; return; }
+      var data = await res.json();
+      threadData = data.thread;
+      threadData.replies = data.replies || [];
+      userVotes = data.userVotes || {};
+      document.title = threadData.title + ' — PhonkHub Forums';
+      var allIds = [threadId];
+      var allReplyIds = [];
+      function collectReplyIds(list) { for (var i = 0; i < list.length; i++) { allReplyIds.push(list[i].id); if (list[i].replies && list[i].replies.length) { collectReplyIds(list[i].replies); } } }
+      collectReplyIds(threadData.replies);
+      await loadReactions(allIds, allReplyIds);
+      renderThread();
+    } catch (err) { main.innerHTML = '<div class="loading-msg">Could not load thread</div>'; }
+  }
+
+  async function loadReactions(threadIds, replyIds) {
+    reactionsCache = {};
+    try {
+      if (threadIds.length > 0) {
+        var r1 = await fetch('/api/react?target_type=thread&ids=' + threadIds.join(','));
+        var d1 = await r1.json();
+        if (d1.emojis) EMOJI_SET = d1.emojis;
+        Object.keys(d1.reactions || {}).forEach(function (tid) { reactionsCache['thread:' + tid] = d1.reactions[tid]; });
+      }
+      if (replyIds.length > 0) {
+        var r2 = await fetch('/api/react?target_type=reply&ids=' + replyIds.join(','));
+        var d2 = await r2.json();
+        if (d2.emojis) EMOJI_SET = d2.emojis;
+        Object.keys(d2.reactions || {}).forEach(function (rid) { reactionsCache['reply:' + rid] = d2.reactions[rid]; });
+      }
+    } catch (err) {}
+  }
+
+  function renderThread() {
+    var main = document.getElementById('forumMain');
+    var t = threadData;
+    var displayName = t.user.display_name || t.user.username;
+    var editedTag = t.edited_at ? ' · <span style="font-style:italic;color:#555;">edited</span>' : '';
+    var threadVote = userVotes['thread:' + t.id] || 0;
+    var upActive = threadVote === 1 ? ' active' : '';
+    var downActive = threadVote === -1 ? ' active' : '';
+    var scoreClass = t.score > 0 ? ' positive' : t.score < 0 ? ' negative' : '';
+    var voteWidgetHtml = '<div class="vote-widget">' +
+        '<button class="vote-btn-sm up' + upActive + '" data-vote-type="thread" data-vote-id="' + t.id + '" data-vote-value="1">▲</button>' +
+        '<div class="vote-count' + scoreClass + '" data-score-for="thread:' + t.id + '">' + t.score + '</div>' +
+        '<button class="vote-btn-sm down' + downActive + '" data-vote-type="thread" data-vote-id="' + t.id + '" data-vote-value="-1">▼</button>' +
+        '<div class="vote-widget-actions">' + (currentUser && currentUser.id === t.user.id ? '<button data-edit-thread="' + t.id + '">Edit</button><button class="delete-btn" data-delete-thread="' + t.id + '">Delete</button>' : '') + '</div></div>' + reactionsHtmlFor('thread', t.id);
+
+    var replyFormHtml;
+    if (currentUser) {
+      replyFormHtml = '<div class="reply-form-box" id="replyFormBox"><textarea id="topReplyBody" placeholder="Write a reply…" maxlength="' + MAX_REPLY + '"></textarea><div class="reply-form-actions"><button id="topReplySubmit">Post Reply</button><div class="reply-char-count" id="topReplyCount">0 / ' + MAX_REPLY + '</div></div><div class="reply-form-status" id="topReplyStatus"></div></div>';
+    } else {
+      replyFormHtml = '<div class="login-prompt"><a href="/login">Log in</a> or <a href="/signup">sign up</a> to reply</div>';
+    }
+
+    var repliesHtml = (!t.replies || t.replies.length === 0) ? '<div class="no-replies">No replies yet. Be the first.</div>' : t.replies.map(function (r) { return renderReply(r, 0); }).join('');
+
+    main.innerHTML = '<div class="breadcrumb"><a href="/forums">Forums</a><span class="breadcrumb-sep">/</span><a href="/forums/' + esc(t.category.slug) + '">' + esc(t.category.name) + '</a></div>' +
+      '<div class="thread-post"><div class="thread-post-title">' + esc(t.title) + '</div><div class="thread-post-meta"><span>by <a class="post-author" href="/@' + esc(t.user.username) + '">' + esc(displayName) + '</a></span><span>' + timeAgo(t.created_at) + '</span>' + editedTag + '</div><div class="thread-post-body">' + renderBody(t.body) + '</div>' + voteWidgetHtml + '</div>' +
+      '<div class="replies-section"><div class="replies-heading"><div class="replies-heading-title">Replies</div></div>' + replyFormHtml + '<div id="replyList">' + repliesHtml + '</div></div>';
+
+    attachThreadHandlers();
+    attachTopReplyForm();
+  }
+
+  function renderReply(r, depth) {
+    var childrenHtml = '';
+    if (r.replies && r.replies.length) {
+      childrenHtml = '<div class="' + (depth >= 3 ? 'reply-children deep' : 'reply-children') + '">' + r.replies.map(function (child) { return renderReply(child, depth + 1); }).join('') + '</div>';
+    }
+    var isOwn = currentUser && currentUser.id === r.user.id;
+    var vote = userVotes['reply:' + r.id] || 0;
+    var upActive = vote === 1 ? ' active' : '';
+    var downActive = vote === -1 ? ' active' : '';
+    var scoreClass = r.score > 0 ? '' : r.score < 0 ? ' negative' : '';
+    var displayName = r.user.display_name || r.user.username;
+    var editedTag = r.edited_at ? '<span class="reply-edited">(edited)</span>' : '';
+    var actionsHtml = '';
+    if (currentUser) { actionsHtml += '<button data-reply-to="' + r.id + '">Reply</button>'; }
+    if (isOwn) { actionsHtml += '<button data-delete-reply="' + r.id + '">Delete</button>'; }
+
+    return '<div class="reply" data-reply-id="' + r.id + '"><div class="reply-header"><a class="reply-author" href="/@' + esc(r.user.username) + '">' + esc(displayName) + '</a><span class="reply-time">' + timeAgo(r.created_at) + '</span>' + editedTag + '</div><div class="reply-body">' + renderBody(r.body) + '</div>' +
+        '<div class="reply-actions"><div class="reply-score-inline' + scoreClass + '" data-score-for="reply:' + r.id + '"><button class="up' + upActive + '" data-vote-type="reply" data-vote-id="' + r.id + '" data-vote-value="1"' + (currentUser ? '' : ' disabled') + '>▲</button><span class="reply-score-num">' + r.score + '</span><button class="down' + downActive + '" data-vote-type="reply" data-vote-id="' + r.id + '" data-vote-value="-1"' + (currentUser ? '' : ' disabled') + '>▼</button></div>' + actionsHtml + '</div>' +
+        reactionsHtmlFor('reply', r.id) +
+        '<div class="inline-reply-form" data-inline-reply-form="' + r.id + '"><textarea placeholder="Reply to ' + esc(displayName) + '…" maxlength="' + MAX_REPLY + '" data-inline-reply-body="' + r.id + '"></textarea><div class="inline-reply-actions"><button data-inline-reply-submit="' + r.id + '">Post Reply</button><button class="ghost" data-inline-reply-cancel="' + r.id + '">Cancel</button></div></div>' + childrenHtml + '</div>';
+  }
+
+  async function castVote(type, id, value) {
+    if (!currentUser) return;
+    var key = type + ':' + id;
+    var current = userVotes[key] || 0;
+    var newValue = current === value ? 0 : value;
+    try {
+      var res = await fetch('/api/forum-vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ target_type: type, target_id: id, value: newValue }) });
+      var data = await res.json();
+      if (!res.ok) return;
+      userVotes[key] = data.userVote;
+      var scoreEl = document.querySelector('[data-score-for="' + key + '"]');
+      if (scoreEl) {
+        if (scoreEl.classList.contains('vote-count')) { scoreEl.textContent = data.score; scoreEl.className = 'vote-count' + (data.score > 0 ? ' positive' : data.score < 0 ? ' negative' : ''); }
+        else { var numSpan = scoreEl.querySelector('.reply-score-num'); if (numSpan) numSpan.textContent = data.score; scoreEl.className = 'reply-score-inline' + (data.score > 0 ? '' : data.score < 0 ? ' negative' : ''); }
+      }
+      var upBtn = document.querySelector('[data-vote-type="' + type + '"][data-vote-id="' + id + '"][data-vote-value="1"]');
+      var downBtn = document.querySelector('[data-vote-type="' + type + '"][data-vote-id="' + id + '"][data-vote-value="-1"]');
+      if (upBtn) upBtn.classList.toggle('active', data.userVote === 1);
+      if (downBtn) downBtn.classList.toggle('active', data.userVote === -1);
+    } catch (err) {}
+  }
+
+  async function toggleReaction(type, id, emoji) {
+    if (!currentUser) return;
+    var key = type + ':' + id;
+    var pendingKey = key + ':' + emoji;
+    if (reactionsPending[pendingKey]) return;
+    reactionsPending[pendingKey] = true;
+    var reactions = reactionsCache[key] || (reactionsCache[key] = {});
+    var existing = reactions[emoji];
+    var wasReacted = existing && existing.userReacted;
+    if (wasReacted) {
+      existing.userReacted = false; existing.count = Math.max(0, existing.count - 1); existing.users = existing.users.filter(function (u) { return u !== currentUser.username; });
+      if (existing.count === 0) delete reactions[emoji];
+    } else {
+      if (!reactions[emoji]) reactions[emoji] = { count: 0, users: [], userReacted: false };
+      reactions[emoji].count++; reactions[emoji].users.push(currentUser.username); reactions[emoji].userReacted = true;
+    }
+    updateReactionsRowInPlace(type, id);
+    try {
+      var res = await fetch('/api/react', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ target_type: type, target_id: id, emoji: emoji }) });
+      var data = await res.json();
+      if (!res.ok) { await loadThread(); return; }
+      reactionsCache[key] = data.reactions;
+      updateReactionsRowInPlace(type, id);
+    } catch (err) { await loadThread(); } finally { delete reactionsPending[pendingKey]; }
+  }
+
+  function updateReactionsRowInPlace(type, id) {
+    var key = type + ':' + id;
+    var row = document.querySelector('.reactions-row[data-react-key="' + key + '"]');
+    if (!row) return;
+    var picker = row.querySelector('.emoji-picker');
+    var pickerWasOpen = picker && picker.classList.contains('open');
+    var tmp = document.createElement('div');
+    tmp.innerHTML = reactionsHtmlFor(type, id);
+    var newRow = tmp.firstChild;
+    if (!newRow) return;
+    if (pickerWasOpen) { var newPicker = newRow.querySelector('.emoji-picker'); if (newPicker) newPicker.classList.add('open'); }
+    row.parentNode.replaceChild(newRow, row);
+  }
+
+  function attachThreadHandlers() {
+    var main = document.getElementById('forumMain');
+    if (main.dataset.wired) return;
+    main.dataset.wired = '1';
+    main.addEventListener('click', function (e) {
+      var voteBtn = e.target.closest('[data-vote-type]'), replyToBtn = e.target.closest('[data-reply-to]'), inlineReplySubmit = e.target.closest('[data-inline-reply-submit]'), inlineReplyCancel = e.target.closest('[data-inline-reply-cancel]'), deleteReply = e.target.closest('[data-delete-reply]'), deleteThread = e.target.closest('[data-delete-thread]'), reactToggle = e.target.closest('[data-react-toggle]'), reactOpen = e.target.closest('[data-react-open]'), reactPick = e.target.closest('[data-react-pick]');
+      if (voteBtn && !voteBtn.disabled) { castVote(voteBtn.getAttribute('data-vote-type'), parseInt(voteBtn.getAttribute('data-vote-id'), 10), parseInt(voteBtn.getAttribute('data-vote-value'), 10)); return; }
+      if (reactToggle) { toggleReaction(reactToggle.getAttribute('data-react-type'), parseInt(reactToggle.getAttribute('data-react-id'), 10), reactToggle.getAttribute('data-react-emoji')); return; }
+      if (reactPick) { toggleReaction(reactPick.getAttribute('data-react-type'), parseInt(reactPick.getAttribute('data-react-id'), 10), reactPick.getAttribute('data-react-emoji')); return; }
+      if (reactOpen) { var openType = reactOpen.getAttribute('data-react-type'), openId = reactOpen.getAttribute('data-react-id'), picker = main.querySelector('[data-react-picker="' + openType + ':' + openId + '"]'); main.querySelectorAll('.emoji-picker.open').forEach(function (p) { if (p !== picker) p.classList.remove('open'); }); if (picker) picker.classList.toggle('open'); e.stopPropagation(); return; }
+      if (!e.target.closest('.emoji-picker')) { main.querySelectorAll('.emoji-picker.open').forEach(function (p) { p.classList.remove('open'); }); }
+      if (replyToBtn) { var rid = replyToBtn.getAttribute('data-reply-to'), form = main.querySelector('[data-inline-reply-form="' + rid + '"]'); if (form) { form.classList.toggle('open'); if (form.classList.contains('open')) { var ta = form.querySelector('textarea'); if (ta) ta.focus(); } } }
+      if (inlineReplyCancel) { var cid = inlineReplyCancel.getAttribute('data-inline-reply-cancel'), cform = main.querySelector('[data-inline-reply-form="' + cid + '"]'); if (cform) { cform.classList.remove('open'); var cta = cform.querySelector('textarea'); if (cta) cta.value = ''; } }
+      if (inlineReplySubmit) { var sid = inlineReplySubmit.getAttribute('data-inline-reply-submit'), sform = main.querySelector('[data-inline-reply-form="' + sid + '"]'); if (sform) { var sta = sform.querySelector('textarea'), body = sta ? sta.value.trim() : ''; if (body) submitReply(sid, body, sta); } }
+      if (deleteReply) { if (confirm('Delete this reply? Any nested replies will also be deleted.')) { doDelete('delete-reply', parseInt(deleteReply.getAttribute('data-delete-reply'), 10)); } }
+      if (deleteThread) { if (confirm('Delete this thread? All replies will also be deleted. This cannot be undone.')) { doDelete('delete-thread', parseInt(deleteThread.getAttribute('data-delete-thread'), 10)); } }
+    });
+  }
+
+  function attachTopReplyForm() {
+    var form = document.getElementById('replyFormBox'); if (!form) return;
+    var ta = document.getElementById('topReplyBody'), countEl = document.getElementById('topReplyCount'), statusEl = document.getElementById('topReplyStatus'), btn = document.getElementById('topReplySubmit');
+    function updateCount() { var len = ta.value.length; countEl.textContent = len + ' / ' + MAX_REPLY; countEl.classList.toggle('over', len > MAX_REPLY); }
+    ta.addEventListener('input', updateCount); updateCount();
+    btn.addEventListener('click', async function () {
+      var body = ta.value.trim();
+      if (!body) { statusEl.textContent = 'Write something first'; statusEl.className = 'reply-form-status err'; return; }
+      if (body.length > MAX_REPLY) { statusEl.textContent = 'Max ' + MAX_REPLY + ' characters'; statusEl.className = 'reply-form-status err'; return; }
+      btn.disabled = true; statusEl.textContent = 'Posting…'; statusEl.className = 'reply-form-status';
+      try {
+        var res = await fetch('/api/forum-post?action=create-reply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ thread_id: threadId, body: body }) });
+        if (!res.ok) { var err = await res.json(); statusEl.textContent = err.error || 'Failed'; statusEl.className = 'reply-form-status err'; btn.disabled = false; return; }
+        ta.value = ''; updateCount(); statusEl.textContent = ''; await loadThread();
+      } catch (err) { statusEl.textContent = 'Network error'; statusEl.className = 'reply-form-status err'; }
+      btn.disabled = false;
+    });
+  }
+
+  async function submitReply(parentId, body, ta) {
+    if (body.length > MAX_REPLY) { alert('Max ' + MAX_REPLY + ' characters'); return; }
+    try {
+      var res = await fetch('/api/forum-post?action=create-reply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ thread_id: threadId, parent_id: parseInt(parentId, 10), body: body }) });
+      if (!res.ok) { var err = await res.json(); alert(err.error || 'Could not post reply'); return; }
+      if (ta) ta.value = ''; await loadThread();
+    } catch (err) { alert('Network error'); }
+  }
+
+  async function doDelete(action, id) {
+    try {
+      var res = await fetch('/api/forum-post?action=' + action, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id }) });
+      if (!res.ok) { var err = await res.json(); alert(err.error || 'Could not delete'); return; }
+      if (action === 'delete-thread') { window.location.href = '/forums'; } else { await loadThread(); }
+    } catch (err) { alert('Network error'); }
+  }
+  loadThread();
 </script>
 
 <script>

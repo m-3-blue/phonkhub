@@ -363,38 +363,7 @@
     color: var(--red);
   }
 
-  @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
-    .brand-group { grid-column: 1; }
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
-    .header-actions {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
-      gap: 0.35rem;
-    }
-    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
-
-    .forum-shell { flex-direction: column; }
-    .forum-sidebar {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 1rem;
-    }
-    .sidebar-group { margin-bottom: 1rem; }
-    .forum-main { padding: 1.5rem 1rem 3rem; }
-
-    .category-card { grid-template-columns: 1fr; }
-    .category-stats { flex-direction: row; gap: 1rem; align-items: flex-start; }
-  }
-
-    /* NOTIFICATION CSS */
+  /* NOTIFICATION CSS */
   .notif-wrapper { position: relative; display: inline-block; }
   .notif-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s; position: relative; }
   .notif-btn:hover { color: var(--white); }
@@ -416,6 +385,45 @@
   .notif-time { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: #666; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
   .notif-empty { padding: 2rem 1rem; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em; }
 
+  @media (max-width: 780px) {
+    /* Header Layout Fix */
+    .header-main { 
+      grid-template-columns: 1fr auto; 
+      gap: 0.5rem; 
+      padding: 0.65rem 0.75rem;
+    }
+    .brand-group { grid-column: 1; grid-row: 1; }
+    .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
+    
+    /* Force the search bar to drop to row 2 and span full width */
+    .search-box { 
+      grid-column: 1 / -1; 
+      grid-row: 2; 
+      max-width: none; 
+      justify-self: stretch; 
+      margin-top: 0.25rem;
+    }
+    
+    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+
+    /* Mobile Notification Dropdown Fix */
+    .notif-dropdown {
+      position: fixed;
+      top: 60px; 
+      left: 10px;
+      right: 10px;
+      width: auto;
+      max-width: none;
+    }
+
+    .forum-shell { flex-direction: column; }
+    .forum-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #1a1a1a; padding: 1rem; }
+    .sidebar-group { margin-bottom: 1rem; }
+    .forum-main { padding: 1.5rem 1rem 3rem; }
+
+    .category-card { grid-template-columns: 1fr; }
+    .category-stats { flex-direction: row; gap: 1rem; align-items: flex-start; }
+  }
 </style>
 </head>
 
@@ -469,132 +477,6 @@
       &copy; 2026 PhonkHub &nbsp;·&nbsp; Property Of ¥GoyMafia¥&trade; &nbsp;·&nbsp; All Rights To The Respective Artists
     </p>
   </footer>
-
-<script>
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-
-  (async function () {
-    var actions = document.getElementById('headerActions');
-    if (!actions) return;
-    try {
-      var res = await fetch('/api/auth?action=me');
-      var data = await res.json();
-
-      if (data.user) {
-        var userChip = document.createElement('a');
-        userChip.className = 'action-chip';
-        userChip.href = '/@' + data.user.username;
-        userChip.textContent = data.user.display_name || data.user.username;
-
-        var logoutBtn = document.createElement('a');
-        logoutBtn.className = 'action-chip accent';
-        logoutBtn.href = '#';
-        logoutBtn.textContent = 'Log Out';
-        logoutBtn.addEventListener('click', async function (e) {
-          e.preventDefault();
-          await fetch('/api/auth?action=logout', { method: 'POST' });
-          window.location.href = '/';
-        });
-
-        actions.appendChild(userChip);
-        actions.appendChild(logoutBtn);
-      } else {
-        var loginLink = document.createElement('a');
-        loginLink.className = 'action-chip';
-        loginLink.href = '/login';
-        loginLink.textContent = 'Log In';
-
-        var signupLink = document.createElement('a');
-        signupLink.className = 'action-chip accent';
-        signupLink.href = '/signup';
-        signupLink.textContent = 'Sign Up';
-
-        actions.appendChild(loginLink);
-        actions.appendChild(signupLink);
-      }
-    } catch (err) {}
-  })();
-
-  (async function () {
-    var sidebarEl = document.getElementById('forumSidebar');
-    var contentEl = document.getElementById('forumContent');
-
-    try {
-      var res = await fetch('/api/forums?action=categories');
-      var data = await res.json();
-      var categories = data.categories || [];
-
-      if (categories.length === 0) {
-        sidebarEl.innerHTML = '';
-        contentEl.innerHTML = '<div class="loading-msg">No categories yet</div>';
-        return;
-      }
-
-      var moderation = categories.filter(function (c) { return c.group_name === 'moderation'; });
-      var discussion = categories.filter(function (c) { return c.group_name === 'discussion'; });
-
-      function sidebarGroupHtml(title, cats) {
-        return (
-          '<div class="sidebar-group">' +
-            '<div class="sidebar-group-title">' + title + '</div>' +
-            cats.map(function (c) {
-              return (
-                '<a class="sidebar-item" href="/forums/' + esc(c.slug) + '">' +
-                  esc(c.name) +
-                  (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') +
-                '</a>'
-              );
-            }).join('') +
-          '</div>'
-        );
-      }
-
-      sidebarEl.innerHTML =
-        sidebarGroupHtml('Moderation', moderation) +
-        sidebarGroupHtml('Discussion', discussion);
-
-      function categoryCardHtml(c) {
-        return (
-          '<a class="category-card" href="/forums/' + esc(c.slug) + '">' +
-            '<div>' +
-              '<div class="category-name">' + esc(c.name) + '</div>' +
-              '<div class="category-desc">' + esc(c.description || '') + '</div>' +
-            '</div>' +
-            '<div class="category-stats">' +
-              '<div><span class="category-stat-num">' + (c.thread_count || 0) + '</span> threads</div>' +
-              '<div><span class="category-stat-num">' + (c.reply_count || 0) + '</span> replies</div>' +
-            '</div>' +
-          '</a>'
-        );
-      }
-
-      function sectionHtml(title, cats) {
-        if (cats.length === 0) return '';
-        return (
-          '<div class="forum-section">' +
-            '<div class="forum-section-header">' +
-              '<div class="forum-section-title">' + title + '</div>' +
-              '<div class="forum-section-line"></div>' +
-            '</div>' +
-            cats.map(categoryCardHtml).join('') +
-          '</div>'
-        );
-      }
-
-      contentEl.innerHTML =
-        sectionHtml('Moderation', moderation) +
-        sectionHtml('Discussion', discussion);
-    } catch (err) {
-      document.getElementById('forumContent').innerHTML =
-        '<div class="loading-msg">Could not load forums</div>';
-      document.getElementById('forumSidebar').innerHTML = '';
-    }
-  })();
-</script>
 
 <script>
   // ---- Notification System ----
@@ -656,6 +538,118 @@
       loadNotifications();
       setInterval(loadNotifications, 30000);
     } catch (err) {}
+  })();
+</script>
+
+<script>
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+      if (data.user) {
+        var userChip = document.createElement('a'); userChip.className = 'action-chip'; userChip.href = '/@' + data.user.username; userChip.textContent = data.user.display_name || data.user.username;
+        var logoutBtn = document.createElement('a'); logoutBtn.className = 'action-chip accent'; logoutBtn.href = '#'; logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); window.location.href = '/'; });
+        actions.appendChild(userChip); actions.appendChild(logoutBtn);
+      } else {
+        var loginLink = document.createElement('a'); loginLink.className = 'action-chip'; loginLink.href = '/login'; loginLink.textContent = 'Log In';
+        var signupLink = document.createElement('a'); signupLink.className = 'action-chip accent'; signupLink.href = '/signup'; signupLink.textContent = 'Sign Up';
+        actions.appendChild(loginLink); actions.appendChild(signupLink);
+      }
+    } catch (err) {}
+  })();
+
+  (async function () {
+    var sidebarEl = document.getElementById('forumSidebar');
+    var contentEl = document.getElementById('forumContent');
+
+    try {
+      // 1. Fetch categories
+      var catRes = await fetch('/api/forums?action=categories');
+      var catData = await catRes.json();
+      var categories = catData.categories || [];
+
+      // 2. Fetch groups dynamically
+      var grpRes = await fetch('/api/forums?action=groups');
+      var grpData = await grpRes.json();
+      var groups = grpData.groups || [];
+
+      if (categories.length === 0) {
+        sidebarEl.innerHTML = '';
+        contentEl.innerHTML = '<div class="loading-msg">No categories yet</div>';
+        return;
+      }
+
+      // ---- SIDEBAR ----
+      function sidebarGroupHtml(group, cats) {
+        if (cats.length === 0) return '';
+        return (
+          '<div class="sidebar-group">' +
+            '<div class="sidebar-group-title">' + esc(group.label) + '</div>' +
+            cats.map(function (c) {
+              return (
+                '<a class="sidebar-item" href="/forums/' + esc(c.slug) + '">' +
+                  esc(c.name) +
+                  (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') +
+                '</a>'
+              );
+            }).join('') +
+          '</div>'
+        );
+      }
+
+      sidebarEl.innerHTML = groups.map(function(g) {
+        var groupCats = categories.filter(function(c) { return c.group_name === g.name; });
+        return sidebarGroupHtml(g, groupCats);
+      }).join('');
+
+      // ---- MAIN CONTENT ----
+      function categoryCardHtml(c) {
+        return (
+          '<a class="category-card" href="/forums/' + esc(c.slug) + '">' +
+            '<div>' +
+              '<div class="category-name">' + esc(c.name) + '</div>' +
+              '<div class="category-desc">' + esc(c.description || '') + '</div>' +
+            '</div>' +
+            '<div class="category-stats">' +
+              '<div><span class="category-stat-num">' + (c.thread_count || 0) + '</span> threads</div>' +
+              '<div><span class="category-stat-num">' + (c.reply_count || 0) + '</span> replies</div>' +
+            '</div>' +
+          '</a>'
+        );
+      }
+
+      function sectionHtml(group, cats) {
+        if (cats.length === 0) return '';
+        return (
+          '<div class="forum-section">' +
+            '<div class="forum-section-header">' +
+              '<div class="forum-section-title">' + esc(group.label) + '</div>' +
+              '<div class="forum-section-line"></div>' +
+            '</div>' +
+            cats.map(categoryCardHtml).join('') +
+          '</div>'
+        );
+      }
+
+      contentEl.innerHTML = groups.map(function(g) {
+        var groupCats = categories.filter(function(c) { return c.group_name === g.name; });
+        return sectionHtml(g, groupCats);
+      }).join('');
+
+    } catch (err) {
+      document.getElementById('forumContent').innerHTML =
+        '<div class="loading-msg">Could not load forums</div>';
+      document.getElementById('forumSidebar').innerHTML = '';
+    }
   })();
 </script>
 

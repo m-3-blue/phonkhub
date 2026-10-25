@@ -9,477 +9,70 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --red: #ff9900;
-    --red-dim: #cb7603;
-    --white: #f0ece4;
-    --gray: #888;
-    --border: #222;
-    --sidebar-width: 220px;
-  }
-
+  :root { --red: #ff9900; --red-dim: #cb7603; --white: #f0ece4; --gray: #888; --border: #222; --sidebar-width: 220px; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: #000;
-    color: var(--white);
-    font-family: 'Barlow', sans-serif;
-    min-height: 100vh;
-  }
-
-  header {
-    position: relative;
-    background: #050505;
-    border-bottom: 1px solid #242424;
-  }
-
-  .header-main {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 1.15rem;
-    padding: 0.75rem 1.25rem;
-    max-width: 1300px;
-    margin: 0 auto;
-  }
-
-  .brand-group {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    justify-self: start;
-  }
-
+  body { background: #000; color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; }
+  header { position: relative; background: #050505; border-bottom: 1px solid #242424; }
+  .header-main { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.15rem; padding: 0.75rem 1.25rem; max-width: 1300px; margin: 0 auto; }
+  .brand-group { display: inline-flex; align-items: center; gap: 0.6rem; justify-self: start; }
   .brand-lockup { display: inline-flex; align-items: center; }
-
-  .discord-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.15rem;
-    height: 2.15rem;
-    flex: 0 0 auto;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.35), rgba(64, 78, 237, 0.35));
-    border: 1px solid rgba(88, 101, 242, 0.35);
-    color: #fff;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .discord-btn:hover {
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5));
-    transform: translateY(-1px);
-  }
-  .discord-btn svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    display: block;
-  }
-
-  #logo {
-    display: block;
-    width: clamp(8rem, 14vw, 11.5rem);
-    height: auto;
-  }
-
-  .search-box {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    max-width: 32rem;
-    height: 2.35rem;
-    padding: 0 0.8rem;
-    border: 1px solid #303030;
-    border-radius: 999px;
-    background: #191919;
-    color: #aaa;
-    justify-self: center;
-    width: 100%;
-    pointer-events: none;
-  }
+  .discord-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.15rem; height: 2.15rem; flex: 0 0 auto; border-radius: 50%; background: linear-gradient(135deg, rgba(88, 101, 242, 0.35), rgba(64, 78, 237, 0.35)); border: 1px solid rgba(88, 101, 242, 0.35); color: #fff; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+  .discord-btn:hover { background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5)); transform: translateY(-1px); }
+  .discord-btn svg { width: 1.25rem; height: 1.25rem; display: block; }
+  #logo { display: block; width: clamp(8rem, 14vw, 11.5rem); height: auto; }
+  .search-box { display: flex; align-items: center; min-width: 0; max-width: 32rem; height: 2.35rem; padding: 0 0.8rem; border: 1px solid #303030; border-radius: 999px; background: #191919; color: #aaa; justify-self: center; width: 100%; pointer-events: none; }
   .search-box svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
-  .search-box input {
-    width: 100%;
-    border: 0;
-    outline: 0;
-    padding: 0 0.6rem;
-    background: transparent;
-    color: var(--white);
-    font: inherit;
-    pointer-events: none;
-  }
+  .search-box input { width: 100%; border: 0; outline: 0; padding: 0 0.6rem; background: transparent; color: var(--white); font: inherit; pointer-events: none; }
   .search-box input::placeholder { color: #858585; }
-
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    justify-self: end;
-  }
-
-  .action-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    min-height: 2.15rem;
-    padding: 0.4rem 0.8rem;
-    border: 1px solid #383838;
-    border-radius: 999px;
-    color: #ddd;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
+  .header-actions { display: flex; align-items: center; gap: 0.65rem; justify-self: end; }
+  .action-chip { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2.15rem; padding: 0.4rem 0.8rem; border: 1px solid #383838; border-radius: 999px; color: #ddd; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; text-transform: uppercase; }
   .action-chip.accent { background: var(--red); border-color: var(--red); color: #080808; }
-
   .primary-nav { border-top: 1px solid #181818; }
-  .nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(1rem, 3vw, 3rem);
-    overflow-x: auto;
-    padding: 0 1.25rem;
-    width: 100%;
-    max-width: 1320px;
-    margin: 0 auto;
-  }
-  .nav-link {
-    position: relative;
-    flex: 0 0 auto;
-    padding: 0.75rem 0.1rem 0.68rem;
-    color: #d4d4d4;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
+  .nav-inner { display: flex; align-items: center; justify-content: center; gap: clamp(1rem, 3vw, 3rem); overflow-x: auto; padding: 0 1.25rem; width: 100%; max-width: 1320px; margin: 0 auto; }
+  .nav-link { position: relative; flex: 0 0 auto; padding: 0.75rem 0.1rem 0.68rem; color: #d4d4d4; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-decoration: none; text-transform: uppercase; }
   .nav-link:hover { color: var(--red); }
-  .nav-link.active::after {
-    content: '';
-    position: absolute;
-    right: 0; bottom: 0; left: 0;
-    height: 2px;
-    background: var(--red);
-  }
-
-  .forum-shell {
-    display: flex;
-    max-width: 1320px;
-    margin: 0 auto;
-    min-height: calc(100vh - 130px);
-  }
-
-  .forum-sidebar {
-    width: var(--sidebar-width);
-    flex-shrink: 0;
-    background: #050505;
-    border-right: 1px solid #1a1a1a;
-    padding: 1.5rem 1rem;
-  }
-
+  .nav-link.active::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: var(--red); }
+  .forum-shell { display: flex; max-width: 1320px; margin: 0 auto; min-height: calc(100vh - 130px); }
+  .forum-sidebar { width: var(--sidebar-width); flex-shrink: 0; background: #050505; border-right: 1px solid #1a1a1a; padding: 1.5rem 1rem; }
   .sidebar-group { margin-bottom: 1.5rem; }
-  .sidebar-group-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #666;
-    padding: 0 0.75rem 0.5rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.55rem 0.75rem;
-    color: #bbb;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 2px;
-    border-left: 2px solid transparent;
-    transition: color 0.15s, background 0.15s, border-color 0.15s;
-  }
+  .sidebar-group-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #666; padding: 0 0.75rem 0.5rem; margin-bottom: 0.25rem; }
+  .sidebar-item { display: flex; align-items: center; gap: 0.55rem; padding: 0.55rem 0.75rem; color: #bbb; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 2px; border-left: 2px solid transparent; transition: color 0.15s, background 0.15s, border-color 0.15s; }
   .sidebar-item:hover { color: var(--white); background: rgba(255, 153, 0, 0.05); }
-  .sidebar-item.active {
-    color: var(--red);
-    background: rgba(255, 153, 0, 0.08);
-    border-left-color: var(--red);
-  }
-
-  .sidebar-item-count {
-    margin-left: auto;
-    font-size: 0.6rem;
-    color: #666;
-    background: #1a1a1a;
-    padding: 0.1rem 0.4rem;
-    border-radius: 999px;
-    letter-spacing: 0.05em;
-  }
-  .sidebar-item.active .sidebar-item-count {
-    background: rgba(255, 153, 0, 0.15);
-    color: var(--red);
-  }
-
-  .forum-main {
-    flex: 1;
-    padding: 2rem 2rem 4rem;
-    min-width: 0;
-  }
-
-  .breadcrumb {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #777;
-    margin-bottom: 1.5rem;
-  }
+  .sidebar-item.active { color: var(--red); background: rgba(255, 153, 0, 0.08); border-left-color: var(--red); }
+  .sidebar-item-count { margin-left: auto; font-size: 0.6rem; color: #666; background: #1a1a1a; padding: 0.1rem 0.4rem; border-radius: 999px; letter-spacing: 0.05em; }
+  .sidebar-item.active .sidebar-item-count { background: rgba(255, 153, 0, 0.15); color: var(--red); }
+  .forum-main { flex: 1; padding: 2rem 2rem 4rem; min-width: 0; }
+  .breadcrumb { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777; margin-bottom: 1.5rem; }
   .breadcrumb a { color: var(--red); text-decoration: none; }
   .breadcrumb a:hover { text-decoration: underline; }
   .breadcrumb-sep { color: #333; margin: 0 0.5rem; }
-
-  .form-box {
-    background: rgba(13, 13, 13, 0.95);
-    border: 1px solid #2a2a2a;
-    border-top: 3px solid var(--red);
-    border-radius: 2px;
-    padding: 1.75rem 2rem;
-  }
-
-  .form-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-  }
-
-  .form-sub {
-    color: #888;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 1.75rem;
-  }
-
-  .category-locked {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.9rem;
-    background: rgba(255, 153, 0, 0.08);
-    border: 1px solid var(--red-dim);
-    border-radius: 2px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 1.5rem;
-  }
-  .category-locked svg {
-    width: 0.9rem;
-    height: 0.9rem;
-    opacity: 0.7;
-  }
-
-  label {
-    display: block;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #aaa;
-    margin-bottom: 0.35rem;
-  }
-
+  .form-box { background: rgba(13, 13, 13, 0.95); border: 1px solid #2a2a2a; border-top: 3px solid var(--red); border-radius: 2px; padding: 1.75rem 2rem; }
+  .form-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .form-sub { color: #888; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.75rem; }
+  .category-locked { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.9rem; background: rgba(255, 153, 0, 0.08); border: 1px solid var(--red-dim); border-radius: 2px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 1.5rem; }
+  .category-locked svg { width: 0.9rem; height: 0.9rem; opacity: 0.7; }
+  label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 0.35rem; }
   .form-group { margin-bottom: 1.25rem; }
-
-  input[type="text"], textarea {
-    width: 100%;
-    padding: 0.8rem 0.9rem;
-    background: #080808;
-    border: 1px solid #2a2a2a;
-    color: var(--white);
-    font: inherit;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
-    border-radius: 2px;
-    font-family: inherit;
-  }
+  input[type="text"], textarea { width: 100%; padding: 0.8rem 0.9rem; background: #080808; border: 1px solid #2a2a2a; color: var(--white); font: inherit; font-size: 0.9rem; outline: none; transition: border-color 0.2s; border-radius: 2px; font-family: inherit; }
   input[type="text"]:focus, textarea:focus { border-color: var(--red-dim); }
   input::placeholder, textarea::placeholder { color: #555; }
-
-  textarea {
-    resize: vertical;
-    min-height: 200px;
-    line-height: 1.5;
-  }
-
-  .char-count {
-    text-align: right;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #666;
-    margin-top: 0.35rem;
-  }
+  textarea { resize: vertical; min-height: 200px; line-height: 1.5; }
+  .char-count { text-align: right; font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #666; margin-top: 0.35rem; }
   .char-count.over { color: #ff5555; }
-
-  .form-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-
-  .btn-submit {
-    padding: 0.8rem 1.75rem;
-    background: var(--red);
-    border: 1px solid var(--red);
-    color: #080808;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: opacity 0.15s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-  }
+  .form-actions { display: flex; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+  .btn-submit { padding: 0.8rem 1.75rem; background: var(--red); border: 1px solid var(--red); color: #080808; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: opacity 0.15s; text-decoration: none; display: inline-flex; align-items: center; }
   .btn-submit:hover { opacity: 0.85; }
   .btn-submit:disabled { opacity: 0.4; cursor: wait; }
-
-  .btn-cancel {
-    padding: 0.8rem 1.75rem;
-    background: transparent;
-    border: 1px solid #444;
-    color: var(--white);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 2px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    transition: border-color 0.15s, color 0.15s;
-  }
+  .btn-cancel { padding: 0.8rem 1.75rem; background: transparent; border: 1px solid #444; color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; border-radius: 2px; text-decoration: none; display: inline-flex; align-items: center; transition: border-color 0.15s, color 0.15s; }
   .btn-cancel:hover { border-color: var(--red); color: var(--red); }
-
-  .status-msg {
-    margin-top: 1rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    min-height: 1rem;
-  }
+  .status-msg { margin-top: 1rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; min-height: 1rem; }
   .status-msg.err { color: #ff5555; }
-
-  .loading-msg {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--gray);
-    font-family: 'Barlow Condensed', sans-serif;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-  }
-
-  .error-box {
-    padding: 3rem 2rem;
-    text-align: center;
-    border: 1px dashed #2a2a2a;
-    border-radius: 2px;
-  }
-  .error-box-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #ff5555;
-    margin-bottom: 0.75rem;
-  }
-  .error-box-msg {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 1.5rem;
-  }
-
-  footer {
-    background: #000;
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.75rem;
-    color: #ccc;
-    letter-spacing: 0.1em;
-    border-top: 1px solid var(--border);
-  }
-  .tagline {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: clamp(0.68rem, 1.4vw, 0.82rem);
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: var(--red);
-  }
-
-  @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
-    .brand-group { grid-column: 1; }
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
-    .header-actions {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
-      gap: 0.35rem;
-    }
-    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
-
-    .forum-shell { flex-direction: column; }
-    .forum-sidebar {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 1rem;
-    }
-    .sidebar-group { margin-bottom: 1rem; }
-    .forum-main { padding: 1.5rem 1rem 3rem; }
-
-    .form-box { padding: 1.25rem 1rem; }
-  }
+  .loading-msg { text-align: center; padding: 3rem 1rem; color: var(--gray); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.75rem; }
+  .error-box { padding: 3rem 2rem; text-align: center; border: 1px dashed #2a2a2a; border-radius: 2px; }
+  .error-box-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #ff5555; margin-bottom: 0.75rem; }
+  .error-box-msg { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin-bottom: 1.5rem; }
+  footer { background: #000; text-align: center; padding: 2rem; font-size: 0.75rem; color: #ccc; letter-spacing: 0.1em; border-top: 1px solid var(--border); }
+  .tagline { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(0.68rem, 1.4vw, 0.82rem); letter-spacing: 0.32em; text-transform: uppercase; color: var(--red); }
 
   /* NOTIFICATION CSS */
   .notif-wrapper { position: relative; display: inline-block; }
@@ -503,6 +96,43 @@
   .notif-time { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: #666; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
   .notif-empty { padding: 2rem 1rem; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em; }
 
+  @media (max-width: 780px) {
+    /* Header Layout Fix */
+    .header-main { 
+      grid-template-columns: 1fr auto; 
+      gap: 0.5rem; 
+      padding: 0.65rem 0.75rem;
+    }
+    .brand-group { grid-column: 1; grid-row: 1; }
+    .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
+    
+    /* Force the search bar to drop to row 2 and span full width */
+    .search-box { 
+      grid-column: 1 / -1; 
+      grid-row: 2; 
+      max-width: none; 
+      justify-self: stretch; 
+      margin-top: 0.25rem;
+    }
+    
+    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+
+    /* Mobile Notification Dropdown Fix */
+    .notif-dropdown {
+      position: fixed;
+      top: 60px; 
+      left: 10px;
+      right: 10px;
+      width: auto;
+      max-width: none;
+    }
+    
+    .forum-shell { flex-direction: column; }
+    .forum-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #1a1a1a; padding: 1rem; }
+    .sidebar-group { margin-bottom: 1rem; }
+    .forum-main { padding: 1.5rem 1rem 3rem; }
+    .form-box { padding: 1.25rem 1rem; }
+  }
 </style>
 </head>
 
@@ -539,7 +169,6 @@
     <aside class="forum-sidebar" id="forumSidebar">
       <div class="loading-msg" style="padding:1rem 0;">Loading…</div>
     </aside>
-
     <main class="forum-main" id="forumMain">
       <div class="loading-msg">Loading…</div>
     </main>
@@ -553,269 +182,6 @@
   </footer>
 
 <script>
-  var MAX_TITLE = 200;
-  var MAX_BODY = 200;
-
-  var currentUser = null;
-  var subSlug = null;
-  var subCategory = null;
-
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-
-  function getSubFromQuery() {
-    var params = new URLSearchParams(window.location.search);
-    return params.get('sub');
-  }
-
-  (async function () {
-    var actions = document.getElementById('headerActions');
-    if (!actions) return;
-    try {
-      var res = await fetch('/api/auth?action=me');
-      var data = await res.json();
-      currentUser = data.user;
-
-      if (data.user) {
-        var userChip = document.createElement('a');
-        userChip.className = 'action-chip';
-        userChip.href = '/@' + data.user.username;
-        userChip.textContent = data.user.display_name || data.user.username;
-
-        var logoutBtn = document.createElement('a');
-        logoutBtn.className = 'action-chip accent';
-        logoutBtn.href = '#';
-        logoutBtn.textContent = 'Log Out';
-        logoutBtn.addEventListener('click', async function (e) {
-          e.preventDefault();
-          await fetch('/api/auth?action=logout', { method: 'POST' });
-          window.location.href = '/';
-        });
-
-        actions.appendChild(userChip);
-        actions.appendChild(logoutBtn);
-      } else {
-        var loginLink = document.createElement('a');
-        loginLink.className = 'action-chip';
-        loginLink.href = '/login';
-        loginLink.textContent = 'Log In';
-
-        var signupLink = document.createElement('a');
-        signupLink.className = 'action-chip accent';
-        signupLink.href = '/signup';
-        signupLink.textContent = 'Sign Up';
-
-        actions.appendChild(loginLink);
-        actions.appendChild(signupLink);
-      }
-    } catch (err) {}
-  })();
-
-  (async function () {
-    var sidebarEl = document.getElementById('forumSidebar');
-    try {
-      var res = await fetch('/api/forums?action=categories');
-      var data = await res.json();
-      var categories = data.categories || [];
-
-      var moderation = categories.filter(function (c) { return c.group_name === 'moderation'; });
-      var discussion = categories.filter(function (c) { return c.group_name === 'discussion'; });
-
-      function sidebarGroupHtml(title, cats) {
-        return (
-          '<div class="sidebar-group">' +
-            '<div class="sidebar-group-title">' + title + '</div>' +
-            cats.map(function (c) {
-              return (
-                '<a class="sidebar-item" href="/forums/' + esc(c.slug) + '">' +
-                  esc(c.name) +
-                  (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') +
-                '</a>'
-              );
-            }).join('') +
-          '</div>'
-        );
-      }
-
-      sidebarEl.innerHTML =
-        sidebarGroupHtml('Moderation', moderation) +
-        sidebarGroupHtml('Discussion', discussion);
-    } catch (err) {
-      sidebarEl.innerHTML = '';
-    }
-  })();
-
-  (async function () {
-    var main = document.getElementById('forumMain');
-
-    if (!currentUser) {
-      try {
-        var meRes = await fetch('/api/auth?action=me');
-        var meData = await meRes.json();
-        currentUser = meData.user;
-      } catch (e) {}
-    }
-
-    if (!currentUser) {
-      main.innerHTML =
-        '<div class="error-box">' +
-          '<div class="error-box-title">Login Required</div>' +
-          '<div class="error-box-msg">You must be logged in to create a thread</div>' +
-          '<a class="btn-submit" href="/login">Log In</a>' +
-        '</div>';
-      return;
-    }
-
-    subSlug = getSubFromQuery();
-    if (!subSlug) {
-      main.innerHTML =
-        '<div class="error-box">' +
-          '<div class="error-box-title">No Category</div>' +
-          '<div class="error-box-msg">You need to pick a category first</div>' +
-          '<a class="btn-submit" href="/forums">Browse Forums</a>' +
-        '</div>';
-      return;
-    }
-
-    try {
-      var res = await fetch('/api/forums?action=categories');
-      var data = await res.json();
-      var categories = data.categories || [];
-      subCategory = categories.find(function (c) { return c.slug === subSlug; });
-
-      if (!subCategory) {
-        main.innerHTML =
-          '<div class="error-box">' +
-            '<div class="error-box-title">Category Not Found</div>' +
-            '<div class="error-box-msg">That category doesn\'t exist</div>' +
-            '<a class="btn-submit" href="/forums">Browse Forums</a>' +
-          '</div>';
-        return;
-      }
-
-      if (subCategory.admin_only && !currentUser.is_admin) {
-        main.innerHTML =
-          '<div class="error-box">' +
-            '<div class="error-box-title">Not Allowed</div>' +
-            '<div class="error-box-msg">Only admins can post in ' + esc(subCategory.name) + '</div>' +
-            '<a class="btn-submit" href="/forums/' + esc(subCategory.slug) + '">Back to ' + esc(subCategory.name) + '</a>' +
-          '</div>';
-        return;
-      }
-
-      renderForm();
-    } catch (err) {
-      main.innerHTML = '<div class="loading-msg">Could not load form</div>';
-    }
-  })();
-
-  function renderForm() {
-    var main = document.getElementById('forumMain');
-
-    main.innerHTML =
-      '<div class="breadcrumb">' +
-        '<a href="/forums">Forums</a>' +
-        '<span class="breadcrumb-sep">/</span>' +
-        '<a href="/forums/' + esc(subCategory.slug) + '">' + esc(subCategory.name) + '</a>' +
-        '<span class="breadcrumb-sep">/</span>' +
-        'New Thread' +
-      '</div>' +
-
-      '<div class="form-box">' +
-        '<div class="form-title">Create New Thread</div>' +
-        '<div class="form-sub">Share your thoughts with the community</div>' +
-
-        '<div class="category-locked">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
-          'Posting in: ' + esc(subCategory.name) +
-        '</div>' +
-
-        '<div class="form-group">' +
-          '<label for="threadTitle">Title</label>' +
-          '<input type="text" id="threadTitle" maxlength="' + MAX_TITLE + '" placeholder="A short, descriptive title">' +
-          '<div class="char-count" id="titleCount">0 / ' + MAX_TITLE + '</div>' +
-        '</div>' +
-
-        '<div class="form-group">' +
-          '<label for="threadBody">Body</label>' +
-          '<textarea id="threadBody" maxlength="' + MAX_BODY + '" placeholder="Write your post here…"></textarea>' +
-          '<div class="char-count" id="bodyCount">0 / ' + MAX_BODY + '</div>' +
-        '</div>' +
-
-        '<div class="form-actions">' +
-          '<button class="btn-submit" id="submitBtn">Post Thread</button>' +
-          '<a class="btn-cancel" href="/forums/' + esc(subCategory.slug) + '">Cancel</a>' +
-        '</div>' +
-
-        '<div class="status-msg" id="statusMsg"></div>' +
-      '</div>';
-
-    var titleEl = document.getElementById('threadTitle');
-    var bodyEl = document.getElementById('threadBody');
-    var titleCount = document.getElementById('titleCount');
-    var bodyCount = document.getElementById('bodyCount');
-    var submitBtn = document.getElementById('submitBtn');
-    var statusMsg = document.getElementById('statusMsg');
-
-    function updateCounts() {
-      var tLen = titleEl.value.length;
-      var bLen = bodyEl.value.length;
-      titleCount.textContent = tLen + ' / ' + MAX_TITLE;
-      titleCount.classList.toggle('over', tLen > MAX_TITLE);
-      bodyCount.textContent = bLen + ' / ' + MAX_BODY;
-      bodyCount.classList.toggle('over', bLen > MAX_BODY);
-    }
-    titleEl.addEventListener('input', updateCounts);
-    bodyEl.addEventListener('input', updateCounts);
-    updateCounts();
-
-    submitBtn.addEventListener('click', async function () {
-      var title = titleEl.value.trim();
-      var body = bodyEl.value.trim();
-
-      if (!title) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Title is required'; return; }
-      if (!body) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Body is required'; return; }
-      if (title.length > MAX_TITLE) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Title too long'; return; }
-      if (body.length > MAX_BODY) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Body too long'; return; }
-
-      submitBtn.disabled = true;
-      statusMsg.className = 'status-msg';
-      statusMsg.textContent = 'Posting…';
-
-      try {
-        var res = await fetch('/api/forum-post?action=create-thread', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            category_slug: subCategory.slug,
-            title: title,
-            body: body,
-          }),
-        });
-        var data = await res.json();
-
-        if (!res.ok) {
-          statusMsg.className = 'status-msg err';
-          statusMsg.textContent = data.error || 'Failed to post';
-          submitBtn.disabled = false;
-          return;
-        }
-
-        statusMsg.textContent = 'Posted! Redirecting…';
-        window.location.href = '/forums/thread-' + data.thread_id;
-      } catch (err) {
-        statusMsg.className = 'status-msg err';
-        statusMsg.textContent = 'Network error';
-        submitBtn.disabled = false;
-      }
-    });
-  }
-</script>
-
-<script>
   // ---- Notification System ----
   (async function () {
     var actionsEl = document.getElementById('headerActions');
@@ -824,7 +190,6 @@
       var authRes = await fetch('/api/auth?action=me');
       var authData = await authRes.json();
       if (!authData.user) return;
-
       var wrapper = document.createElement('div');
       wrapper.className = 'notif-wrapper';
       wrapper.innerHTML = `
@@ -841,16 +206,13 @@
         </div>
       `;
       actionsEl.insertBefore(wrapper, actionsEl.firstChild);
-
       var btn = document.getElementById('notifBtn');
       var dropdown = document.getElementById('notifDropdown');
       var badge = document.getElementById('notifBadge');
       var list = document.getElementById('notifList');
       var markReadBtn = document.getElementById('markReadBtn');
-
       btn.addEventListener('click', function (e) { e.stopPropagation(); dropdown.classList.toggle('open'); });
       document.addEventListener('click', function (e) { if (!wrapper.contains(e.target)) dropdown.classList.remove('open'); });
-
       async function loadNotifications() {
         try {
           var res = await fetch('/api/notifications');
@@ -858,7 +220,6 @@
           var data = await res.json();
           if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
           if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
-
           var icons = { follow: '👤', reply: '💬', mention: '@' };
           list.innerHTML = data.notifications.map(function(n) {
             var isUnread = !n.is_read;
@@ -866,17 +227,144 @@
             var text = n.type === 'follow' ? '<strong>' + actorName + '</strong> followed you' : n.type === 'reply' ? '<strong>' + actorName + '</strong> replied to your comment' : '<strong>' + actorName + '</strong> mentioned you';
             var mins = Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000);
             var timeStr = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
-
             return `<a href="${n.link}" class="notif-item ${isUnread ? 'unread' : ''}"><div class="notif-icon">${icons[n.type] || '🔔'}</div><div class="notif-text">${text}<span class="notif-time">${timeStr}</span></div></a>`;
           }).join('');
         } catch (err) {}
       }
       markReadBtn.addEventListener('click', async function() { await fetch('/api/notifications?action=read-all', { method: 'POST' }); loadNotifications(); });
-      loadNotifications();
-      setInterval(loadNotifications, 30000);
+      loadNotifications(); setInterval(loadNotifications, 30000);
     } catch (err) {}
   })();
 </script>
 
+<script>
+  var MAX_TITLE = 200;
+  var MAX_BODY = 200;
+  var currentUser = null;
+  var subSlug = null;
+  var subCategory = null;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function getSubFromQuery() { var params = new URLSearchParams(window.location.search); return params.get('sub'); }
+
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+      currentUser = data.user;
+      if (data.user) {
+        var userChip = document.createElement('a'); userChip.className = 'action-chip'; userChip.href = '/@' + data.user.username; userChip.textContent = data.user.display_name || data.user.username;
+        var logoutBtn = document.createElement('a'); logoutBtn.className = 'action-chip accent'; logoutBtn.href = '#'; logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); window.location.href = '/'; });
+        actions.appendChild(userChip); actions.appendChild(logoutBtn);
+      } else {
+        var loginLink = document.createElement('a'); loginLink.className = 'action-chip'; loginLink.href = '/login'; loginLink.textContent = 'Log In';
+        var signupLink = document.createElement('a'); signupLink.className = 'action-chip accent'; signupLink.href = '/signup'; signupLink.textContent = 'Sign Up';
+        actions.appendChild(loginLink); actions.appendChild(signupLink);
+      }
+    } catch (err) {}
+  })();
+
+  (async function () {
+    var sidebarEl = document.getElementById('forumSidebar');
+    try {
+      var catRes = await fetch('/api/forums?action=categories');
+      var catData = await catRes.json();
+      var categories = catData.categories || [];
+      var grpRes = await fetch('/api/forums?action=groups');
+      var grpData = await grpRes.json();
+      var groups = grpData.groups || [];
+
+      function sidebarGroupHtml(group, cats) {
+        if (cats.length === 0) return '';
+        return (
+          '<div class="sidebar-group">' +
+            '<div class="sidebar-group-title">' + esc(group.label) + '</div>' +
+            cats.map(function (c) {
+              return '<a class="sidebar-item" href="/forums/' + esc(c.slug) + '">' + esc(c.name) + (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') + '</a>';
+            }).join('') +
+          '</div>'
+        );
+      }
+      sidebarEl.innerHTML = groups.map(function(g) {
+        var groupCats = categories.filter(function(c) { return c.group_name === g.name; });
+        return sidebarGroupHtml(g, groupCats);
+      }).join('');
+    } catch (err) { sidebarEl.innerHTML = ''; }
+  })();
+
+  (async function () {
+    var main = document.getElementById('forumMain');
+    if (!currentUser) {
+      try { var meRes = await fetch('/api/auth?action=me'); var meData = await meRes.json(); currentUser = meData.user; } catch (e) {}
+    }
+    if (!currentUser) {
+      main.innerHTML = '<div class="error-box"><div class="error-box-title">Login Required</div><div class="error-box-msg">You must be logged in to create a thread</div><a class="btn-submit" href="/login">Log In</a></div>';
+      return;
+    }
+
+    subSlug = getSubFromQuery();
+    if (!subSlug) {
+      main.innerHTML = '<div class="error-box"><div class="error-box-title">No Category</div><div class="error-box-msg">You need to pick a category first</div><a class="btn-submit" href="/forums">Browse Forums</a></div>';
+      return;
+    }
+
+    try {
+      var res = await fetch('/api/forums?action=categories');
+      var data = await res.json();
+      var categories = data.categories || [];
+      subCategory = categories.find(function (c) { return c.slug === subSlug; });
+
+      if (!subCategory) {
+        main.innerHTML = '<div class="error-box"><div class="error-box-title">Category Not Found</div><div class="error-box-msg">That category doesn\'t exist</div><a class="btn-submit" href="/forums">Browse Forums</a></div>';
+        return;
+      }
+      if (subCategory.admin_only && !currentUser.is_admin) {
+        main.innerHTML = '<div class="error-box"><div class="error-box-title">Not Allowed</div><div class="error-box-msg">Only admins can post in ' + esc(subCategory.name) + '</div><a class="btn-submit" href="/forums/' + esc(subCategory.slug) + '">Back to ' + esc(subCategory.name) + '</a></div>';
+        return;
+      }
+      renderForm();
+    } catch (err) {
+      main.innerHTML = '<div class="loading-msg">Could not load form</div>';
+    }
+  })();
+
+  function renderForm() {
+    var main = document.getElementById('forumMain');
+    main.innerHTML =
+      '<div class="breadcrumb"><a href="/forums">Forums</a><span class="breadcrumb-sep">/</span><a href="/forums/' + esc(subCategory.slug) + '">' + esc(subCategory.name) + '</a><span class="breadcrumb-sep">/</span>New Thread</div>' +
+      '<div class="form-box">' +
+        '<div class="form-title">Create New Thread</div>' +
+        '<div class="form-sub">Share your thoughts with the community</div>' +
+        '<div class="category-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Posting in: ' + esc(subCategory.name) + '</div>' +
+        '<div class="form-group"><label for="threadTitle">Title</label><input type="text" id="threadTitle" maxlength="' + MAX_TITLE + '" placeholder="A short, descriptive title"><div class="char-count" id="titleCount">0 / ' + MAX_TITLE + '</div></div>' +
+        '<div class="form-group"><label for="threadBody">Body</label><textarea id="threadBody" maxlength="' + MAX_BODY + '" placeholder="Write your post here…"></textarea><div class="char-count" id="bodyCount">0 / ' + MAX_BODY + '</div></div>' +
+        '<div class="form-actions"><button class="btn-submit" id="submitBtn">Post Thread</button><a class="btn-cancel" href="/forums/' + esc(subCategory.slug) + '">Cancel</a></div>' +
+        '<div class="status-msg" id="statusMsg"></div>' +
+      '</div>';
+
+    var titleEl = document.getElementById('threadTitle'), bodyEl = document.getElementById('threadBody'), titleCount = document.getElementById('titleCount'), bodyCount = document.getElementById('bodyCount'), submitBtn = document.getElementById('submitBtn'), statusMsg = document.getElementById('statusMsg');
+    function updateCounts() { var tLen = titleEl.value.length, bLen = bodyEl.value.length; titleCount.textContent = tLen + ' / ' + MAX_TITLE; titleCount.classList.toggle('over', tLen > MAX_TITLE); bodyCount.textContent = bLen + ' / ' + MAX_BODY; bodyCount.classList.toggle('over', bLen > MAX_BODY); }
+    titleEl.addEventListener('input', updateCounts); bodyEl.addEventListener('input', updateCounts); updateCounts();
+
+    submitBtn.addEventListener('click', async function () {
+      var title = titleEl.value.trim(), body = bodyEl.value.trim();
+      if (!title) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Title is required'; return; }
+      if (!body) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Body is required'; return; }
+      if (title.length > MAX_TITLE) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Title too long'; return; }
+      if (body.length > MAX_BODY) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Body too long'; return; }
+      submitBtn.disabled = true; statusMsg.className = 'status-msg'; statusMsg.textContent = 'Posting…';
+      try {
+        var res = await fetch('/api/forum-post?action=create-thread', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ category_slug: subCategory.slug, title: title, body: body }) });
+        var data = await res.json();
+        if (!res.ok) { statusMsg.className = 'status-msg err'; statusMsg.textContent = data.error || 'Failed to post'; submitBtn.disabled = false; return; }
+        statusMsg.textContent = 'Posted! Redirecting…';
+        window.location.href = '/forums/thread-' + data.thread_id;
+      } catch (err) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Network error'; submitBtn.disabled = false; }
+    });
+  }
+</script>
 </body>
 </html>

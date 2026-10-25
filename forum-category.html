@@ -27,7 +27,6 @@
     min-height: 100vh;
   }
 
-  /* HEADER */
   header {
     position: relative;
     background: #050505;
@@ -71,11 +70,7 @@
     background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5));
     transform: translateY(-1px);
   }
-  .discord-btn svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    display: block;
-  }
+  .discord-btn svg { width: 1.25rem; height: 1.25rem; display: block; }
 
   #logo {
     display: block;
@@ -169,7 +164,6 @@
     background: var(--red);
   }
 
-  /* LAYOUT */
   .forum-shell {
     display: flex;
     max-width: 1320px;
@@ -240,7 +234,6 @@
     min-width: 0;
   }
 
-  /* CONTENT */
   .forum-header {
     display: flex;
     align-items: flex-start;
@@ -298,7 +291,6 @@
   }
   .new-thread-btn:hover { opacity: 0.85; }
 
-  /* THREADS */
   .thread-list {
     display: flex;
     flex-direction: column;
@@ -414,49 +406,6 @@
     color: var(--red);
   }
 
-  /* MOBILE HEADER FIX */
-  @media (max-width: 780px) {
-    .header-main { 
-      grid-template-columns: auto 1fr; 
-      gap: 0.5rem; 
-    }
-    .brand-group { 
-      grid-column: 1; 
-    }
-    .search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      max-width: none;
-      justify-self: stretch;
-    }
-    .header-actions {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
-      gap: 0.35rem;
-    }
-    .action-chip { 
-      padding: 0.35rem 0.55rem; 
-      font-size: 0.62rem; 
-    }
-
-    .forum-shell { 
-      flex-direction: column; 
-    }
-    .forum-sidebar {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 1rem;
-    }
-    .sidebar-group { 
-      margin-bottom: 1rem; 
-    }
-    .forum-main { 
-      padding: 1.5rem 1rem 3rem; 
-    }
-  }
-
   /* NOTIFICATION CSS */
   .notif-wrapper { position: relative; display: inline-block; }
   .notif-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s; position: relative; }
@@ -479,6 +428,42 @@
   .notif-time { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: #666; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
   .notif-empty { padding: 2rem 1rem; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em; }
 
+ @media (max-width: 780px) {
+    /* Header Layout Fix */
+    .header-main { 
+      grid-template-columns: 1fr auto; 
+      gap: 0.5rem; 
+      padding: 0.65rem 0.75rem;
+    }
+    .brand-group { grid-column: 1; grid-row: 1; }
+    .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
+    
+    /* Force the search bar to drop to row 2 and span full width */
+    .search-box { 
+      grid-column: 1 / -1; 
+      grid-row: 2; 
+      max-width: none; 
+      justify-self: stretch; 
+      margin-top: 0.25rem;
+    }
+    
+    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+
+    /* Mobile Notification Dropdown Fix */
+    .notif-dropdown {
+      position: fixed;
+      top: 60px; 
+      left: 10px;
+      right: 10px;
+      width: auto;
+      max-width: none;
+    }
+
+    .forum-shell { flex-direction: column; }
+    .forum-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #1a1a1a; padding: 1rem; }
+    .sidebar-group { margin-bottom: 1rem; }
+    .forum-main { padding: 1.5rem 1rem 3rem; }
+  }
 </style>
 </head>
 
@@ -531,190 +516,6 @@
   </footer>
 
 <script>
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-
-  function timeAgo(iso) {
-    if (!iso) return '—';
-    var then = new Date(iso).getTime();
-    var now = Date.now();
-    var sec = Math.floor((now - then) / 1000);
-    if (sec < 5) return 'just now';
-    if (sec < 60) return sec + 's ago';
-    var min = Math.floor(sec / 60);
-    if (min < 60) return min + 'm ago';
-    var hr = Math.floor(min / 60);
-    if (hr < 24) return hr + 'h ago';
-    var day = Math.floor(hr / 24);
-    if (day < 30) return day + 'd ago';
-    var mon = Math.floor(day / 30);
-    if (mon < 12) return mon + 'mo ago';
-    return Math.floor(mon / 12) + 'y ago';
-  }
-
-  function getSlugFromPath() {
-    var match = window.location.pathname.match(/^\/forums\/([a-z0-9-]+)/i);
-    return match ? match[1] : null;
-  }
-
-  var currentSlug = getSlugFromPath();
-  var currentUser = null;
-
-  (async function () {
-    var actions = document.getElementById('headerActions');
-    if (!actions) return;
-    try {
-      var res = await fetch('/api/auth?action=me');
-      var data = await res.json();
-      currentUser = data.user;
-
-      if (data.user) {
-        var userChip = document.createElement('a');
-        userChip.className = 'action-chip';
-        userChip.href = '/@' + data.user.username;
-        userChip.textContent = data.user.display_name || data.user.username;
-
-        var logoutBtn = document.createElement('a');
-        logoutBtn.className = 'action-chip accent';
-        logoutBtn.href = '#';
-        logoutBtn.textContent = 'Log Out';
-        logoutBtn.addEventListener('click', async function (e) {
-          e.preventDefault();
-          await fetch('/api/auth?action=logout', { method: 'POST' });
-          window.location.href = '/';
-        });
-
-        actions.appendChild(userChip);
-        actions.appendChild(logoutBtn);
-      } else {
-        var loginLink = document.createElement('a');
-        loginLink.className = 'action-chip';
-        loginLink.href = '/login';
-        loginLink.textContent = 'Log In';
-
-        var signupLink = document.createElement('a');
-        signupLink.className = 'action-chip accent';
-        signupLink.href = '/signup';
-        signupLink.textContent = 'Sign Up';
-
-        actions.appendChild(loginLink);
-        actions.appendChild(signupLink);
-      }
-    } catch (err) {}
-  })();
-
-  (async function () {
-    var sidebarEl = document.getElementById('forumSidebar');
-    var contentEl = document.getElementById('forumContent');
-
-    if (!currentSlug) {
-      contentEl.innerHTML = '<div class="loading-msg">Invalid category URL</div>';
-      return;
-    }
-
-    try {
-      var catRes = await fetch('/api/forums?action=categories');
-      var catData = await catRes.json();
-      var categories = catData.categories || [];
-
-      var threadRes = await fetch('/api/forums?action=threads&category=' + encodeURIComponent(currentSlug));
-      if (!threadRes.ok) {
-        contentEl.innerHTML = '<div class="loading-msg">Category not found</div>';
-        sidebarEl.innerHTML = '';
-        return;
-      }
-      var data = await threadRes.json();
-      var category = data.category;
-      var threads = data.threads || [];
-
-      document.title = category.name + ' — PhonkHub Forums';
-
-      var moderation = categories.filter(function (c) { return c.group_name === 'moderation'; });
-      var discussion = categories.filter(function (c) { return c.group_name === 'discussion'; });
-
-      function sidebarGroupHtml(title, cats) {
-        return (
-          '<div class="sidebar-group">' +
-            '<div class="sidebar-group-title">' + title + '</div>' +
-            cats.map(function (c) {
-              var active = c.slug === currentSlug ? ' active' : '';
-              return (
-                '<a class="sidebar-item' + active + '" href="/forums/' + esc(c.slug) + '">' +
-                  esc(c.name) +
-                  (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') +
-                '</a>'
-              );
-            }).join('') +
-          '</div>'
-        );
-      }
-
-      sidebarEl.innerHTML =
-        sidebarGroupHtml('Moderation', moderation) +
-        sidebarGroupHtml('Discussion', discussion);
-
-      var newThreadBtnHtml = '';
-      var canPost = currentUser && (!category.admin_only || currentUser.is_admin);
-      if (canPost) {
-        newThreadBtnHtml = '<a class="new-thread-btn" href="/forums/new?sub=' + esc(category.slug) + '">+ New Thread</a>';
-      } else if (!currentUser && !category.admin_only) {
-        newThreadBtnHtml = '<a class="new-thread-btn" href="/login">Log In to Post</a>';
-      }
-
-      var threadsHtml;
-      if (threads.length === 0) {
-        threadsHtml =
-          '<div class="empty-state">' +
-            '<div class="empty-state-icon">💬</div>' +
-            '<div class="empty-state-msg">No threads yet</div>' +
-            (canPost ? '<a class="new-thread-btn" href="/forums/new?sub=' + esc(category.slug) + '">Start the First Thread</a>' : '') +
-          '</div>';
-      } else {
-        threadsHtml =
-          '<div class="thread-list">' +
-          threads.map(function (t) {
-            var displayName = t.display_name || t.username;
-            return (
-              '<div class="thread-row">' +
-                '<a class="thread-overlay" href="/forums/thread-' + t.id + '" aria-label="' + esc(t.title) + '"></a>' +
-                '<div class="thread-title">' + esc(t.title) + '</div>' +
-                '<div class="thread-meta">' +
-                  '<span>by <a class="thread-author" href="/@' + esc(t.username) + '">' + esc(displayName) + '</a></span>' +
-                  '<span>' + timeAgo(t.created_at) + '</span>' +
-                  '<span class="thread-meta-stat"><strong>' + (t.score > 0 ? '+' : '') + t.score + '</strong> score</span>' +
-                  '<span class="thread-meta-stat"><strong>' + t.reply_count + '</strong> repl' + (t.reply_count === 1 ? 'y' : 'ies') + '</span>' +
-                '</div>' +
-              '</div>'
-            );
-          }).join('') +
-          '</div>';
-      }
-
-      contentEl.innerHTML =
-        '<div class="forum-header">' +
-          '<div class="forum-header-left">' +
-            '<div class="breadcrumb">' +
-              '<a href="/forums">Forums</a>' +
-              '<span class="breadcrumb-sep">/</span>' +
-              esc(category.name) +
-            '</div>' +
-            '<div class="forum-title">' + esc(category.name) + '</div>' +
-            '<div class="forum-desc">' + esc(category.description || '') + '</div>' +
-          '</div>' +
-          newThreadBtnHtml +
-        '</div>' +
-        threadsHtml;
-    } catch (err) {
-      contentEl.innerHTML = '<div class="loading-msg">Could not load threads</div>';
-      sidebarEl.innerHTML = '';
-    }
-  })();
-</script>
-
-<script>
   // ---- Notification System ----
   (async function () {
     var actionsEl = document.getElementById('headerActions');
@@ -723,7 +524,6 @@
       var authRes = await fetch('/api/auth?action=me');
       var authData = await authRes.json();
       if (!authData.user) return;
-
       var wrapper = document.createElement('div');
       wrapper.className = 'notif-wrapper';
       wrapper.innerHTML = `
@@ -740,16 +540,13 @@
         </div>
       `;
       actionsEl.insertBefore(wrapper, actionsEl.firstChild);
-
       var btn = document.getElementById('notifBtn');
       var dropdown = document.getElementById('notifDropdown');
       var badge = document.getElementById('notifBadge');
       var list = document.getElementById('notifList');
       var markReadBtn = document.getElementById('markReadBtn');
-
       btn.addEventListener('click', function (e) { e.stopPropagation(); dropdown.classList.toggle('open'); });
       document.addEventListener('click', function (e) { if (!wrapper.contains(e.target)) dropdown.classList.remove('open'); });
-
       async function loadNotifications() {
         try {
           var res = await fetch('/api/notifications');
@@ -757,7 +554,6 @@
           var data = await res.json();
           if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
           if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
-
           var icons = { follow: '👤', reply: '💬', mention: '@' };
           list.innerHTML = data.notifications.map(function(n) {
             var isUnread = !n.is_read;
@@ -765,15 +561,124 @@
             var text = n.type === 'follow' ? '<strong>' + actorName + '</strong> followed you' : n.type === 'reply' ? '<strong>' + actorName + '</strong> replied to your comment' : '<strong>' + actorName + '</strong> mentioned you';
             var mins = Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000);
             var timeStr = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
-
             return `<a href="${n.link}" class="notif-item ${isUnread ? 'unread' : ''}"><div class="notif-icon">${icons[n.type] || '🔔'}</div><div class="notif-text">${text}<span class="notif-time">${timeStr}</span></div></a>`;
           }).join('');
         } catch (err) {}
       }
       markReadBtn.addEventListener('click', async function() { await fetch('/api/notifications?action=read-all', { method: 'POST' }); loadNotifications(); });
-      loadNotifications();
-      setInterval(loadNotifications, 30000);
+      loadNotifications(); setInterval(loadNotifications, 30000);
     } catch (err) {}
+  })();
+</script>
+
+<script>
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function timeAgo(iso) { if (!iso) return '—'; var then = new Date(iso).getTime(); var now = Date.now(); var sec = Math.floor((now - then) / 1000); if (sec < 5) return 'just now'; if (sec < 60) return sec + 's ago'; var min = Math.floor(sec / 60); if (min < 60) return min + 'm ago'; var hr = Math.floor(min / 60); if (hr < 24) return hr + 'h ago'; var day = Math.floor(hr / 24); if (day < 30) return day + 'd ago'; var mon = Math.floor(day / 30); if (mon < 12) return mon + 'mo ago'; return Math.floor(mon / 12) + 'y ago'; }
+  function getSlugFromPath() { var match = window.location.pathname.match(/^\/forums\/([a-z0-9-]+)/i); return match ? match[1] : null; }
+
+  var currentSlug = getSlugFromPath();
+  var currentUser = null;
+
+  (async function () {
+    var actions = document.getElementById('headerActions');
+    if (!actions) return;
+    try {
+      var res = await fetch('/api/auth?action=me');
+      var data = await res.json();
+      currentUser = data.user;
+      if (data.user) {
+        var userChip = document.createElement('a'); userChip.className = 'action-chip'; userChip.href = '/@' + data.user.username; userChip.textContent = data.user.display_name || data.user.username;
+        var logoutBtn = document.createElement('a'); logoutBtn.className = 'action-chip accent'; logoutBtn.href = '#'; logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async function (e) { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); window.location.href = '/'; });
+        actions.appendChild(userChip); actions.appendChild(logoutBtn);
+      } else {
+        var loginLink = document.createElement('a'); loginLink.className = 'action-chip'; loginLink.href = '/login'; loginLink.textContent = 'Log In';
+        var signupLink = document.createElement('a'); signupLink.className = 'action-chip accent'; signupLink.href = '/signup'; signupLink.textContent = 'Sign Up';
+        actions.appendChild(loginLink); actions.appendChild(signupLink);
+      }
+    } catch (err) {}
+  })();
+
+  (async function () {
+    var sidebarEl = document.getElementById('forumSidebar');
+    var contentEl = document.getElementById('forumContent');
+    if (!currentSlug) { contentEl.innerHTML = '<div class="loading-msg">Invalid category URL</div>'; return; }
+
+    try {
+      var catRes = await fetch('/api/forums?action=categories');
+      var catData = await catRes.json();
+      var categories = catData.categories || [];
+
+      var grpRes = await fetch('/api/forums?action=groups');
+      var grpData = await grpRes.json();
+      var groups = grpData.groups || [];
+
+      var threadRes = await fetch('/api/forums?action=threads&category=' + encodeURIComponent(currentSlug));
+      if (!threadRes.ok) { contentEl.innerHTML = '<div class="loading-msg">Category not found</div>'; sidebarEl.innerHTML = ''; return; }
+      var data = await threadRes.json();
+      var category = data.category;
+      var threads = data.threads || [];
+
+      document.title = category.name + ' — PhonkHub Forums';
+
+      function sidebarGroupHtml(group, cats) {
+        if (cats.length === 0) return '';
+        return (
+          '<div class="sidebar-group">' +
+            '<div class="sidebar-group-title">' + esc(group.label) + '</div>' +
+            cats.map(function (c) {
+              var active = c.slug === currentSlug ? ' active' : '';
+              return '<a class="sidebar-item' + active + '" href="/forums/' + esc(c.slug) + '">' + esc(c.name) + (c.thread_count > 0 ? '<span class="sidebar-item-count">' + c.thread_count + '</span>' : '') + '</a>';
+            }).join('') +
+          '</div>'
+        );
+      }
+
+      sidebarEl.innerHTML = groups.map(function(g) {
+        var groupCats = categories.filter(function(c) { return c.group_name === g.name; });
+        return sidebarGroupHtml(g, groupCats);
+      }).join('');
+
+      var newThreadBtnHtml = '';
+      var canPost = currentUser && (!category.admin_only || currentUser.is_admin);
+      if (canPost) {
+        newThreadBtnHtml = '<a class="new-thread-btn" href="/forums/new?sub=' + esc(category.slug) + '">+ New Thread</a>';
+      } else if (!currentUser && !category.admin_only) {
+        newThreadBtnHtml = '<a class="new-thread-btn" href="/login">Log In to Post</a>';
+      }
+
+      var threadsHtml;
+      if (threads.length === 0) {
+        threadsHtml = '<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-msg">No threads yet</div>' + (canPost ? '<a class="new-thread-btn" href="/forums/new?sub=' + esc(category.slug) + '">Start the First Thread</a>' : '') + '</div>';
+      } else {
+        threadsHtml = '<div class="thread-list">' + threads.map(function (t) {
+          var displayName = t.display_name || t.username;
+          return (
+            '<div class="thread-row">' +
+              '<a class="thread-overlay" href="/forums/thread-' + t.id + '" aria-label="' + esc(t.title) + '"></a>' +
+              '<div class="thread-title">' + esc(t.title) + '</div>' +
+              '<div class="thread-meta">' +
+                '<span>by <a class="thread-author" href="/@' + esc(t.username) + '">' + esc(displayName) + '</a></span>' +
+                '<span>' + timeAgo(t.created_at) + '</span>' +
+                '<span class="thread-meta-stat"><strong>' + (t.score > 0 ? '+' : '') + t.score + '</strong> score</span>' +
+                '<span class="thread-meta-stat"><strong>' + t.reply_count + '</strong> repl' + (t.reply_count === 1 ? 'y' : 'ies') + '</span>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('') + '</div>';
+      }
+
+      contentEl.innerHTML =
+        '<div class="forum-header">' +
+          '<div class="forum-header-left">' +
+            '<div class="breadcrumb"><a href="/forums">Forums</a><span class="breadcrumb-sep">/</span>' + esc(category.name) + '</div>' +
+            '<div class="forum-title">' + esc(category.name) + '</div>' +
+            '<div class="forum-desc">' + esc(category.description || '') + '</div>' +
+          '</div>' + newThreadBtnHtml + '</div>' + threadsHtml;
+    } catch (err) {
+      contentEl.innerHTML = '<div class="loading-msg">Could not load threads</div>';
+      sidebarEl.innerHTML = '';
+    }
   })();
 </script>
 

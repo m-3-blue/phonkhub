@@ -699,12 +699,34 @@
     color: var(--red);
   }
 
+  /* UPDATED MOBILE HEADER FIX */
   @media (max-width: 780px) {
-    .header-main { grid-template-columns: auto 1fr; gap: 0.5rem; }
-    .brand-group { grid-column: 1; }
-    .search-box { grid-column: 1 / -1; grid-row: 2; max-width: none; justify-self: stretch; }
+    .header-main { 
+      grid-template-columns: 1fr auto; 
+      gap: 0.5rem; 
+      padding: 0.65rem 0.75rem;
+    }
+    .brand-group { grid-column: 1; grid-row: 1; }
     .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
+    
+    .search-box { 
+      grid-column: 1 / -1; 
+      grid-row: 2; 
+      max-width: none; 
+      justify-self: stretch; 
+      margin-top: 0.25rem;
+    }
+    
     .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; }
+    
+    .notif-dropdown {
+      position: fixed;
+      top: 60px; 
+      left: 10px;
+      right: 10px;
+      width: auto;
+      max-width: none;
+    }
   }
 
   @media (max-width: 480px) {

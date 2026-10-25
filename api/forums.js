@@ -49,6 +49,12 @@ export default async function handler(req, res) {
 
     const action = req.query.action;
 
+    // -------- LIST ALL GROUPS (NEW) --------
+    if (action === 'groups') {
+      const result = await client.execute('SELECT * FROM forum_groups ORDER BY position ASC');
+      return res.status(200).json({ groups: result.rows });
+    }
+
     // -------- LIST ALL CATEGORIES (landing page) --------
     if (action === 'categories') {
       const result = await client.execute(`
