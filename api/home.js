@@ -8,6 +8,16 @@ function getClient() {
 }
 
 export default async function handler(req, res) {
+  // 1. Allow requests from the app (localhost, Vercel, or native Capacitor)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -15,13 +25,13 @@ export default async function handler(req, res) {
   const client = getClient();
 
   try {
-    // 1. Get all tracks - FIXED: Order by position, not ID!
+    // 3. Get all tracks - Ordered by position
     const tracksResult = await client.execute('SELECT * FROM tracks ORDER BY position ASC');
     
-    // 2. Get all track categories
+    // 4. Get all track categories
     const catsResult = await client.execute('SELECT * FROM track_categories ORDER BY position ASC');
 
-    // 3. Get scores (aggregate votes)
+    // 5. Get scores (aggregate votes)
     const scoresResult = await client.execute(`
       SELECT track_id, SUM(value) as score 
       FROM votes 
