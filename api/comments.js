@@ -28,7 +28,13 @@ async function isIpBanned(client, ip) {
   return result.rows.length > 0;
 }
 
+// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
