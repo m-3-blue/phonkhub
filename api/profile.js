@@ -87,64 +87,96 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const user = await getCurrentUser(client, req);
-      if (!user) return res.status(401).json({ error: 'Log in first' });
+      const sessionUser = await getCurrentUser(client, req);
+      
+      // Check if viewing someone else
+      const targetId = req.query.id;
+      const targetUsername = req.query.username;
+      
+      let targetUser = sessionUser;
 
-      // 1. Get Followers Count & List
+      // If viewing another user, fetch their data
+      if (targetId || targetUsername) {
+        let result;
+        if (targetId) {
+          result = await client.execute({ sql: 'SELECT * FROM users WHERE id = ?', args: [targetId] });
+        } else {
+          result = await client.execute({ sql: 'SELECT * FROM users WHERE username = ?', args: [targetUsername] });
+        }
+        
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+        
+        const row = result.rows[0];
+        let socials = {};
+        if (row.socials) { try { socials = JSON.parse(row.socials); } catch (e) {} }
+        
+        targetUser = {
+          id: row.id,
+          username: row.username,
+          display_name: row.display_name || row.username,
+          bio: row.bio || '',
+          socials: socials,
+          accent_color: row.accent_color || DEFAULT_ACCENT,
+          created_at: row.created_at
+        };
+      }
+
+      if (!targetUser) {
+        return res.status(401).json({ error: 'Log in first' });
+      }
+
+      // Now fetch the stats and activity for the targetUser
       const followersRes = await client.execute({
         sql: `SELECT u.id, u.username, u.display_name, u.accent_color 
               FROM follows f JOIN users u ON u.id = f.follower_id 
               WHERE f.following_id = ?`,
-        args: [user.id]
+        args: [targetUser.id]
       });
       
-      // 2. Get Following Count & List
       const followingRes = await client.execute({
         sql: `SELECT u.id, u.username, u.display_name, u.accent_color 
               FROM follows f JOIN users u ON u.id = f.following_id 
               WHERE f.follower_id = ?`,
-        args: [user.id]
+        args: [targetUser.id]
       });
 
-      // 3. Get Total Comments
       const commentsCountRes = await client.execute({
         sql: 'SELECT COUNT(*) as count FROM comments WHERE user_id = ?',
-        args: [user.id]
+        args: [targetUser.id]
       });
 
-      // 4. Get Total Votes
       const votesCountRes = await client.execute({
         sql: 'SELECT COUNT(*) as count FROM votes WHERE user_id = ?',
-        args: [user.id]
+        args: [targetUser.id]
       });
 
-      // 5. Get Recent Comments
       const recentCommentsRes = await client.execute({
         sql: `SELECT c.id, c.body, c.created_at, t.title as track_title, t.youtube_id
-              FROM comments c
-              JOIN tracks t ON t.id = c.track_id
+              FROM comments c JOIN tracks t ON t.id = c.track_id
               WHERE c.user_id = ?
               ORDER BY c.created_at DESC LIMIT 5`,
-        args: [user.id]
+        args: [targetUser.id]
       });
 
-      // 6. Get Recent Votes
       const recentVotesRes = await client.execute({
         sql: `SELECT v.value, v.created_at, t.title as track_title, t.youtube_id
-              FROM votes v
-              JOIN tracks t ON t.id = v.track_id
+              FROM votes v JOIN tracks t ON t.id = v.track_id
               WHERE v.user_id = ?
               ORDER BY v.created_at DESC LIMIT 5`,
-        args: [user.id]
+        args: [targetUser.id]
       });
 
       return res.status(200).json({
         profile: {
-          display_name: user.display_name,
-          bio: user.bio,
-          socials: user.socials,
-          accent_color: user.accent_color,
-          created_at: user.created_at,
+          id: targetUser.id,
+          username: targetUser.username,
+          display_name: targetUser.display_name,
+          bio: targetUser.bio,
+          socials: targetUser.socials,
+          accent_color: targetUser.accent_color,
+          created_at: targetUser.created_at,
           stats: {
             followers: followersRes.rows.length,
             following: followingRes.rows.length,
@@ -156,6 +188,7 @@ export default async function handler(req, res) {
           recent_comments: recentCommentsRes.rows,
           recent_votes: recentVotesRes.rows
         },
+        is_own_profile: sessionUser ? sessionUser.id === targetUser.id : false
       });
     }
 
