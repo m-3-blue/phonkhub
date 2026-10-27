@@ -17,35 +17,29 @@ function now() {
 
 function getClientIp(req) {
   var fwd = req.headers['x-forwarded-for'];
-  if (typeof fwd === 'string' && fwd.length > 0) {
-    return fwd.split(',')[0].trim();
-  }
-  if (typeof req.headers['x-real-ip'] === 'string') {
-    return req.headers['x-real-ip'];
-  }
-  if (req.socket && req.socket.remoteAddress) {
-    return req.socket.remoteAddress;
-  }
+  if (typeof fwd === 'string' && fwd.length > 0) return fwd.split(',')[0].trim();
+  if (typeof req.headers['x-real-ip'] === 'string') return req.headers['x-real-ip'];
+  if (req.socket && req.socket.remoteAddress) return req.socket.remoteAddress;
   return 'unknown';
 }
 
 async function isIpBanned(client, ip) {
   if (!ip || ip === 'unknown') return false;
-  var result = await client.execute({
-    sql: 'SELECT 1 FROM banned_ips WHERE ip = ?',
-    args: [ip],
-  });
+  var result = await client.execute({ sql: 'SELECT 1 FROM banned_ips WHERE ip = ?', args: [ip] });
   return result.rows.length > 0;
 }
 
+// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
     const [key, ...rest] = part.trim().split('=');
-    if (key === SESSION_COOKIE) {
-      return rest.join('=') || null;
-    }
+    if (key === SESSION_COOKIE) return rest.join('=') || null;
   }
   return null;
 }
@@ -76,6 +70,18 @@ async function getCurrentUser(client, req) {
 }
 
 export default async function handler(req, res) {
+  // 1. DYNAMIC CORS SETUP
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -99,45 +105,24 @@ export default async function handler(req, res) {
       const { category_slug, title, body } = req.body || {};
 
       if (!category_slug) return res.status(400).json({ error: 'Missing category' });
-      if (typeof title !== 'string' || title.trim().length === 0) {
-        return res.status(400).json({ error: 'Title required' });
-      }
-      if (title.trim().length > MAX_TITLE) {
-        return res.status(400).json({ error: 'Title too long (max ' + MAX_TITLE + ' chars)' });
-      }
-      if (typeof body !== 'string' || body.trim().length === 0) {
-        return res.status(400).json({ error: 'Body required' });
-      }
-      if (body.trim().length > MAX_BODY) {
-        return res.status(400).json({ error: 'Body too long (max ' + MAX_BODY + ' chars)' });
-      }
-      if (containsUrl(title) || containsUrl(body)) {
-        return res.status(400).json({ error: 'Links are not allowed' });
-      }
+      if (typeof title !== 'string' || title.trim().length === 0) return res.status(400).json({ error: 'Title required' });
+      if (title.trim().length > MAX_TITLE) return res.status(400).json({ error: 'Title too long (max ' + MAX_TITLE + ' chars)' });
+      if (typeof body !== 'string' || body.trim().length === 0) return res.status(400).json({ error: 'Body required' });
+      if (body.trim().length > MAX_BODY) return res.status(400).json({ error: 'Body too long (max ' + MAX_BODY + ' chars)' });
+      if (containsUrl(title) || containsUrl(body)) return res.status(400).json({ error: 'Links are not allowed' });
 
-      const catResult = await client.execute({
-        sql: 'SELECT id, admin_only FROM forum_categories WHERE slug = ?',
-        args: [category_slug],
-      });
-      if (catResult.rows.length === 0) {
-        return res.status(404).json({ error: 'Category not found' });
-      }
+      const catResult = await client.execute({ sql: 'SELECT id, admin_only FROM forum_categories WHERE slug = ?', args: [category_slug] });
+      if (catResult.rows.length === 0) return res.status(404).json({ error: 'Category not found' });
       const category = catResult.rows[0];
 
-      if (category.admin_only && !user.is_admin) {
-        return res.status(403).json({ error: 'Only admins can post here' });
-      }
+      if (category.admin_only && !user.is_admin) return res.status(403).json({ error: 'Only admins can post here' });
 
       const result = await client.execute({
-        sql: `INSERT INTO forum_threads (category_id, user_id, title, body, ip, created_at)
-              VALUES (?, ?, ?, ?, ?, ?)`,
+        sql: `INSERT INTO forum_threads (category_id, user_id, title, body, ip, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
         args: [category.id, user.id, title.trim(), body.trim(), ip, now()],
       });
 
-      return res.status(200).json({
-        ok: true,
-        thread_id: Number(result.lastInsertRowid),
-      });
+      return res.status(200).json({ ok: true, thread_id: Number(result.lastInsertRowid) });
     }
 
     // -------- CREATE REPLY --------
@@ -146,53 +131,31 @@ export default async function handler(req, res) {
       const threadId = parseInt(thread_id, 10);
 
       if (!threadId) return res.status(400).json({ error: 'Missing thread_id' });
-      if (typeof body !== 'string' || body.trim().length === 0) {
-        return res.status(400).json({ error: 'Body required' });
-      }
-      if (body.trim().length > MAX_BODY) {
-        return res.status(400).json({ error: 'Body too long (max ' + MAX_BODY + ' chars)' });
-      }
-      if (containsUrl(body)) {
-        return res.status(400).json({ error: 'Links are not allowed' });
-      }
+      if (typeof body !== 'string' || body.trim().length === 0) return res.status(400).json({ error: 'Body required' });
+      if (body.trim().length > MAX_BODY) return res.status(400).json({ error: 'Body too long (max ' + MAX_BODY + ' chars)' });
+      if (containsUrl(body)) return res.status(400).json({ error: 'Links are not allowed' });
 
       const threadResult = await client.execute({
-        sql: `SELECT t.id, c.admin_only
-              FROM forum_threads t
-              JOIN forum_categories c ON c.id = t.category_id
-              WHERE t.id = ?`,
+        sql: `SELECT t.id, c.admin_only FROM forum_threads t JOIN forum_categories c ON c.id = t.category_id WHERE t.id = ?`,
         args: [threadId],
       });
-      if (threadResult.rows.length === 0) {
-        return res.status(404).json({ error: 'Thread not found' });
-      }
-      if (threadResult.rows[0].admin_only && !user.is_admin) {
-        return res.status(403).json({ error: 'Only admins can reply here' });
-      }
+      if (threadResult.rows.length === 0) return res.status(404).json({ error: 'Thread not found' });
+      if (threadResult.rows[0].admin_only && !user.is_admin) return res.status(403).json({ error: 'Only admins can reply here' });
 
       let parentId = null;
       if (parent_id) {
         const parsedParent = parseInt(parent_id, 10);
-        const parentExists = await client.execute({
-          sql: 'SELECT id FROM forum_replies WHERE id = ? AND thread_id = ?',
-          args: [parsedParent, threadId],
-        });
-        if (parentExists.rows.length === 0) {
-          return res.status(404).json({ error: 'Parent reply not found' });
-        }
+        const parentExists = await client.execute({ sql: 'SELECT id FROM forum_replies WHERE id = ? AND thread_id = ?', args: [parsedParent, threadId] });
+        if (parentExists.rows.length === 0) return res.status(404).json({ error: 'Parent reply not found' });
         parentId = parsedParent;
       }
 
       const result = await client.execute({
-        sql: `INSERT INTO forum_replies (thread_id, user_id, parent_id, body, ip, created_at)
-              VALUES (?, ?, ?, ?, ?, ?)`,
+        sql: `INSERT INTO forum_replies (thread_id, user_id, parent_id, body, ip, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
         args: [threadId, user.id, parentId, body.trim(), ip, now()],
       });
 
-      return res.status(200).json({
-        ok: true,
-        reply_id: Number(result.lastInsertRowid),
-      });
+      return res.status(200).json({ ok: true, reply_id: Number(result.lastInsertRowid) });
     }
 
     // -------- EDIT THREAD --------
@@ -201,38 +164,17 @@ export default async function handler(req, res) {
       const threadId = parseInt(id, 10);
 
       if (!threadId) return res.status(400).json({ error: 'Missing id' });
-      if (typeof title !== 'string' || title.trim().length === 0) {
-        return res.status(400).json({ error: 'Title required' });
-      }
-      if (title.trim().length > MAX_TITLE) {
-        return res.status(400).json({ error: 'Title too long' });
-      }
-      if (typeof body !== 'string' || body.trim().length === 0) {
-        return res.status(400).json({ error: 'Body required' });
-      }
-      if (body.trim().length > MAX_BODY) {
-        return res.status(400).json({ error: 'Body too long' });
-      }
-      if (containsUrl(title) || containsUrl(body)) {
-        return res.status(400).json({ error: 'Links are not allowed' });
-      }
+      if (typeof title !== 'string' || title.trim().length === 0) return res.status(400).json({ error: 'Title required' });
+      if (title.trim().length > MAX_TITLE) return res.status(400).json({ error: 'Title too long' });
+      if (typeof body !== 'string' || body.trim().length === 0) return res.status(400).json({ error: 'Body required' });
+      if (body.trim().length > MAX_BODY) return res.status(400).json({ error: 'Body too long' });
+      if (containsUrl(title) || containsUrl(body)) return res.status(400).json({ error: 'Links are not allowed' });
 
-      const check = await client.execute({
-        sql: 'SELECT user_id FROM forum_threads WHERE id = ?',
-        args: [threadId],
-      });
-      if (check.rows.length === 0) {
-        return res.status(404).json({ error: 'Thread not found' });
-      }
-      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) {
-        return res.status(403).json({ error: 'Not your thread' });
-      }
+      const check = await client.execute({ sql: 'SELECT user_id FROM forum_threads WHERE id = ?', args: [threadId] });
+      if (check.rows.length === 0) return res.status(404).json({ error: 'Thread not found' });
+      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) return res.status(403).json({ error: 'Not your thread' });
 
-      await client.execute({
-        sql: 'UPDATE forum_threads SET title = ?, body = ?, edited_at = ? WHERE id = ?',
-        args: [title.trim(), body.trim(), now(), threadId],
-      });
-
+      await client.execute({ sql: 'UPDATE forum_threads SET title = ?, body = ?, edited_at = ? WHERE id = ?', args: [title.trim(), body.trim(), now(), threadId] });
       return res.status(200).json({ ok: true });
     }
 
@@ -242,32 +184,15 @@ export default async function handler(req, res) {
       const replyId = parseInt(id, 10);
 
       if (!replyId) return res.status(400).json({ error: 'Missing id' });
-      if (typeof body !== 'string' || body.trim().length === 0) {
-        return res.status(400).json({ error: 'Body required' });
-      }
-      if (body.trim().length > MAX_BODY) {
-        return res.status(400).json({ error: 'Body too long' });
-      }
-      if (containsUrl(body)) {
-        return res.status(400).json({ error: 'Links are not allowed' });
-      }
+      if (typeof body !== 'string' || body.trim().length === 0) return res.status(400).json({ error: 'Body required' });
+      if (body.trim().length > MAX_BODY) return res.status(400).json({ error: 'Body too long' });
+      if (containsUrl(body)) return res.status(400).json({ error: 'Links are not allowed' });
 
-      const check = await client.execute({
-        sql: 'SELECT user_id FROM forum_replies WHERE id = ?',
-        args: [replyId],
-      });
-      if (check.rows.length === 0) {
-        return res.status(404).json({ error: 'Reply not found' });
-      }
-      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) {
-        return res.status(403).json({ error: 'Not your reply' });
-      }
+      const check = await client.execute({ sql: 'SELECT user_id FROM forum_replies WHERE id = ?', args: [replyId] });
+      if (check.rows.length === 0) return res.status(404).json({ error: 'Reply not found' });
+      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) return res.status(403).json({ error: 'Not your reply' });
 
-      await client.execute({
-        sql: 'UPDATE forum_replies SET body = ?, edited_at = ? WHERE id = ?',
-        args: [body.trim(), now(), replyId],
-      });
-
+      await client.execute({ sql: 'UPDATE forum_replies SET body = ?, edited_at = ? WHERE id = ?', args: [body.trim(), now(), replyId] });
       return res.status(200).json({ ok: true });
     }
 
@@ -277,41 +202,14 @@ export default async function handler(req, res) {
       const threadId = parseInt(id, 10);
       if (!threadId) return res.status(400).json({ error: 'Missing id' });
 
-      const check = await client.execute({
-        sql: 'SELECT user_id FROM forum_threads WHERE id = ?',
-        args: [threadId],
-      });
-      if (check.rows.length === 0) {
-        return res.status(404).json({ error: 'Thread not found' });
-      }
-      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) {
-        return res.status(403).json({ error: 'Not your thread' });
-      }
+      const check = await client.execute({ sql: 'SELECT user_id FROM forum_threads WHERE id = ?', args: [threadId] });
+      if (check.rows.length === 0) return res.status(404).json({ error: 'Thread not found' });
+      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) return res.status(403).json({ error: 'Not your thread' });
 
-      await client.execute({
-        sql: `DELETE FROM forum_votes
-              WHERE (target_type = 'thread' AND target_id = ?)
-                 OR (target_type = 'reply' AND target_id IN (
-                       SELECT id FROM forum_replies WHERE thread_id = ?
-                     ))`,
-        args: [threadId, threadId],
-      });
-      await client.execute({
-        sql: `DELETE FROM emoji_reactions
-              WHERE (target_type = 'thread' AND target_id = ?)
-                 OR (target_type = 'reply' AND target_id IN (
-                       SELECT id FROM forum_replies WHERE thread_id = ?
-                     ))`,
-        args: [threadId, threadId],
-      });
-      await client.execute({
-        sql: 'DELETE FROM forum_replies WHERE thread_id = ?',
-        args: [threadId],
-      });
-      await client.execute({
-        sql: 'DELETE FROM forum_threads WHERE id = ?',
-        args: [threadId],
-      });
+      await client.execute({ sql: `DELETE FROM forum_votes WHERE (target_type = 'thread' AND target_id = ?) OR (target_type = 'reply' AND target_id IN (SELECT id FROM forum_replies WHERE thread_id = ?))`, args: [threadId, threadId] });
+      await client.execute({ sql: `DELETE FROM emoji_reactions WHERE (target_type = 'thread' AND target_id = ?) OR (target_type = 'reply' AND target_id IN (SELECT id FROM forum_replies WHERE thread_id = ?))`, args: [threadId, threadId] });
+      await client.execute({ sql: 'DELETE FROM forum_replies WHERE thread_id = ?', args: [threadId] });
+      await client.execute({ sql: 'DELETE FROM forum_threads WHERE id = ?', args: [threadId] });
 
       return res.status(200).json({ ok: true });
     }
@@ -322,39 +220,14 @@ export default async function handler(req, res) {
       const replyId = parseInt(id, 10);
       if (!replyId) return res.status(400).json({ error: 'Missing id' });
 
-      const check = await client.execute({
-        sql: 'SELECT user_id FROM forum_replies WHERE id = ?',
-        args: [replyId],
-      });
-      if (check.rows.length === 0) {
-        return res.status(404).json({ error: 'Reply not found' });
-      }
-      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) {
-        return res.status(403).json({ error: 'Not your reply' });
-      }
+      const check = await client.execute({ sql: 'SELECT user_id FROM forum_replies WHERE id = ?', args: [replyId] });
+      if (check.rows.length === 0) return res.status(404).json({ error: 'Reply not found' });
+      if (Number(check.rows[0].user_id) !== user.id && !user.is_admin) return res.status(403).json({ error: 'Not your reply' });
 
-      await client.execute({
-        sql: `DELETE FROM forum_votes
-              WHERE target_type = 'reply' AND target_id IN (
-                SELECT id FROM forum_replies WHERE id = ? OR parent_id = ?
-              )`,
-        args: [replyId, replyId],
-      });
-      await client.execute({
-        sql: `DELETE FROM emoji_reactions
-              WHERE target_type = 'reply' AND target_id IN (
-                SELECT id FROM forum_replies WHERE id = ? OR parent_id = ?
-              )`,
-        args: [replyId, replyId],
-      });
-      await client.execute({
-        sql: 'DELETE FROM forum_replies WHERE parent_id = ?',
-        args: [replyId],
-      });
-      await client.execute({
-        sql: 'DELETE FROM forum_replies WHERE id = ?',
-        args: [replyId],
-      });
+      await client.execute({ sql: `DELETE FROM forum_votes WHERE target_type = 'reply' AND target_id IN (SELECT id FROM forum_replies WHERE id = ? OR parent_id = ?)`, args: [replyId, replyId] });
+      await client.execute({ sql: `DELETE FROM emoji_reactions WHERE target_type = 'reply' AND target_id IN (SELECT id FROM forum_replies WHERE id = ? OR parent_id = ?)`, args: [replyId, replyId] });
+      await client.execute({ sql: 'DELETE FROM forum_replies WHERE parent_id = ?', args: [replyId] });
+      await client.execute({ sql: 'DELETE FROM forum_replies WHERE id = ?', args: [replyId] });
 
       return res.status(200).json({ ok: true });
     }
