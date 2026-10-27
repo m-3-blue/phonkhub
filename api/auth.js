@@ -51,16 +51,18 @@ function isValidEmail(e) {
   return typeof e === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 }
 
+// UPDATED: Cross-site compatible cookie
 function setSessionCookie(res, token, expiresAt) {
   res.setHeader('Set-Cookie',
     SESSION_COOKIE + '=' + token +
-    '; Path=/; HttpOnly; SameSite=Lax; Expires=' + new Date(expiresAt).toUTCString()
+    '; Path=/; HttpOnly; Secure; SameSite=None; Expires=' + new Date(expiresAt).toUTCString()
   );
 }
 
+// UPDATED: Cross-site compatible clear
 function clearSessionCookie(res) {
   res.setHeader('Set-Cookie',
-    SESSION_COOKIE + '=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0'
+    SESSION_COOKIE + '=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0'
   );
 }
 
