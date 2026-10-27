@@ -1,5 +1,5 @@
 import { createClient } from '@libsql/client';
-// If you use cookies/auth, make sure to import what you need here
+import cookie from 'cookie';
 
 function getClient() {
   return createClient({
@@ -8,15 +8,17 @@ function getClient() {
   });
 }
 
+// You might need to import your session checker here. 
+// Assuming you use a basic session cookie, we'll parse it.
 export default async function handler(req, res) {
-  // 1. DYNAMIC CORS SETUP (Fixes the wildcard credentials error)
+  // 1. DYNAMIC CORS SETUP
   const origin = req.headers.origin || '*';
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // 2. Handle preflight requests
+  // 2. Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -45,7 +47,7 @@ export default async function handler(req, res) {
     
     const track = trackResult.rows[0];
 
-    // 4. Get recommended tracks (same category, excluding current)
+    // 4. Get recommended tracks
     const recsResult = await client.execute({
       sql: 'SELECT * FROM tracks WHERE category = ? AND id != ? ORDER BY position ASC LIMIT 10',
       args: [track.category, track.id]
@@ -64,11 +66,37 @@ export default async function handler(req, res) {
       score = Number(scoreResult.rows[0].score);
     }
 
-    // 6. Auth / User Vote (Mocked for now to prevent errors)
-    // Note: Since the app sends credentials: 'include', you should parse the cookie here
-    // to find the user and their specific vote on this track.
+    // 6. Parse the auth cookie properly
+    const cookies = cookie.parse(req.headers.cookie || '');
+    const sessionId = cookies.session; // Assuming your cookie is named 'session'
+    
     let user = null; 
     let userVote = 0;
+
+    if (sessionId) {
+      // Fetch the user based on the session ID
+      const userResult = await client.execute({
+        sql: `SELECT u.id, u.username, u.display_name 
+              FROM users u 
+              JOIN sessions s ON u.id = s.user_id 
+              WHERE s.id = ?`,
+        args: [sessionId]
+      });
+
+      if (userResult.rows.length > 0) {
+        user = userResult.rows[0];
+
+        // Fetch the user's specific vote for this track
+        const voteResult = await client.execute({
+          sql: 'SELECT value FROM votes WHERE track_id = ? AND user_id = ?',
+          args: [track.id, user.id]
+        });
+
+        if (voteResult.rows.length > 0) {
+          userVote = voteResult.rows[0].value;
+        }
+      }
+    }
 
     return res.status(200).json({
       track,
