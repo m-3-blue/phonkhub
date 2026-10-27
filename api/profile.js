@@ -4,7 +4,6 @@ const SESSION_COOKIE = 'ph_session';
 const MAX_BIO = 200;
 const MAX_DISPLAY_NAME = 40;
 const DEFAULT_ACCENT = '#ff9900';
-
 const VALID_PLATFORMS = ['discord', 'youtube', 'soundcloud', 'twitter', 'instagram', 'spotify'];
 
 function getClient() {
@@ -33,15 +32,12 @@ function getSessionToken(req) {
 function isValidAccent(hex) {
   if (typeof hex !== 'string') return false;
   if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return false;
-
   var r = parseInt(hex.substr(1, 2), 16);
   var g = parseInt(hex.substr(3, 2), 16);
   var b = parseInt(hex.substr(5, 2), 16);
-
   var max = Math.max(r, g, b);
   var min = Math.min(r, g, b);
   var saturation = max === 0 ? 0 : (max - min) / max;
-
   return saturation >= 0.25;
 }
 
@@ -50,7 +46,7 @@ async function getCurrentUser(client, req) {
   if (!token) return null;
 
   const result = await client.execute({
-    sql: `SELECT u.id, u.username, u.display_name, u.bio, u.socials, u.accent_color
+    sql: `SELECT u.id, u.username, u.display_name, u.bio, u.socials, u.accent_color, u.created_at
           FROM sessions s JOIN users u ON u.id = s.user_id
           WHERE s.token = ? AND s.expires_at > ?`,
     args: [token, now()],
@@ -70,6 +66,7 @@ async function getCurrentUser(client, req) {
     bio: result.rows[0].bio || '',
     socials: socials,
     accent_color: result.rows[0].accent_color || DEFAULT_ACCENT,
+    created_at: result.rows[0].created_at
   };
 }
 
@@ -93,12 +90,65 @@ export default async function handler(req, res) {
       const user = await getCurrentUser(client, req);
       if (!user) return res.status(401).json({ error: 'Log in first' });
 
+      // 1. Get Followers Count
+      const followersRes = await client.execute({
+        sql: 'SELECT COUNT(*) as count FROM follows WHERE following_id = ?',
+        args: [user.id]
+      });
+      
+      // 2. Get Following Count
+      const followingRes = await client.execute({
+        sql: 'SELECT COUNT(*) as count FROM follows WHERE follower_id = ?',
+        args: [user.id]
+      });
+
+      // 3. Get Total Comments
+      const commentsCountRes = await client.execute({
+        sql: 'SELECT COUNT(*) as count FROM comments WHERE user_id = ?',
+        args: [user.id]
+      });
+
+      // 4. Get Total Votes
+      const votesCountRes = await client.execute({
+        sql: 'SELECT COUNT(*) as count FROM votes WHERE user_id = ?',
+        args: [user.id]
+      });
+
+      // 5. Get Recent Comments
+      const recentCommentsRes = await client.execute({
+        sql: `SELECT c.id, c.body, c.created_at, t.title as track_title, t.youtube_id
+              FROM comments c
+              JOIN tracks t ON t.id = c.track_id
+              WHERE c.user_id = ?
+              ORDER BY c.created_at DESC LIMIT 5`,
+        args: [user.id]
+      });
+
+      // 6. Get Recent Votes
+      const recentVotesRes = await client.execute({
+        sql: `SELECT v.value, v.created_at, t.title as track_title, t.youtube_id
+              FROM votes v
+              JOIN tracks t ON t.id = v.track_id
+              WHERE v.user_id = ?
+              ORDER BY v.created_at DESC LIMIT 5`,
+        args: [user.id]
+      });
+
       return res.status(200).json({
         profile: {
           display_name: user.display_name,
           bio: user.bio,
           socials: user.socials,
           accent_color: user.accent_color,
+          created_at: user.created_at,
+          stats: {
+            followers: followersRes.rows[0].count,
+            following: followingRes.rows[0].count,
+            comments: commentsCountRes.rows[0].count,
+            votes: votesCountRes.rows[0].count
+          },
+          recent_comments: recentCommentsRes.rows,
+          recent_votes: recentVotesRes.rows
         },
       });
     }
