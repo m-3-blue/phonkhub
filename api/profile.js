@@ -17,7 +17,13 @@ function now() {
   return new Date().toISOString();
 }
 
+// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
