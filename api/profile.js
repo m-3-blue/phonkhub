@@ -89,7 +89,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const sessionUser = await getCurrentUser(client, req);
       
-      // Check if viewing someone else
+      // Check if viewing someone else via ID or Username
       const targetId = req.query.id;
       const targetUsername = req.query.username;
       
@@ -100,7 +100,7 @@ export default async function handler(req, res) {
         let result;
         if (targetId) {
           result = await client.execute({ sql: 'SELECT * FROM users WHERE id = ?', args: [targetId] });
-        } else {
+        } else if (targetUsername) {
           result = await client.execute({ sql: 'SELECT * FROM users WHERE username = ?', args: [targetUsername] });
         }
         
