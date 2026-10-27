@@ -90,15 +90,19 @@ export default async function handler(req, res) {
       const user = await getCurrentUser(client, req);
       if (!user) return res.status(401).json({ error: 'Log in first' });
 
-      // 1. Get Followers Count
+      // 1. Get Followers Count & List
       const followersRes = await client.execute({
-        sql: 'SELECT COUNT(*) as count FROM follows WHERE following_id = ?',
+        sql: `SELECT u.id, u.username, u.display_name, u.accent_color 
+              FROM follows f JOIN users u ON u.id = f.follower_id 
+              WHERE f.following_id = ?`,
         args: [user.id]
       });
       
-      // 2. Get Following Count
+      // 2. Get Following Count & List
       const followingRes = await client.execute({
-        sql: 'SELECT COUNT(*) as count FROM follows WHERE follower_id = ?',
+        sql: `SELECT u.id, u.username, u.display_name, u.accent_color 
+              FROM follows f JOIN users u ON u.id = f.following_id 
+              WHERE f.follower_id = ?`,
         args: [user.id]
       });
 
@@ -142,11 +146,13 @@ export default async function handler(req, res) {
           accent_color: user.accent_color,
           created_at: user.created_at,
           stats: {
-            followers: followersRes.rows[0].count,
-            following: followingRes.rows[0].count,
+            followers: followersRes.rows.length,
+            following: followingRes.rows.length,
             comments: commentsCountRes.rows[0].count,
             votes: votesCountRes.rows[0].count
           },
+          followers_list: followersRes.rows,
+          following_list: followingRes.rows,
           recent_comments: recentCommentsRes.rows,
           recent_votes: recentVotesRes.rows
         },
@@ -173,7 +179,11 @@ export default async function handler(req, res) {
       if (socials && typeof socials === 'object' && !Array.isArray(socials)) {
         for (const platform of VALID_PLATFORMS) {
           if (typeof socials[platform] === 'string' && socials[platform].trim()) {
-            finalSocials[platform] = socials[platform].trim().slice(0, 120);
+            let link = socials[platform].trim().slice(0, 120);
+            if (!link.startsWith('http://') && !link.startsWith('https://')) {
+              link = 'https://' + link;
+            }
+            finalSocials[platform] = link;
           }
         }
       }
