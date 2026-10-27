@@ -2,8 +2,6 @@ import { createClient } from '@libsql/client';
 
 const SESSION_COOKIE = 'ph_session';
 
-// The full set of emojis users can react with.
-// Key = shortcode used in the DB, value = Twemoji CDN URL
 const EMOJI_SET = {
   fire: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f525.png',
   skull: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f480.png',
@@ -32,35 +30,29 @@ function now() {
 
 function getClientIp(req) {
   var fwd = req.headers['x-forwarded-for'];
-  if (typeof fwd === 'string' && fwd.length > 0) {
-    return fwd.split(',')[0].trim();
-  }
-  if (typeof req.headers['x-real-ip'] === 'string') {
-    return req.headers['x-real-ip'];
-  }
-  if (req.socket && req.socket.remoteAddress) {
-    return req.socket.remoteAddress;
-  }
+  if (typeof fwd === 'string' && fwd.length > 0) return fwd.split(',')[0].trim();
+  if (typeof req.headers['x-real-ip'] === 'string') return req.headers['x-real-ip'];
+  if (req.socket && req.socket.remoteAddress) return req.socket.remoteAddress;
   return 'unknown';
 }
 
 async function isIpBanned(client, ip) {
   if (!ip || ip === 'unknown') return false;
-  var result = await client.execute({
-    sql: 'SELECT 1 FROM banned_ips WHERE ip = ?',
-    args: [ip],
-  });
+  var result = await client.execute({ sql: 'SELECT 1 FROM banned_ips WHERE ip = ?', args: [ip] });
   return result.rows.length > 0;
 }
 
+// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
     const [key, ...rest] = part.trim().split('=');
-    if (key === SESSION_COOKIE) {
-      return rest.join('=') || null;
-    }
+    if (key === SESSION_COOKIE) return rest.join('=') || null;
   }
   return null;
 }
@@ -70,9 +62,7 @@ async function getCurrentUser(client, req) {
   if (!token) return null;
 
   const result = await client.execute({
-    sql: `SELECT u.id, u.username
-          FROM sessions s JOIN users u ON u.id = s.user_id
-          WHERE s.token = ? AND s.expires_at > ?`,
+    sql: `SELECT u.id, u.username FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ? AND s.expires_at > ?`,
     args: [token, now()],
   });
 
@@ -120,6 +110,18 @@ async function getReactionsFor(client, targetType, targetIds, currentUserId) {
 }
 
 export default async function handler(req, res) {
+  // 1. DYNAMIC CORS SETUP
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   const client = getClient();
   const ip = getClientIp(req);
 
@@ -133,12 +135,8 @@ export default async function handler(req, res) {
       var targetType = req.query.target_type;
       var idsParam = req.query.ids;
 
-      if (targetType !== 'thread' && targetType !== 'reply') {
-        return res.status(400).json({ error: 'Invalid target_type' });
-      }
-      if (!idsParam) {
-        return res.status(400).json({ error: 'Missing ids' });
-      }
+      if (targetType !== 'thread' && targetType !== 'reply') return res.status(400).json({ error: 'Invalid target_type' });
+      if (!idsParam) return res.status(400).json({ error: 'Missing ids' });
 
       var ids = idsParam.split(',').map(function (s) { return parseInt(s, 10); }).filter(function (n) { return !isNaN(n); });
       if (ids.length === 0) return res.status(400).json({ error: 'No valid ids' });
@@ -159,22 +157,13 @@ export default async function handler(req, res) {
       var pTargetId = parseInt(body.target_id, 10);
       var pEmoji = body.emoji;
 
-      if (pTargetType !== 'thread' && pTargetType !== 'reply') {
-        return res.status(400).json({ error: 'Invalid target_type' });
-      }
+      if (pTargetType !== 'thread' && pTargetType !== 'reply') return res.status(400).json({ error: 'Invalid target_type' });
       if (!pTargetId) return res.status(400).json({ error: 'Missing target_id' });
-      if (!pEmoji || !EMOJI_SET[pEmoji]) {
-        return res.status(400).json({ error: 'Invalid emoji' });
-      }
+      if (!pEmoji || !EMOJI_SET[pEmoji]) return res.status(400).json({ error: 'Invalid emoji' });
 
       var table = pTargetType === 'thread' ? 'forum_threads' : 'forum_replies';
-      var targetCheck = await client.execute({
-        sql: 'SELECT id FROM ' + table + ' WHERE id = ?',
-        args: [pTargetId],
-      });
-      if (targetCheck.rows.length === 0) {
-        return res.status(404).json({ error: 'Target not found' });
-      }
+      var targetCheck = await client.execute({ sql: 'SELECT id FROM ' + table + ' WHERE id = ?', args: [pTargetId] });
+      if (targetCheck.rows.length === 0) return res.status(404).json({ error: 'Target not found' });
 
       var existing = await client.execute({
         sql: 'SELECT 1 FROM emoji_reactions WHERE user_id = ? AND target_type = ? AND target_id = ? AND emoji = ?',
@@ -189,7 +178,6 @@ export default async function handler(req, res) {
         });
         nowReacted = false;
       } else {
-        // INSERT OR IGNORE handles race conditions where the row was just added
         await client.execute({
           sql: 'INSERT OR IGNORE INTO emoji_reactions (user_id, target_type, target_id, emoji, created_at) VALUES (?, ?, ?, ?, ?)',
           args: [user.id, pTargetType, pTargetId, pEmoji, now()],
@@ -199,11 +187,7 @@ export default async function handler(req, res) {
 
       var updated = await getReactionsFor(client, pTargetType, [pTargetId], user.id);
 
-      return res.status(200).json({
-        ok: true,
-        userReacted: nowReacted,
-        reactions: updated[pTargetId] || {},
-      });
+      return res.status(200).json({ ok: true, userReacted: nowReacted, reactions: updated[pTargetId] || {} });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
