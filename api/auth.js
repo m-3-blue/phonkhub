@@ -66,7 +66,13 @@ function clearSessionCookie(res) {
   );
 }
 
+// UPDATED: Check Authorization header first (Capacitor App), fallback to cookies (Web)
 function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
@@ -149,6 +155,7 @@ export default async function handler(req, res) {
       setSessionCookie(res, token, expiresAt);
       return res.status(200).json({
         user: { id: userId, username, display_name: finalDisplayName, is_admin: false },
+        token: token // Added for Capacitor
       });
     }
 
@@ -199,6 +206,7 @@ export default async function handler(req, res) {
           display_name: user.display_name || user.username,
           is_admin: !!user.is_admin,
         },
+        token: token // Added for Capacitor
       });
     }
 
