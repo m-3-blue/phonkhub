@@ -1,5 +1,7 @@
 import { createClient } from '@libsql/client';
 
+const SESSION_COOKIE = 'ph_session';
+
 function getClient() {
   return createClient({
     url: process.env.TURSO_DATABASE_URL,
@@ -34,7 +36,37 @@ async function isIpBanned(client, ip) {
   return result.rows.length > 0;
 }
 
+// --- THE FIX: Check Authorization header first for Capacitor ---
+function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
+  const raw = req.headers.cookie || '';
+  const parts = raw.split(';');
+  for (const part of parts) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === SESSION_COOKIE) {
+      return rest.join('=') || null;
+    }
+  }
+  return null;
+}
+
 export default async function handler(req, res) {
+  // 1. DYNAMIC CORS SETUP
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -171,15 +203,7 @@ export default async function handler(req, res) {
 
       let userVotes = {};
 
-      const rawCookie = req.headers.cookie || '';
-      let token = null;
-      for (const part of rawCookie.split(';')) {
-        const [key, ...rest] = part.trim().split('=');
-        if (key === 'ph_session') {
-          token = rest.join('=') || null;
-          break;
-        }
-      }
+      const token = getSessionToken(req);
 
       let user = null;
       if (token) {
