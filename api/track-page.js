@@ -1,7 +1,5 @@
 import { createClient } from '@libsql/client';
 
-const SESSION_COOKIE = 'ph_session';
-
 function getClient() {
   return createClient({
     url: process.env.TURSO_DATABASE_URL,
@@ -9,104 +7,70 @@ function getClient() {
   });
 }
 
-function now() {
-  return new Date().toISOString();
-}
-
-function getSessionToken(req) {
-  const raw = req.headers.cookie || '';
-  const parts = raw.split(';');
-  for (const part of parts) {
-    const [key, ...rest] = part.trim().split('=');
-    if (key === SESSION_COOKIE) {
-      return rest.join('=') || null;
-    }
-  }
-  return null;
-}
-
-async function getCurrentUser(client, req) {
-  const token = getSessionToken(req);
-  if (!token) return null;
-
-  const result = await client.execute({
-    sql: `SELECT u.id, u.username, u.display_name, u.is_admin 
-          FROM sessions s JOIN users u ON u.id = s.user_id 
-          WHERE s.token = ? AND s.expires_at > ?`,
-    args: [token, now()],
-  });
-
-  if (result.rows.length === 0) return null;
-  return {
-    id: result.rows[0].id,
-    username: result.rows[0].username,
-    display_name: result.rows[0].display_name || result.rows[0].username,
-    is_admin: !!result.rows[0].is_admin,
-  };
-}
-
 export default async function handler(req, res) {
+  // 1. Allow requests from the app (localhost, Vercel, or native Capacitor)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const youtubeId = req.query.youtube_id;
   if (!youtubeId) {
-    return res.status(400).json({ error: 'Missing youtube_id' });
+    return res.status(400).json({ error: 'youtube_id is required' });
   }
 
   const client = getClient();
 
   try {
-    // 1. Fetch the track
+    // 3. Get the specific track
     const trackResult = await client.execute({
-      sql: 'SELECT id, position, youtube_id, title, artist, tags, category FROM tracks WHERE youtube_id = ?',
-      args: [youtubeId],
+      sql: 'SELECT * FROM tracks WHERE youtube_id = ?',
+      args: [youtubeId]
     });
-
+    
     if (trackResult.rows.length === 0) {
       return res.status(404).json({ error: 'Track not found' });
     }
-
+    
     const track = trackResult.rows[0];
-    const trackId = track.id;
 
-    // 2. Fetch vote score and user vote
-    const scoreResult = await client.execute({
-      sql: 'SELECT COALESCE(SUM(value), 0) AS score FROM votes WHERE track_id = ?',
-      args: [trackId],
+    // 4. Get recommended tracks (same category, excluding current)
+    const recsResult = await client.execute({
+      sql: 'SELECT * FROM tracks WHERE category = ? AND id != ? ORDER BY position ASC LIMIT 10',
+      args: [track.category, track.id]
     });
-    const score = Number(scoreResult.rows[0].score) || 0;
+    
+    const recommended = recsResult.rows;
 
-    const user = await getCurrentUser(client, req);
-    let userVote = 0;
-    if (user) {
-      const voteResult = await client.execute({
-        sql: 'SELECT value FROM votes WHERE track_id = ? AND user_id = ?',
-        args: [trackId, user.id],
-      });
-      if (voteResult.rows.length > 0) {
-        userVote = Number(voteResult.rows[0].value);
-      }
+    // 5. Get the score for this track
+    const scoreResult = await client.execute({
+      sql: 'SELECT SUM(value) as score FROM votes WHERE track_id = ?',
+      args: [track.id]
+    });
+    
+    let score = 0;
+    if (scoreResult.rows.length > 0 && scoreResult.rows[0].score !== null) {
+      score = Number(scoreResult.rows[0].score);
     }
 
-    // 3. Fetch recommended tracks (e.g., 3 random tracks from the same category, or just top 3)
-    // We'll just grab 3 random tracks that aren't the current one
-    const recsResult = await client.execute({
-      sql: `SELECT id, position, youtube_id, title, artist 
-            FROM tracks 
-            WHERE id != ? 
-            ORDER BY RANDOM() 
-            LIMIT 3`,
-      args: [trackId],
-    });
+    // 6. Check if the current user has voted (Requires auth logic)
+    let user = null; 
+    let userVote = 0;
 
     return res.status(200).json({
-      track: track,
-      score: score,
-      userVote: userVote,
-      user: user,
-      recommended: recsResult.rows,
+      track,
+      recommended,
+      score,
+      user,
+      userVote
     });
 
   } catch (err) {
