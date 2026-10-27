@@ -55,10 +55,26 @@ function getSessionToken(req) {
 }
 
 export default async function handler(req, res) {
-  // 1. DYNAMIC CORS SETUP
-  const origin = req.headers.origin || '*';
-  res.setHeader('Access-Control-Allow-Origin', origin);
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  // 1. STRICT CORS SETUP
+  const ALLOWED_ORIGINS = [
+    'https://o-phonkhub.vercel.app',
+    'https://phonkhub.vercel.app',
+    'https://localhost',
+    'capacitor://localhost',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ];
+
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  } else if (!origin) {
+    // Allow server-to-server or curl (no browser origin)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  // If origin is set but not in the list, we don't send CORS headers → browser blocks it
+  
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
