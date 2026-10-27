@@ -13,7 +13,13 @@ function now() {
   return new Date().toISOString();
 }
 
+// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
@@ -39,6 +45,18 @@ async function getCurrentUser(client, req) {
 }
 
 export default async function handler(req, res) {
+  // 1. DYNAMIC CORS SETUP
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   const client = getClient();
   const action = req.query.action;
 
