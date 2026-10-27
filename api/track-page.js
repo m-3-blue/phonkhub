@@ -1,4 +1,5 @@
 import { createClient } from '@libsql/client';
+// If you use cookies/auth, make sure to import what you need here
 
 function getClient() {
   return createClient({
@@ -8,9 +9,11 @@ function getClient() {
 }
 
 export default async function handler(req, res) {
-  // 1. Allow requests from the app (localhost, Vercel, or native Capacitor)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  // 1. DYNAMIC CORS SETUP (Fixes the wildcard credentials error)
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   // 2. Handle preflight requests
@@ -61,7 +64,9 @@ export default async function handler(req, res) {
       score = Number(scoreResult.rows[0].score);
     }
 
-    // 6. Check if the current user has voted (Requires auth logic)
+    // 6. Auth / User Vote (Mocked for now to prevent errors)
+    // Note: Since the app sends credentials: 'include', you should parse the cookie here
+    // to find the user and their specific vote on this track.
     let user = null; 
     let userVote = 0;
 
