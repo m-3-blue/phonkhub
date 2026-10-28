@@ -70,10 +70,8 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   } else if (!origin) {
-    // Allow server-to-server or curl (no browser origin)
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
-  // If origin is set but not in the list, we don't send CORS headers → browser blocks it
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -155,6 +153,10 @@ export default async function handler(req, res) {
     }
 
     // -------- SINGLE THREAD WITH REPLIES --------
+    if (action === 'thread') {
+      const threadId = parseInt(req.query.id, 10);
+      if (!threadId) return res.status(400).json({ error: 'Missing id' });
+
       const threadResult = await client.execute({
         sql: `SELECT
                 t.id, t.title, t.body, t.created_at, t.edited_at, t.score, t.category_id,
@@ -165,21 +167,6 @@ export default async function handler(req, res) {
               JOIN forum_categories c ON c.id = t.category_id
               WHERE t.id = ?`,
         args: [threadId],
-      });
-
-      // ... (rest of the code)
-
-      return res.status(200).json({
-        thread: {
-          // ... other fields
-          category: {
-            slug: thread.category_slug,
-            name: thread.category_name,
-            admin_only: !!thread.admin_only // Add this line
-          },
-          // ...
-        },
-        // ...
       });
 
       if (threadResult.rows.length === 0) {
@@ -276,6 +263,7 @@ export default async function handler(req, res) {
           category: {
             slug: thread.category_slug,
             name: thread.category_name,
+            admin_only: !!thread.admin_only // Added this for the frontend fix
           },
           user: {
             id: thread.user_id,
