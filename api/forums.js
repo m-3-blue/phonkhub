@@ -155,20 +155,31 @@ export default async function handler(req, res) {
     }
 
     // -------- SINGLE THREAD WITH REPLIES --------
-    if (action === 'thread') {
-      const threadId = parseInt(req.query.id, 10);
-      if (!threadId) return res.status(400).json({ error: 'Missing id' });
-
       const threadResult = await client.execute({
         sql: `SELECT
                 t.id, t.title, t.body, t.created_at, t.edited_at, t.score, t.category_id,
                 u.id AS user_id, u.username, u.display_name,
-                c.slug AS category_slug, c.name AS category_name
+                c.slug AS category_slug, c.name AS category_name, c.admin_only
               FROM forum_threads t
               JOIN users u ON u.id = t.user_id
               JOIN forum_categories c ON c.id = t.category_id
               WHERE t.id = ?`,
         args: [threadId],
+      });
+
+      // ... (rest of the code)
+
+      return res.status(200).json({
+        thread: {
+          // ... other fields
+          category: {
+            slug: thread.category_slug,
+            name: thread.category_name,
+            admin_only: !!thread.admin_only // Add this line
+          },
+          // ...
+        },
+        // ...
       });
 
       if (threadResult.rows.length === 0) {
