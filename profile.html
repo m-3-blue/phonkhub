@@ -1046,25 +1046,26 @@
       var displayName = user.display_name || user.username;
       var isOwnProfile = currentUser && currentUser.username === user.username;
       var accent = user.accent_color || '#ff9900';
-let badgeHtml = '';
-if (p.is_admin === 1 || p.is_booster === 1) {
-  badgeHtml = `
-    <span class="user-badges" style="display: inline-flex; gap: 6px; align-items: center; vertical-align: middle; margin-left: 6px;">
+      var badgeHtml = '';
+      if (user.is_admin === 1 || user.is_booster === 1) {
+        badgeHtml = `
+          <span class="user-badges" style="display: inline-flex; gap: 6px; align-items: center; vertical-align: middle; margin-left: 6px;">
+            
+            ${user.is_admin === 1 ? `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 24px; height: 24px; display: block;"></span>` : ''}
+            
+            ${user.is_booster === 1 ? `
+              <span class="user-badge booster-glow" title="Booster">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; display: block;">
+                  <rect x="2" y="4" width="20" height="16" rx="4" fill="black" />
+                  <text x="12" y="15.5" font-family="Arial, sans-serif" font-size="7.5" font-weight="900" fill="white" text-anchor="middle" letter-spacing="0.5">VIP</text>
+                </svg>
+              </span>
+            ` : ''}
+            
+          </span>
+        `;
+      }
       
-      ${p.is_admin === 1 ? `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 24px; height: 24px; display: block;"></span>` : ''}
-      
-      ${p.is_booster === 1 ? `
-        <span class="user-badge booster-glow" title="Booster">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; display: block;">
-            <rect x="2" y="4" width="20" height="16" rx="4" fill="black" />
-            <text x="12" y="15.5" font-family="Arial, sans-serif" font-size="7.5" font-weight="900" fill="white" text-anchor="middle" letter-spacing="0.5">VIP</text>
-          </svg>
-        </span>
-      ` : ''}
-      
-    </span>
-  `;
-}
       document.documentElement.style.setProperty('--accent', accent);
       document.documentElement.style.setProperty('--accent-rgb', hexToRgbString(accent));
       document.title = displayName + ' (@' + user.username + ') — PhonkHub';
