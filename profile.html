@@ -678,10 +678,54 @@
     object-fit: contain;
   }
 
-  .booster-glow {
-  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) 
-          drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
-  animation: gold-pulse 2s infinite alternate;
+/* The container for the glow */
+.booster-glow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;  
+  height: 24px;
+  border-radius: 50%;
+}
+
+/* The Spotlight Ring */
+.booster-glow::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: -3px; right: -3px; bottom: -3px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 90, 0, 0.1) 0deg,
+    rgba(255, 90, 0, 0.1) 280deg,
+    #FFF 340deg,
+    #FFF 360deg
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  animation: rotate-spotlight 2.5s linear infinite;
+  z-index: 1;
+}
+
+/* The Icon */
+.booster-glow img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px; /* Rounds the edges of the black box */
+  
+  /* The orange recolor + double glow */
+  filter: invert(1) sepia(1) saturate(15) hue-rotate(350deg) brightness(0.9) contrast(3) 
+          drop-shadow(0 0 4px rgba(255, 90, 0, 1)) 
+          drop-shadow(0 0 12px rgba(255, 90, 0, 0.8));
+}
+
+@keyframes rotate-spotlight {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes gold-pulse {
@@ -1010,9 +1054,11 @@
       if (user.is_admin === 1) {
         badgeHtml = `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="PhonkHub Admin"></span>`;
       } else if (user.is_booster === 1) {
-        badgeHtml = `<span class="user-badge"><img src="https://scontent.flca1-4.fna.fbcdn.net/v/t1.15752-9/868934148_1897938614897458_109131166346084021_n.png?stp=cp0_dst-png&_nc_cat=104&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=_9Qr4xmiomsQ7kNvwHBMTPG&_nc_oc=AdqvAU0HDkKANhDTJ0tZ-fW0n95yJpQmUJFg7doJXNEfKWSE0fA10GDrWdKLoasSywA&_nc_zt=23&_nc_ht=scontent.flca1-4.fna&_nc_ss=7baaf&oh=03_Q7cD6wHlBP8tcGniKzKU5-FNlN_-ax7E9KBtvJ4LbihTuPCkJQ&oe=6B0C30C0" alt="Booster" title="PhonkHub Booster"></span>`;
-      }
-
+    badgeHtml += `
+      <span class="user-badge booster-glow" title="Booster">
+        <img src="https://oshjlw0mez8w9slz.public.blob.vercel-storage.com/868934148_1897938614897458_109131166346084021_n.png" alt="Booster">
+      </span>`;
+  }
       document.documentElement.style.setProperty('--accent', accent);
       document.documentElement.style.setProperty('--accent-rgb', hexToRgbString(accent));
       document.title = displayName + ' (@' + user.username + ') — PhonkHub';
