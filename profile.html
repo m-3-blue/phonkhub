@@ -874,13 +874,15 @@
 
   function socialHref(platform, value) {
     var v = value.trim();
-    if (/^https?:\/\//i.test(v)) return v; // If they pasted a full URL, use it
     
-    // Strip the @ symbol if they included it
-    v = v.replace(/^@/, '');
+    // If it's a real URL (contains a dot or a slash after the protocol), keep it
+    if (/^https?:\/\/[^\/]+\.[^\/]+/i.test(v)) return v; 
+    
+    // Otherwise, strip the protocol and the @ symbol so we can build it
+    v = v.replace(/^https?:\/\//i, '').replace(/^@/, '');
 
     switch (platform) {
-      case 'discord': return null; // Discord doesn't have a standard web profile URL
+      case 'discord': return null; 
       case 'youtube': return 'https://youtube.com/@' + v;
       case 'soundcloud': return 'https://soundcloud.com/' + v;
       case 'twitter': return 'https://x.com/' + v;
@@ -1023,7 +1025,7 @@
         }).join('');
         aboutHtml += '<div class="socials-list">' + socialHtml + '</div>';
       }
-      
+
       aboutHtml += '<div class="about-row"><div class="about-label">Joined</div><div class="about-value">' + formatDate(user.created_at) + '</div></div><div class="about-row"><div class="about-label">Comments</div><div class="about-value">' + counts.comments + '</div></div><div class="about-row"><div class="about-label">Votes Cast</div><div class="about-value">' + counts.votes + '</div></div>';
 
       if (!user.bio && (!user.socials || Object.keys(user.socials).length === 0)) aboutHtml = '<div class="empty-section" style="margin-bottom: 1rem;">No bio or social links yet</div>' + aboutHtml;
