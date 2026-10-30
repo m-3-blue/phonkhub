@@ -53,7 +53,7 @@ export default async function handler(req, res) {
 
   try {
     const userResult = await client.execute({
-      sql: `SELECT id, username, display_name, bio, socials, accent_color, created_at,
+      sql: `SELECT id, username, display_name, bio, socials, accent_color, created_at, is_admin, is_booster, avatar_url, banner_url,
               (SELECT COUNT(*) FROM follows WHERE following_id = users.id) AS follower_count,
               (SELECT COUNT(*) FROM follows WHERE follower_id = users.id) AS following_count
             FROM users WHERE username = ?`,
@@ -123,6 +123,10 @@ export default async function handler(req, res) {
         socials: socials,
         accent_color: user.accent_color || DEFAULT_ACCENT,
         created_at: user.created_at,
+        is_admin: user.is_admin || 0,        // <--- ADD THIS
+        is_booster: user.is_booster || 0,    // <--- ADD THIS
+        avatar_url: user.avatar_url || null, // <--- ADD THIS
+        banner_url: user.banner_url || null, // <--- ADD THIS
         follower_count: Number(user.follower_count) || 0,
         following_count: Number(user.following_count) || 0,
         is_following: isFollowing,
