@@ -678,7 +678,6 @@
     object-fit: contain;
   }
 
-/* The Icon */
 .booster-glow img {
   position: relative;
   z-index: 2;
@@ -687,11 +686,11 @@
   object-fit: contain;
   border-radius: 6px; 
   
-  /* Use this exact filter combo for the Vercel SVG */
-  filter: invert(1) sepia(1) saturate(20) hue-rotate(350deg) 
+  /* The updated filter */
+  filter: invert(1) sepia(1) saturate(15) hue-rotate(350deg) brightness(1.2) 
           drop-shadow(0 0 4px rgba(255, 90, 0, 1)) 
           drop-shadow(0 0 12px rgba(255, 90, 0, 0.8));
-} 
+}
 
   /* NOTIFICATION CSS */
   .notif-wrapper { position: relative; display: inline-block; }
