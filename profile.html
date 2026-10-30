@@ -1050,15 +1050,26 @@
       var displayName = user.display_name || user.username;
       var isOwnProfile = currentUser && currentUser.username === user.username;
       var accent = user.accent_color || '#ff9900';
-      var badgeHtml = '';
-      if (user.is_admin === 1) {
-        badgeHtml = `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="PhonkHub Admin"></span>`;
-      } else if (user.is_booster === 1) {
+      let badgeHtml = '';
+
+if (p.is_admin === 1 || p.is_booster === 1) {
+  badgeHtml = `<span class="user-badges" style="display: inline-flex; gap: 6px; align-items: center; vertical-align: middle; margin-left: 6px;">`;
+  
+  // 1. Admin Badge
+  if (p.is_admin === 1) {
+    badgeHtml += `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 24px; height: 24px; display: block;"></span>`;
+  }
+  
+  // 2. Booster Badge (Orange Glow)
+  if (p.is_booster === 1) {
     badgeHtml += `
       <span class="user-badge booster-glow" title="Booster">
         <img src="https://oshjlw0mez8w9slz.public.blob.vercel-storage.com/868934148_1897938614897458_109131166346084021_n.png" alt="Booster">
       </span>`;
   }
+  
+  badgeHtml += `</span>`;
+}
       document.documentElement.style.setProperty('--accent', accent);
       document.documentElement.style.setProperty('--accent-rgb', hexToRgbString(accent));
       document.title = displayName + ' (@' + user.username + ') — PhonkHub';
