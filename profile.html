@@ -678,42 +678,6 @@
     object-fit: contain;
   }
 
-/* The container */
-.booster-glow {
-  position: relative;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  width: 24px !important;  
-  height: 24px !important;
-  border-radius: 6px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
-/* The Spotlight Ring */
-.booster-glow::before {
-  content: '';
-  position: absolute;
-  top: -2px; left: -2px; right: -2px; bottom: -2px;
-  border-radius: 8px;
-  background: conic-gradient(
-    from 0deg,
-    rgba(255, 90, 0, 0.2) 0deg,
-    rgba(255, 90, 0, 0.2) 280deg,
-    #FFF 340deg,
-    #FFF 360deg
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  padding: 2px;
-  animation: rotate-spotlight 2.5s linear infinite;
-  z-index: 1;
-}
-
 /* The SVG Icon */
 .booster-glow svg {
   position: relative;
