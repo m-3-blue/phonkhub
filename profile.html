@@ -659,20 +659,20 @@
     letter-spacing: 0.05em;
   }
 
-    .user-badge {
+  .user-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid #333;
-    padding: 0.15rem 0.3rem;
+    padding: 0.15rem 0.25rem; /* Made the padding slightly smaller */
     border-radius: 4px;
-    line-height: 1;
+    line-height: 0; /* Fixes weird gaps inside the box */
   }
 
   .user-badge img {
-    width: 1.2em; /* This makes the image scale exactly with the text size! */
-    height: 1.2em;
+    width: 1em; /* Made it exactly the same height as the text */
+    height: 1em;
     display: block;
     object-fit: contain;
   }
@@ -1037,7 +1037,7 @@
           '<div class="profile-body">' +
             actionBtnHtml +
             '<div class="avatar"' + avatarStyle + '>' + esc(displayName.charAt(0).toUpperCase()) + '</div>' +
-            '<div class="display-name" style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">' + esc(displayName) + badgeHtml + '</div>' +
+            '<div class="display-name" style="display: flex; align-items: center; gap: 0.2rem; flex-wrap: wrap;">' + esc(displayName) + badgeHtml + '</div>' +
             '<div class="handle">@' + esc(user.username) + '</div>' +
             '<div class="profile-stats">' +
               '<button class="stat-link" onclick="openModal(\'followers\', \'' + esc(user.username) + '\')"><span class="stat-num" id="followerCount">' + user.follower_count + '</span> Followers</button>' +
