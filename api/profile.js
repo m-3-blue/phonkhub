@@ -72,7 +72,11 @@ async function getCurrentUser(client, req) {
     bio: result.rows[0].bio || '',
     socials: socials,
     accent_color: result.rows[0].accent_color || DEFAULT_ACCENT,
-    created_at: result.rows[0].created_at
+    created_at: result.rows[0].created_at,
+    is_admin: result.rows[0].is_admin || 0,
+    is_booster: result.rows[0].is_booster || 0,
+    avatar_url: result.rows[0].avatar_url || null,
+    banner_url: result.rows[0].banner_url || null
   };
 }
 
@@ -92,10 +96,8 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   } else if (!origin) {
-    // Allow server-to-server or curl (no browser origin)
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
-  // If origin is set but not in the list, we don't send CORS headers → browser blocks it
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -141,7 +143,11 @@ export default async function handler(req, res) {
           bio: row.bio || '',
           socials: socials,
           accent_color: row.accent_color || DEFAULT_ACCENT,
-          created_at: row.created_at
+          created_at: row.created_at,
+          is_admin: row.is_admin || 0,
+          is_booster: row.is_booster || 0,
+          avatar_url: row.avatar_url || null,
+          banner_url: row.banner_url || null
         };
       }
 
@@ -199,6 +205,10 @@ export default async function handler(req, res) {
           socials: targetUser.socials,
           accent_color: targetUser.accent_color,
           created_at: targetUser.created_at,
+          is_admin: targetUser.is_admin,
+          is_booster: targetUser.is_booster,
+          avatar_url: targetUser.avatar_url,
+          banner_url: targetUser.banner_url,
           stats: {
             followers: followersRes.rows.length,
             following: followingRes.rows.length,
@@ -235,6 +245,9 @@ export default async function handler(req, res) {
         for (const platform of VALID_PLATFORMS) {
           if (typeof socials[platform] === 'string' && socials[platform].trim()) {
             let link = socials[platform].trim().slice(0, 120);
+            if (!link.startsWith('http://') && !link.startsWith('https://')) {
+              link = 'https://' + link;
+            }
             finalSocials[platform] = link;
           }
         }
