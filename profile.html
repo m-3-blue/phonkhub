@@ -875,11 +875,12 @@
   function socialHref(platform, value) {
     var v = value.trim();
     
-    // If it's a real URL (contains a dot or a slash after the protocol), keep it
-    if (/^https?:\/\/[^\/]+\.[^\/]+/i.test(v)) return v; 
-    
-    // Otherwise, strip the protocol and the @ symbol so we can build it
-    v = v.replace(/^https?:\/\//i, '').replace(/^@/, '');
+    // If it looks like a full URL or domain path, just use it
+    if (/^https?:\/\//i.test(v)) return v; 
+    if (v.includes('/')) return 'https://' + v;
+
+    // Otherwise, it's a username. Strip any @ and build the profile link.
+    v = v.replace(/^@/, '');
 
     switch (platform) {
       case 'discord': return null; 
@@ -888,7 +889,7 @@
       case 'twitter': return 'https://x.com/' + v;
       case 'instagram': return 'https://instagram.com/' + v;
       case 'spotify': return 'https://open.spotify.com/user/' + v;
-      default: return null;
+      default: return 'https://' + v; // Fallback
     }
   }
 
