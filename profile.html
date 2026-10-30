@@ -963,6 +963,12 @@
       var displayName = user.display_name || user.username;
       var isOwnProfile = currentUser && currentUser.username === user.username;
       var accent = user.accent_color || '#ff9900';
+      var badgeHtml = '';
+      if (user.is_admin === 1) {
+        badgeHtml = `<img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" width="24" height="24" alt="Admin" title="Admin" style="margin-left: 6px; vertical-align: middle; display: inline-block;">`;
+      } else if (user.is_booster === 1) {
+        badgeHtml = `<img src="https://cdn3.emoji.gg/emojis/5611-evolving-badge-nitro-15-months.png" width="24" height="24" alt="Booster" title="Booster" style="margin-left: 6px; vertical-align: middle; display: inline-block;">`;
+      }
 
       document.documentElement.style.setProperty('--accent', accent);
       document.documentElement.style.setProperty('--accent-rgb', hexToRgbString(accent));
@@ -995,6 +1001,9 @@
 
       if (!user.bio && (!user.socials || Object.keys(user.socials).length === 0)) aboutHtml = '<div class="empty-section" style="margin-bottom: 1rem;">No bio or social links yet</div>' + aboutHtml;
 
+   var bannerStyle = user.banner_url ? ' style="background-image: url(\'' + user.banner_url + '\'); background-size: cover; background-position: center;"' : '';
+   var avatarStyle = user.avatar_url ? ' style="background-image: url(\'' + user.avatar_url + '\'); background-size: cover; background-position: center; color: transparent;"' : '';
+
       var actionBtnHtml = '';
       if (isOwnProfile) {
         actionBtnHtml = '<a class="edit-profile-btn" href="/edit-profile">Edit Profile</a>';
@@ -1006,11 +1015,11 @@
       main.innerHTML =
         '<a class="back-link" href="/">← Back to home</a>' +
         '<div class="profile-box">' +
-          '<div class="banner"></div>' +
+          '<div class="banner"' + bannerStyle + '></div>' +
           '<div class="profile-body">' +
             actionBtnHtml +
-            '<div class="avatar">' + esc(displayName.charAt(0).toUpperCase()) + '</div>' +
-            '<div class="display-name">' + esc(displayName) + '</div>' +
+            '<div class="avatar"' + avatarStyle + '>' + esc(displayName.charAt(0).toUpperCase()) + '</div>' +
+            '<div class="display-name">' + esc(displayName) + badgeHtml + '</div>' +
             '<div class="handle">@' + esc(user.username) + '</div>' +
             '<div class="profile-stats">' +
               '<button class="stat-link" onclick="openModal(\'followers\', \'' + esc(user.username) + '\')"><span class="stat-num" id="followerCount">' + user.follower_count + '</span> Followers</button>' +
