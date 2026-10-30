@@ -678,48 +678,44 @@
     object-fit: contain;
   }
 
-/* The container for the glow */
+/* The container */
 .booster-glow {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;  
-  height: 24px;
-  border-radius: 50%;
+  border-radius: 6px;
 }
 
 /* The Spotlight Ring */
 .booster-glow::before {
   content: '';
   position: absolute;
-  top: -3px; left: -3px; right: -3px; bottom: -3px;
-  border-radius: 50%;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
+  border-radius: 8px;
   background: conic-gradient(
     from 0deg,
-    rgba(255, 90, 0, 0.1) 0deg,
-    rgba(255, 90, 0, 0.1) 280deg,
+    rgba(255, 90, 0, 0.2) 0deg,
+    rgba(255, 90, 0, 0.2) 280deg,
     #FFF 340deg,
     #FFF 360deg
   );
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 2px;
   animation: rotate-spotlight 2.5s linear infinite;
   z-index: 1;
 }
 
-/* The Icon */
-.booster-glow img {
+/* The SVG Icon */
+.booster-glow svg {
   position: relative;
   z-index: 2;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 6px; /* Rounds the edges of the black box */
-  
-  /* The orange recolor + double glow */
-  filter: invert(1) sepia(1) saturate(15) hue-rotate(350deg) brightness(0.9) contrast(3) 
-          drop-shadow(0 0 4px rgba(255, 90, 0, 1)) 
+  /* The orange color and the double glow */
+  fill: #FF5A00;
+  filter: drop-shadow(0 0 4px rgba(255, 90, 0, 1)) 
           drop-shadow(0 0 12px rgba(255, 90, 0, 0.8));
 }
 
@@ -1051,21 +1047,23 @@
       var isOwnProfile = currentUser && currentUser.username === user.username;
       var accent = user.accent_color || '#ff9900';
 let badgeHtml = '';
-
 if (p.is_admin === 1 || p.is_booster === 1) {
-  badgeHtml = `<span class="user-badges" style="display: inline-flex; gap: 6px; align-items: center; vertical-align: middle; margin-left: 6px;">`;
-  
-  // Admin Badge
-  if (p.is_admin === 1) {
-    badgeHtml += `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 24px; height: 24px; display: block;"></span>`;
-  }
-  
-  // Booster Badge
-  if (p.is_booster === 1) {
-    badgeHtml += `<span class="user-badge booster-glow" title="Booster"><img src="https://oshjlw0mez8w9slz.public.blob.vercel-storage.com/868934148_1897938614897458_109131166346084021_n.png" alt="Booster"></span>`;
-  }
-  
-  badgeHtml += `</span>`;
+  badgeHtml = `
+    <span class="user-badges" style="display: inline-flex; gap: 6px; align-items: center; vertical-align: middle; margin-left: 6px;">
+      
+      ${p.is_admin === 1 ? `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 24px; height: 24px; display: block;"></span>` : ''}
+      
+      ${p.is_booster === 1 ? `
+        <span class="user-badge booster-glow" title="Booster">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; display: block;">
+            <rect x="2" y="4" width="20" height="16" rx="4" fill="black" />
+            <text x="12" y="15.5" font-family="Arial, sans-serif" font-size="7.5" font-weight="900" fill="white" text-anchor="middle" letter-spacing="0.5">VIP</text>
+          </svg>
+        </span>
+      ` : ''}
+      
+    </span>
+  `;
 }
       document.documentElement.style.setProperty('--accent', accent);
       document.documentElement.style.setProperty('--accent-rgb', hexToRgbString(accent));
