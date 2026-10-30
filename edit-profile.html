@@ -483,6 +483,7 @@
       }
       var data = await res.json();
       var profile = data.profile || {};
+      var isPrivileged = (profile.is_admin === 1 || profile.is_booster === 1);
 
       state.accent_color = profile.accent_color || DEFAULT_ACCENT;
 
@@ -516,27 +517,27 @@
           '<div class="color-presets">' + presetSwatches + '</div>' +
           '<div class="color-hint" id="colorHint">Accent color for your profile</div>' +
 
-          // --- NEW IMAGES SECTION ---
-          '<div class="section-divider">Images (Admins & Boosters)</div>' +
-          
-          '<div class="form-group">' +
-            '<label>Avatar</label>' +
-            '<div style="display: flex; gap: 10px; align-items: center;">' +
-              '<div id="avatarPreview" style="width: 48px; height: 48px; border-radius: 50%; background: #222; background-size: cover; background-position: center; border: 1px solid #444;"></div>' +
-              '<input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="uploadImage(this, \'avatar\')">' +
-              '<button type="button" class="action-chip" onclick="document.getElementById(\'avatarUpload\').click()" style="cursor: pointer;">Upload Avatar</button>' +
+          (isPrivileged ? 
+            '<div class="section-divider">Images (Admins & Boosters)</div>' +
+            
+            '<div class="form-group">' +
+              '<label>Avatar</label>' +
+              '<div style="display: flex; gap: 12px; align-items: center;">' +
+                '<div id="avatarPreview" style="width: 56px; height: 56px; border-radius: 50%; background: #080808; background-size: cover; background-position: center; border: 1px solid #333;"></div>' +
+                '<input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="uploadImage(this, \'avatar\')">' +
+                '<label for="avatarUpload" class="action-chip accent" style="cursor: pointer; margin: 0;">Upload Avatar</label>' +
+              '</div>' +
             '</div>' +
-          '</div>' +
 
-          '<div class="form-group">' +
-            '<label>Banner</label>' +
-            '<div style="display: flex; gap: 10px; align-items: center;">' +
-              '<div id="bannerPreview" style="width: 120px; height: 48px; border-radius: 4px; background: #222; background-size: cover; background-position: center; border: 1px solid #444;"></div>' +
-              '<input type="file" id="bannerUpload" accept="image/*" style="display: none;" onchange="uploadImage(this, \'banner\')">' +
-              '<button type="button" class="action-chip" onclick="document.getElementById(\'bannerUpload\').click()" style="cursor: pointer;">Upload Banner</button>' +
-            '</div>' +
-          '</div>' +
-          // --- END NEW IMAGES SECTION ---
+            '<div class="form-group">' +
+              '<label>Banner</label>' +
+              '<div style="display: flex; gap: 12px; align-items: center;">' +
+                '<div id="bannerPreview" style="width: 140px; height: 56px; border-radius: 2px; background: #080808; background-size: cover; background-position: center; border: 1px solid #333;"></div>' +
+                '<input type="file" id="bannerUpload" accept="image/*" style="display: none;" onchange="uploadImage(this, \'banner\')">' +
+                '<label for="bannerUpload" class="action-chip accent" style="cursor: pointer; margin: 0;">Upload Banner</label>' +
+              '</div>' +
+            '</div>' 
+          : '') +
 
           '<div class="section-divider">Basics</div>' +
 
@@ -559,8 +560,10 @@
         '</div>';
 
       setTimeout(() => {
-        if (profile.avatar_url) document.getElementById('avatarPreview').style.backgroundImage = `url('${profile.avatar_url}')`;
-        if (profile.banner_url) document.getElementById('bannerPreview').style.backgroundImage = `url('${profile.banner_url}')`;
+        var avatarEl = document.getElementById('avatarPreview');
+        var bannerEl = document.getElementById('bannerPreview');
+        if (avatarEl && profile.avatar_url) avatarEl.style.backgroundImage = `url('${profile.avatar_url}')`;
+        if (bannerEl && profile.banner_url) bannerEl.style.backgroundImage = `url('${profile.banner_url}')`;
       }, 100);
 
       var colorPicker = document.getElementById('colorPicker');
@@ -764,7 +767,7 @@
     formData.append('file', file);
     formData.append('type', type);
 
-    var btn = input.previousElementSibling;
+    var btn = input.nextElementSibling;
     var originalText = btn.textContent;
     btn.textContent = 'Uploading...';
     btn.disabled = true;
