@@ -659,6 +659,24 @@
     letter-spacing: 0.05em;
   }
 
+    .user-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+    line-height: 1;
+  }
+
+  .user-badge img {
+    width: 1.2em; /* This makes the image scale exactly with the text size! */
+    height: 1.2em;
+    display: block;
+    object-fit: contain;
+  }
+
   /* NOTIFICATION CSS */
   .notif-wrapper { position: relative; display: inline-block; }
   .notif-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s; position: relative; }
@@ -965,9 +983,9 @@
       var accent = user.accent_color || '#ff9900';
       var badgeHtml = '';
       if (user.is_admin === 1) {
-        badgeHtml = `<img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" width="24" height="24" alt="Admin" title="Admin" style="margin-left: 6px; vertical-align: middle; display: inline-block;">`;
+        badgeHtml = `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="PhonkHub Admin"></span>`;
       } else if (user.is_booster === 1) {
-        badgeHtml = `<img src="https://cdn3.emoji.gg/emojis/5611-evolving-badge-nitro-15-months.png" width="24" height="24" alt="Booster" title="Booster" style="margin-left: 6px; vertical-align: middle; display: inline-block;">`;
+        badgeHtml = `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/5611-evolving-badge-nitro-15-months.png" alt="Booster" title="PhonkHub Booster"></span>`;
       }
 
       document.documentElement.style.setProperty('--accent', accent);
@@ -1019,7 +1037,7 @@
           '<div class="profile-body">' +
             actionBtnHtml +
             '<div class="avatar"' + avatarStyle + '>' + esc(displayName.charAt(0).toUpperCase()) + '</div>' +
-            '<div class="display-name">' + esc(displayName) + badgeHtml + '</div>' +
+            '<div class="display-name" style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">' + esc(displayName) + badgeHtml + '</div>' +
             '<div class="handle">@' + esc(user.username) + '</div>' +
             '<div class="profile-stats">' +
               '<button class="stat-link" onclick="openModal(\'followers\', \'' + esc(user.username) + '\')"><span class="stat-num" id="followerCount">' + user.follower_count + '</span> Followers</button>' +
