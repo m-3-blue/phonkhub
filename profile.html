@@ -872,19 +872,26 @@
 
   var PLATFORM_LABELS = { discord: 'Discord', youtube: 'YouTube', soundcloud: 'SoundCloud', twitter: 'Twitter', instagram: 'Instagram', spotify: 'Spotify' };
 
-  function socialHref(platform, value) {
-    var v = value.trim();
-    if (/^https?:\/\//i.test(v)) return v;
-    switch (platform) {
-      case 'discord': return null;
-      case 'youtube': return 'https://youtube.com/' + (v.startsWith('@') ? v : '@' + v);
-      case 'soundcloud': return 'https://soundcloud.com/' + v.replace(/^@/, '');
-      case 'twitter': return 'https://x.com/' + v.replace(/^@/, '');
-      case 'instagram': return 'https://instagram.com/' + v.replace(/^@/, '');
-      case 'spotify': return 'https://open.spotify.com/user/' + v.replace(/^@/, '');
-      default: return null;
-    }
+function getSocialUrl(platform, rawInput) {
+  if (!rawInput) return '#';
+  
+  // Clean the string: remove https://, http://, www., and @
+  let val = rawInput.trim()
+    .replace(/^https?:\/\//i, '')
+    .replace(/^www\./i, '')
+    .replace(/^@/, '')
+    .replace(/^\/+/, '');
+
+  // Build the proper URL
+  switch(platform) {
+    case 'youtube': return `https://youtube.com/@${val}`;
+    case 'twitter': return `https://x.com/${val}`;
+    case 'instagram': return `https://instagram.com/${val}`;
+    case 'spotify': return `https://open.spotify.com/user/${val}`;
+    case 'soundcloud': return `https://soundcloud.com/${val}`;
+    default: return `https://${val}`; // Discord and others fall back to raw URL
   }
+}
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
