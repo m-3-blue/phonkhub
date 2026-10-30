@@ -235,9 +235,6 @@ export default async function handler(req, res) {
         for (const platform of VALID_PLATFORMS) {
           if (typeof socials[platform] === 'string' && socials[platform].trim()) {
             let link = socials[platform].trim().slice(0, 120);
-            if (!link.startsWith('http://') && !link.startsWith('https://')) {
-              link = 'https://' + link;
-            }
             finalSocials[platform] = link;
           }
         }
