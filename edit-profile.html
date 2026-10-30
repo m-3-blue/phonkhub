@@ -516,6 +516,28 @@
           '<div class="color-presets">' + presetSwatches + '</div>' +
           '<div class="color-hint" id="colorHint">Accent color for your profile</div>' +
 
+          // --- NEW IMAGES SECTION ---
+          '<div class="section-divider">Images (Admins & Boosters)</div>' +
+          
+          '<div class="form-group">' +
+            '<label>Avatar</label>' +
+            '<div style="display: flex; gap: 10px; align-items: center;">' +
+              '<div id="avatarPreview" style="width: 48px; height: 48px; border-radius: 50%; background: #222; background-size: cover; background-position: center; border: 1px solid #444;"></div>' +
+              '<input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="uploadImage(this, \'avatar\')">' +
+              '<button type="button" class="action-chip" onclick="document.getElementById(\'avatarUpload\').click()" style="cursor: pointer;">Upload Avatar</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>Banner</label>' +
+            '<div style="display: flex; gap: 10px; align-items: center;">' +
+              '<div id="bannerPreview" style="width: 120px; height: 48px; border-radius: 4px; background: #222; background-size: cover; background-position: center; border: 1px solid #444;"></div>' +
+              '<input type="file" id="bannerUpload" accept="image/*" style="display: none;" onchange="uploadImage(this, \'banner\')">' +
+              '<button type="button" class="action-chip" onclick="document.getElementById(\'bannerUpload\').click()" style="cursor: pointer;">Upload Banner</button>' +
+            '</div>' +
+          '</div>' +
+          // --- END NEW IMAGES SECTION ---
+
           '<div class="section-divider">Basics</div>' +
 
           '<div class="form-group">' +
@@ -535,6 +557,11 @@
           '<button class="save-btn" id="saveBtn">Save Changes</button>' +
           '<div class="status" id="status"></div>' +
         '</div>';
+
+      setTimeout(() => {
+        if (profile.avatar_url) document.getElementById('avatarPreview').style.backgroundImage = `url('${profile.avatar_url}')`;
+        if (profile.banner_url) document.getElementById('bannerPreview').style.backgroundImage = `url('${profile.banner_url}')`;
+      }, 100);
 
       var colorPicker = document.getElementById('colorPicker');
       var colorText = document.getElementById('colorText');
@@ -728,6 +755,40 @@
       setInterval(loadNotifications, 30000);
     } catch (err) {}
   })();
+
+    window.uploadImage = async function(input, type) {
+    if (!input.files || !input.files[0]) return;
+    
+    var file = input.files[0];
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', type);
+
+    var btn = input.previousElementSibling;
+    var originalText = btn.textContent;
+    btn.textContent = 'Uploading...';
+    btn.disabled = true;
+
+    try {
+      var res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      var data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+
+      var previewId = type === 'avatar' ? 'avatarPreview' : 'bannerPreview';
+      document.getElementById(previewId).style.backgroundImage = `url('${data.url}')`;
+      
+      alert('Upload successful! Click "Save Changes" to apply.');
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  };
 </script>
 
 </body>
