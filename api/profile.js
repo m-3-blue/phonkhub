@@ -245,9 +245,15 @@ export default async function handler(req, res) {
         for (const platform of VALID_PLATFORMS) {
           if (typeof socials[platform] === 'string' && socials[platform].trim()) {
             let link = socials[platform].trim().slice(0, 120);
-            if (!link.startsWith('http://') && !link.startsWith('https://')) {
+            
+            // If they typed a slash (youtube.com/mika) or a common domain (discord.gg), add https://
+            // Otherwise, it's just a username (mika.987), so leave it alone.
+            const looksLikeUrl = link.includes('/') || /\.(com|gg|to|me|co|io|org|net|link)(\/|$)/i.test(link);
+            
+            if (looksLikeUrl && !link.startsWith('http://') && !link.startsWith('https://')) {
               link = 'https://' + link;
             }
+            
             finalSocials[platform] = link;
           }
         }
