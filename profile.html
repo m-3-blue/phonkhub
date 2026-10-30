@@ -718,16 +718,18 @@
 .booster-glow svg {
   position: relative;
   z-index: 2;
-  width: 24px !important;
-  height: 24px !important;
-  fill: #FF5A00;
+  width: 100%;
+  height: 100%;
+  
+  /* Set the main color of the SVG */
+  fill: #FF5A00; 
+  
+  /* The double orange glow */
   filter: drop-shadow(0 0 4px rgba(255, 90, 0, 1)) 
           drop-shadow(0 0 12px rgba(255, 90, 0, 0.8));
-}
-
-@keyframes rotate-spotlight {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+          
+  /* Rounds the corners (if your SVG is a square) */
+  border-radius: 6px; 
 }
 
   /* NOTIFICATION CSS */
