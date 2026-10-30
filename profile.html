@@ -665,14 +665,15 @@
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid #333;
-    padding: 0.15rem 0.25rem; /* Made the padding slightly smaller */
+    padding: 0.1rem 0.3rem; 
     border-radius: 4px;
-    line-height: 0; /* Fixes weird gaps inside the box */
+    height: 1.2em; /* Forces the box to exactly match the text height */
+    box-sizing: border-box;
   }
 
   .user-badge img {
-    width: 1em; /* Made it exactly the same height as the text */
-    height: 1em;
+    width: 0.9em; /* Makes the icon slightly smaller than the box */
+    height: 0.9em;
     display: block;
     object-fit: contain;
   }
