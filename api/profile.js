@@ -52,7 +52,7 @@ async function getCurrentUser(client, req) {
   if (!token) return null;
 
   const result = await client.execute({
-    sql: `SELECT u.id, u.username, u.display_name, u.bio, u.socials, u.accent_color, u.created_at
+    sql: `SELECT u.id, u.username, u.display_name, u.bio, u.socials, u.accent_color, u.created_at, u.is_admin, u.is_booster, u.avatar_url, u.banner_url
           FROM sessions s JOIN users u ON u.id = s.user_id
           WHERE s.token = ? AND s.expires_at > ?`,
     args: [token, now()],
