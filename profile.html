@@ -477,6 +477,36 @@
     white-space: nowrap;
   }
 
+    .forum-item {
+    display: block;
+    padding: 1rem;
+    background: rgba(13, 13, 13, 0.85);
+    border: 1px solid #1d1d1d;
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .forum-item:hover {
+    border-color: var(--accent);
+    background: rgba(20, 20, 20, 0.95);
+  }
+  .forum-item-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.25rem;
+  }
+  .forum-item-meta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   .bio-box {
     background:
       linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), transparent 65%),
@@ -697,6 +727,61 @@
           drop-shadow(0 0 4px rgba(255, 90, 0, 1)) 
           drop-shadow(0 0 12px rgba(255, 90, 0, 0.8)) !important;
 }
+
+  /* Tooltip Container */
+  .badge-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 6px; /* Spacing between badges */
+  }
+
+  /* The Popup Box */
+  .badge-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: #000;
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  /* The Little Arrow pointing down */
+  .badge-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+
+  /* Show on Hover (Desktop) or when clicked (Mobile/App) */
+  .badge-wrapper:hover .badge-tooltip,
+  .badge-wrapper.active .badge-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
 
   /* NOTIFICATION CSS */
   .notif-wrapper { position: relative; display: inline-block; }
@@ -986,7 +1071,7 @@
     }
   }
 
-  (async function () {
+(async function () {
     var main = document.getElementById('main');
     var username = getUsernameFromPath();
     if (!username) { main.innerHTML = '<div class="loading">Invalid profile URL</div>'; return; }
@@ -1006,18 +1091,35 @@
       if (!res.ok) { main.innerHTML = '<a class="back-link" href="/">← Back to home</a><div class="empty-section">' + esc(data.error || 'User not found') + '</div>'; return; }
 
       var user = data.user, votes = data.votes || [], comments = data.comments || [], counts = data.counts || { comments: 0, votes: 0 };
+      var userThreads = data.threads || [];
+      var userReplies = data.forumReplies || [];
+
+      console.log("THREADS FROM API:", userThreads); // <--- ADD THIS
+      console.log("REPLIES FROM API:", userReplies); // <--- ADD THIS
+      
       var displayName = user.display_name || user.username;
       var isOwnProfile = currentUser && currentUser.username === user.username;
       var accent = user.accent_color || '#ff9900';
+      
       var badgeHtml = '';
       if (user.is_admin === 1 || user.is_booster === 1) {
+        var closeOthers = "document.querySelectorAll('.badge-wrapper').forEach(el => { if(el !== this) el.classList.remove('active') }); this.classList.toggle('active'); event.stopPropagation();";
+        
         badgeHtml = `
-          ${user.is_admin === 1 ? `<span class="user-badge" style="margin-left: 6px;"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 20px; height: 20px; display: block;"></span>` : ''}
+          ${user.is_admin === 1 ? `
+            <div class="badge-wrapper" onclick="${closeOthers}">
+              <span class="user-badge" style="margin-left: 0;"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" style="width: 20px; height: 20px; display: block;"></span>
+              <div class="badge-tooltip">PhonkHub Admin</div>
+            </div>
+          ` : ''}
           
           ${user.is_booster === 1 ? `
-            <span class="user-badge booster-glow" title="Booster" style="margin-left: 6px;">
-              <img src="https://oshjlw0mez8w9slz.public.blob.vercel-storage.com/icons8-vip.svg" alt="Booster" style="width: 20px; height: 20px; display: block;">
-            </span>
+            <div class="badge-wrapper" onclick="${closeOthers}">
+              <span class="user-badge booster-glow" style="margin-left: 0;">
+                <img src="https://oshjlw0mez8w9slz.public.blob.vercel-storage.com/icons8-vip.svg" alt="Booster">
+              </span>
+              <div class="badge-tooltip">Discord Booster</div>
+            </div>
           ` : ''}
         `;
       }
@@ -1038,6 +1140,27 @@
         return '<a class="vote-item" href="/track/' + v.youtube_id + '"><div class="vote-arrow ' + cls + '">' + arrow + '</div><div class="vote-info"><div class="vote-title">' + esc(v.title) + '</div><div class="vote-artist">' + esc(v.artist) + '</div></div><div class="vote-time">' + timeAgo(v.voted_at) + '</div></a>';
       }).join('');
 
+      // --- FORUM TAB LOGIC ---
+      var glowClass = user.is_booster == 1 ? ' vip-glow' : '';
+      var forumHtml = '';
+
+      if (userThreads.length === 0 && userReplies.length === 0) {
+        forumHtml = '<div class="empty-section">No forum activity yet</div>';
+      } else {
+        if (userThreads.length > 0) {
+          forumHtml += '<h3 style="font-family:\'Barlow Condensed\'; color:#fff; margin-bottom:10px; text-transform:uppercase;">Threads</h3>';
+          forumHtml += userThreads.map(function(t) {
+            return '<a href="/forums/thread-' + t.id + '" class="forum-item' + glowClass + '"><div class="forum-item-title">' + esc(t.title) + '</div><div class="forum-item-meta">in ' + esc(t.category_name) + ' · ' + timeAgo(t.created_at) + '</div></a>';
+          }).join('');
+        }
+        if (userReplies.length > 0) {
+          forumHtml += '<h3 style="font-family:\'Barlow Condensed\'; color:#fff; margin-top:20px; margin-bottom:10px; text-transform:uppercase;">Replies</h3>';
+          forumHtml += userReplies.map(function(r) {
+            return '<a href="/forums/thread-' + r.thread_id + '" class="forum-item' + glowClass + '"><div class="forum-item-title" style="font-size:0.85rem; color:#ddd;">' + esc(r.body) + '</div><div class="forum-item-meta">on ' + esc(r.thread_title) + ' · ' + timeAgo(r.created_at) + '</div></a>';
+          }).join('');
+        }
+      }
+
       var aboutHtml = '';
       if (user.bio) aboutHtml += '<div class="bio-box">' + esc(user.bio) + '</div>';
       if (user.socials && Object.keys(user.socials).length > 0) {
@@ -1057,8 +1180,8 @@
 
       if (!user.bio && (!user.socials || Object.keys(user.socials).length === 0)) aboutHtml = '<div class="empty-section" style="margin-bottom: 1rem;">No bio or social links yet</div>' + aboutHtml;
 
-   var bannerStyle = user.banner_url ? ' style="background-image: url(\'' + user.banner_url + '\'); background-size: cover; background-position: center;"' : '';
-   var avatarStyle = user.avatar_url ? ' style="background-image: url(\'' + user.avatar_url + '\'); background-size: cover; background-position: center; color: transparent;"' : '';
+      var bannerStyle = user.banner_url ? ' style="background-image: url(\'' + user.banner_url + '\'); background-size: cover; background-position: center;"' : '';
+      var avatarStyle = user.avatar_url ? ' style="background-image: url(\'' + user.avatar_url + '\'); background-size: cover; background-position: center; color: transparent;"' : '';
 
       var actionBtnHtml = '';
       if (isOwnProfile) {
@@ -1087,10 +1210,12 @@
         '<div class="tabs">' +
           '<button class="tab active" data-tab="comments">Comments' + commentsCountHtml + '</button>' +
           '<button class="tab" data-tab="votes">Votes' + votesCountHtml + '</button>' +
+          '<button class="tab" data-tab="forum">Forum</button>' + 
           '<button class="tab" data-tab="about">About</button>' +
         '</div>' +
         '<div class="tab-panel active" data-panel="comments">' + commentsHtml + '</div>' +
         '<div class="tab-panel" data-panel="votes">' + votesHtml + '</div>' +
+        '<div class="tab-panel" data-panel="forum">' + forumHtml + '</div>' +
         '<div class="tab-panel" data-panel="about">' + aboutHtml + '</div>';
 
       var followBtn = document.getElementById('followBtn');
@@ -1121,6 +1246,13 @@
       });
     } catch (err) { main.innerHTML = '<div class="loading">Could not load profile</div>'; }
   })();
+
+    // Close tooltips when clicking anywhere else
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.badge-wrapper')) {
+      document.querySelectorAll('.badge-wrapper.active').forEach(el => el.classList.remove('active'));
+    }
+  });
 </script>
 </body>
 </html>
