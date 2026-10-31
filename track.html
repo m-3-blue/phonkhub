@@ -582,6 +582,12 @@
     border-left-color: #161616;
   }
 
+    .comment.vip-glow {
+    border-color: rgba(255, 90, 0, 0.5);
+    box-shadow: 0 0 15px rgba(255, 90, 0, 0.15), inset 0 0 10px rgba(255, 90, 0, 0.05);
+    background: linear-gradient(135deg, rgba(255, 90, 0, 0.05), transparent 60%), rgba(13, 13, 13, 0.9);
+  }
+
   .reply-form-container, .edit-form-container {
     margin-top: 0.6rem;
     display: none;
@@ -1051,7 +1057,7 @@
     var editedTag = c.edited_at ? '<span class="comment-edited">(edited)</span>' : '';
 
     return (
-      '<div class="comment" data-comment-id="' + c.id + '">' +
+      '<div class="comment' + (c.user.is_booster === 1 ? ' vip-glow' : '') + '" data-comment-id="' + c.id + '">' +
         '<div class="comment-header">' +
           '<a class="comment-author" href="/@' + esc(c.user.username) + '">' + esc(displayName) + '</a>' +
           '<span class="comment-time">' + timeAgo(c.created_at) + '</span>' +
