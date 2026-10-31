@@ -196,6 +196,23 @@ export default async function handler(req, res) {
         args: [targetUser.id]
       });
 
+            // --- FETCH FORUM ACTIVITY FOR APP ---
+      const userThreads = await client.execute({
+        sql: `SELECT t.id, t.title, t.created_at, c.name AS category_name 
+              FROM forum_threads t 
+              JOIN forum_categories c ON c.id = t.category_id 
+              WHERE t.user_id = ? ORDER BY t.created_at DESC LIMIT 10`,
+        args: [targetUser.id],
+      });
+
+      const userReplies = await client.execute({
+        sql: `SELECT r.id, r.body, r.created_at, t.id AS thread_id, t.title AS thread_title 
+              FROM forum_replies r 
+              JOIN forum_threads t ON t.id = r.thread_id 
+              WHERE r.user_id = ? ORDER BY r.created_at DESC LIMIT 10`,
+        args: [targetUser.id],
+      });
+
       return res.status(200).json({
         profile: {
           id: targetUser.id,
