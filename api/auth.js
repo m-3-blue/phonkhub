@@ -51,7 +51,6 @@ function isValidEmail(e) {
   return typeof e === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 }
 
-// UPDATED: Cross-site compatible cookie
 function setSessionCookie(res, token, expiresAt) {
   res.setHeader('Set-Cookie',
     SESSION_COOKIE + '=' + token +
@@ -59,14 +58,12 @@ function setSessionCookie(res, token, expiresAt) {
   );
 }
 
-// UPDATED: Cross-site compatible clear
 function clearSessionCookie(res) {
   res.setHeader('Set-Cookie',
     SESSION_COOKIE + '=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0'
   );
 }
 
-// UPDATED: Check Authorization header first (Capacitor App), fallback to cookies (Web)
 function getSessionToken(req) {
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -84,34 +81,24 @@ function getSessionToken(req) {
   return null;
 }
 
+export default async function handler(req, res) {
+  // 1. THE NEW, BULLETPROOF CORS SETUP
   const origin = req.headers.origin;
   
-  // Allow the live sites, plus ANY localhost port for development
-  if (origin && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+  if (origin && (origin.includes('localhost') || origin.includes('127.0.0.1') || origin === 'capacitor://localhost')) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (origin && ['https://o-phonkhub.vercel.app', 'https://phonkhub.vercel.app', 'capacitor://localhost', 'https://localhost'].includes(origin)) {
+  } else if (origin && ['https://o-phonkhub.vercel.app', 'https://phonkhub.vercel.app'].includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   } else if (!origin) {
-    // Allow server-to-server or curl (no browser origin)
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
 
-  const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (!origin) {
-    // Allow server-to-server or curl (no browser origin)
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
-  // If origin is set but not in the list, we don't send CORS headers → browser blocks it
-  
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // 2. Handle preflight
+  // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -121,23 +108,13 @@ function getSessionToken(req) {
   const ip = getClientIp(req);
 
   try {
-    // -------- SIGNUP --------
     if (action === 'signup' && req.method === 'POST') {
-      if (await isIpBanned(client, ip)) {
-        return res.status(403).json({ error: 'Access denied' });
-      }
-
+      if (await isIpBanned(client, ip)) return res.status(403).json({ error: 'Access denied' });
       const { username, email, password, display_name } = req.body || {};
 
-      if (!isValidUsername(username)) {
-        return res.status(400).json({ error: 'Username must be 3-20 characters, letters/numbers/underscores only' });
-      }
-      if (!isValidEmail(email)) {
-        return res.status(400).json({ error: 'Invalid email' });
-      }
-      if (typeof password !== 'string' || password.length < 8) {
-        return res.status(400).json({ error: 'Password must be at least 8 characters' });
-      }
+      if (!isValidUsername(username)) return res.status(400).json({ error: 'Username must be 3-20 characters, letters/numbers/underscores only' });
+      if (!isValidEmail(email)) return res.status(400).json({ error: 'Invalid email' });
+      if (typeof password !== 'string' || password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
 
       const existing = await client.execute({
         sql: 'SELECT id, username, email FROM users WHERE username = ? OR email = ?',
@@ -145,17 +122,12 @@ function getSessionToken(req) {
       });
       if (existing.rows.length > 0) {
         const row = existing.rows[0];
-        if (row.username.toLowerCase() === username.toLowerCase()) {
-          return res.status(409).json({ error: 'Username already taken' });
-        }
+        if (row.username.toLowerCase() === username.toLowerCase()) return res.status(409).json({ error: 'Username already taken' });
         return res.status(409).json({ error: 'Email already registered' });
       }
 
       const hash = await bcrypt.hash(password, 10);
-
-      const finalDisplayName = (typeof display_name === 'string' && display_name.trim())
-        ? display_name.trim().slice(0, 40)
-        : username;
+      const finalDisplayName = (typeof display_name === 'string' && display_name.trim()) ? display_name.trim().slice(0, 40) : username;
 
       const result = await client.execute({
         sql: 'INSERT INTO users (username, email, password_hash, display_name, ip, created_at) VALUES (?, ?, ?, ?, ?, ?)',
@@ -163,9 +135,9 @@ function getSessionToken(req) {
       });
 
       const userId = Number(result.lastInsertRowid);
-
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = daysFromNow(SESSION_DAYS);
+      
       await client.execute({
         sql: 'INSERT INTO sessions (token, user_id, ip, created_at, expires_at) VALUES (?, ?, ?, ?, ?)',
         args: [token, userId, ip, now(), expiresAt],
@@ -173,45 +145,33 @@ function getSessionToken(req) {
 
       setSessionCookie(res, token, expiresAt);
       return res.status(200).json({
-        user: { id: userId, username, display_name: finalDisplayName, is_admin: false },
-        token: token // Added for Capacitor
+        user: { id: userId, username, display_name: finalDisplayName, is_admin: false, is_booster: false },
+        token: token
       });
     }
 
-    // -------- LOGIN --------
-    if (action === 'login' && req.method === 'POST') {
-      if (await isIpBanned(client, ip)) {
-        return res.status(403).json({ error: 'Access denied' });
-      }
-
+      if (action === 'login' && req.method === 'POST') {
+      if (await isIpBanned(client, ip)) return res.status(403).json({ error: 'Access denied' });
       const { username, password } = req.body || {};
 
-      if (!username || !password) {
-        return res.status(400).json({ error: 'Missing username or password' });
-      }
+      if (!username || !password) return res.status(400).json({ error: 'Missing username or password' });
 
       const result = await client.execute({
-        sql: 'SELECT id, username, display_name, password_hash, is_admin FROM users WHERE username = ? OR email = ?',
+        sql: 'SELECT id, username, display_name, password_hash, is_admin, is_booster FROM users WHERE username = ? OR email = ?',
         args: [username, username],
       });
 
-      if (result.rows.length === 0) {
-        return res.status(401).json({ error: 'Invalid username or password' });
-      }
+      if (result.rows.length === 0) return res.status(401).json({ error: 'Invalid username or password' });
 
       const user = result.rows[0];
       const ok = await bcrypt.compare(password, user.password_hash);
-      if (!ok) {
-        return res.status(401).json({ error: 'Invalid username or password' });
-      }
+      if (!ok) return res.status(401).json({ error: 'Invalid username or password' });
 
-      await client.execute({
-        sql: 'UPDATE users SET ip = ? WHERE id = ?',
-        args: [ip, user.id],
-      });
+      await client.execute({ sql: 'UPDATE users SET ip = ? WHERE id = ?', args: [ip, user.id] });
 
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = daysFromNow(SESSION_DAYS);
+      
       await client.execute({
         sql: 'INSERT INTO sessions (token, user_id, ip, created_at, expires_at) VALUES (?, ?, ?, ?, ?)',
         args: [token, user.id, ip, now(), expiresAt],
@@ -223,32 +183,27 @@ function getSessionToken(req) {
           id: user.id,
           username: user.username,
           display_name: user.display_name || user.username,
-          is_admin: !!user.is_admin,
+          is_admin: user.is_admin == 1 || user.is_admin === true,
+          is_booster: user.is_booster == 1 || user.is_booster === true,
         },
-        token: token // Added for Capacitor
+        token: token
       });
     }
 
-    // -------- LOGOUT --------
     if (action === 'logout' && req.method === 'POST') {
       const token = getSessionToken(req);
       if (token) {
-        await client.execute({
-          sql: 'DELETE FROM sessions WHERE token = ?',
-          args: [token],
-        });
+        await client.execute({ sql: 'DELETE FROM sessions WHERE token = ?', args: [token] });
       }
       clearSessionCookie(res);
       return res.status(200).json({ ok: true });
     }
 
-    // -------- ME --------
     if (action === 'me' && req.method === 'GET') {
       const token = getSessionToken(req);
-      if (!token) {
-        return res.status(200).json({ user: null });
-      }
+      if (!token) return res.status(200).json({ user: null });
 
+      // FIXED: Now correctly selects is_booster alongside is_admin
       const result = await client.execute({
         sql: `SELECT u.id, u.username, u.display_name, u.is_admin, u.is_booster, s.expires_at
               FROM sessions s
@@ -256,7 +211,7 @@ function getSessionToken(req) {
               WHERE s.token = ?`,
         args: [token],
       });
-      
+
       if (result.rows.length === 0) {
         clearSessionCookie(res);
         return res.status(200).json({ user: null });
@@ -276,9 +231,10 @@ function getSessionToken(req) {
           username: row.username,
           display_name: row.display_name || row.username,
           is_admin: row.is_admin == 1 || row.is_admin === true,
-          is_booster: row.is_booster == 1 || row.is_booster === true
+          is_booster: row.is_booster == 1 || row.is_booster === true,
         },
       });
+    }
 
     return res.status(400).json({ error: 'Unknown action' });
   } catch (err) {
