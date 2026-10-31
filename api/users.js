@@ -71,7 +71,7 @@ export default async function handler(req, res) {
       try { socials = JSON.parse(user.socials); } catch (e) { socials = {}; }
     }
 
-    const [votesResult, commentsResult, countsResult] = await Promise.all([
+    const [votesResult, commentsResult, countsResult, threadsResult, repliesResult] = await Promise.all([
       client.execute({
         sql: `SELECT v.value, v.created_at AS voted_at,
                      t.id, t.youtube_id, t.title, t.artist
@@ -99,11 +99,27 @@ export default async function handler(req, res) {
                 (SELECT COUNT(*) FROM votes WHERE user_id = ?) AS vote_count`,
         args: [user.id, user.id],
       }),
+
+      client.execute({
+        sql: `SELECT t.id, t.title, t.created_at, c.name AS category_name 
+              FROM forum_threads t 
+              JOIN forum_categories c ON c.id = t.category_id 
+              WHERE t.user_id = ? ORDER BY t.created_at DESC LIMIT 10`,
+        args: [user.id],
+      }),
+
+      client.execute({
+        sql: `SELECT r.id, r.body, r.created_at, t.id AS thread_id, t.title AS thread_title 
+              FROM forum_replies r 
+              JOIN forum_threads t ON t.id = r.thread_id 
+              WHERE r.user_id = ? ORDER BY r.created_at DESC LIMIT 10`,
+        args: [user.id],
+      }),
     ]);
 
     const counts = countsResult.rows[0] || { comment_count: 0, vote_count: 0 };
 
-    // Check if requester follows this user
+      // Check if requester follows this user
     const requester = await getCurrentUser(client, req);
     let isFollowing = false;
     if (requester && requester.id !== user.id) {
@@ -123,10 +139,10 @@ export default async function handler(req, res) {
         socials: socials,
         accent_color: user.accent_color || DEFAULT_ACCENT,
         created_at: user.created_at,
-        is_admin: user.is_admin || 0,        // <--- ADD THIS
-        is_booster: user.is_booster || 0,    // <--- ADD THIS
-        avatar_url: user.avatar_url || null, // <--- ADD THIS
-        banner_url: user.banner_url || null, // <--- ADD THIS
+        is_admin: user.is_admin || 0,
+        is_booster: user.is_booster || 0,
+        avatar_url: user.avatar_url || null,
+        banner_url: user.banner_url || null,
         follower_count: Number(user.follower_count) || 0,
         following_count: Number(user.following_count) || 0,
         is_following: isFollowing,
@@ -137,6 +153,8 @@ export default async function handler(req, res) {
         comments: Number(counts.comment_count) || 0,
         votes: Number(counts.vote_count) || 0,
       },
+      threads: threadsResult.rows,
+      forumReplies: repliesResult.rows
     });
   } catch (err) {
     console.error(err);
