@@ -54,7 +54,7 @@ async function getCurrentUser(client, req) {
   if (!token) return null;
 
   const result = await client.execute({
-    sql: `SELECT u.id, u.username, u.display_name FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ? AND s.expires_at > ?`,
+    sql: `SELECT u.id, u.username, u.display_name, u.is_booster FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ? AND s.expires_at > ?`,
     args: [token, now()],
   });
 
@@ -63,6 +63,7 @@ async function getCurrentUser(client, req) {
     id: result.rows[0].id,
     username: result.rows[0].username,
     display_name: result.rows[0].display_name || result.rows[0].username,
+    is_booster: result.rows[0].is_booster, // ADD THIS LINE
   };
 }
 
@@ -111,7 +112,7 @@ export default async function handler(req, res) {
 
       const result = await client.execute({
         sql: `SELECT c.id, c.track_id, c.parent_id, c.body, c.created_at, c.edited_at,
-                     u.id AS user_id, u.username, u.display_name
+                     u.id AS user_id, u.username, u.display_name, u.is_booster
               FROM comments c JOIN users u ON u.id = c.user_id
               WHERE c.track_id = ? ORDER BY c.created_at ASC`,
         args: [trackId],
@@ -144,7 +145,7 @@ export default async function handler(req, res) {
         byId[row.id] = {
           id: row.id, track_id: row.track_id, parent_id: row.parent_id,
           body: row.body, created_at: row.created_at, edited_at: row.edited_at || null,
-          user: { id: row.user_id, username: row.username, display_name: row.display_name || row.username },
+          user: { id: row.user_id, username: row.username, display_name: row.display_name || row.username, is_booster: row.is_booster },
           like_count: likeCounts[row.id] || 0, user_liked: !!userLikes[row.id], replies: [],
         };
       }
