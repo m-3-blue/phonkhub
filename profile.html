@@ -671,42 +671,31 @@
     box-sizing: border-box;
   }
 
-  .user-badge img {
-    width: 0.8em; /* Scales the icon to fit the smaller box */
-    height: 0.8em;
-    display: block;
-    object-fit: contain;
-  }
-
-
-/* The container */
+/* The Container (Matches Admin Badge exactly) */
 .booster-glow {
-  position: relative;
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  width: 24px !important;  
-  height: 24px !important;
-  border-radius: 6px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid #333 !important;
+  border-radius: 4px !important;
+  padding: 0.05rem 0.25rem !important;
+  height: 1em !important; /* Matches the main site's text height */
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
 }
 
-/* The Icon */
+/* The Icon (Your exact filter) */
 .booster-glow img {
-  position: relative;
-  z-index: 2;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain;
-  border-radius: 6px; 
+  width: 0.8em !important; /* Matches the admin icon size */
+  height: 0.8em !important;
+  display: block !important;
+  object-fit: contain !important;
   
-  /* Your exact filter */
+  /* YOUR EXACT FILTER */
   filter: invert(1) sepia(1) saturate(15) hue-rotate(350deg) brightness(1.2) 
           drop-shadow(0 0 4px rgba(255, 90, 0, 1)) 
-          drop-shadow(0 0 12px rgba(255, 90, 0, 0.8));
+          drop-shadow(0 0 12px rgba(255, 90, 0, 0.8)) !important;
 }
 
   /* NOTIFICATION CSS */
@@ -1023,17 +1012,13 @@
       var badgeHtml = '';
       if (user.is_admin === 1 || user.is_booster === 1) {
         badgeHtml = `
-          <span class="user-badges" style="display: inline-flex; gap: 6px; align-items: center; vertical-align: middle; margin-left: 6px;">
-            
-            ${user.is_admin === 1 ? `<span class="user-badge"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 24px; height: 24px; display: block;"></span>` : ''}
-            
-            ${user.is_booster === 1 ? `
-               <span class="user-badge booster-glow" title="Booster">
-                  <img src="https://oshjlw0mez8w9slz.public.blob.vercel-storage.com/icons8-vip.svg" alt="Booster">
-                </span>
-            ` : ''}
-            
-          </span>
+          ${user.is_admin === 1 ? `<span class="user-badge" style="margin-left: 6px;"><img src="https://cdn3.emoji.gg/emojis/905144-adminroleicon.png" alt="Admin" title="Admin" style="width: 20px; height: 20px; display: block;"></span>` : ''}
+          
+          ${user.is_booster === 1 ? `
+            <span class="user-badge booster-glow" title="Booster" style="margin-left: 6px;">
+              <img src="https://oshjlw0mez8w9slz.public.blob.vercel-storage.com/icons8-vip.svg" alt="Booster" style="width: 20px; height: 20px; display: block;">
+            </span>
+          ` : ''}
         `;
       }
 
