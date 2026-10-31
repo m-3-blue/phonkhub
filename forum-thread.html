@@ -202,13 +202,21 @@
   .reply-children { margin-top: 0.6rem; padding-left: 1.25rem; border-left: 2px solid #1d1d1d; display: flex; flex-direction: column; gap: 0.5rem; }
   .reply-children.deep { padding-left: 0.5rem; border-left-color: #161616; }
 
-    /* VIP Booster Glow for Forums */
+  /* VIP Booster Glow for Forums (Matches Track Comments) */
   .vip-glow {
-    border: 1px solid rgba(255, 90, 0, 0.6) !important;
-    box-shadow: 0 0 15px rgba(255, 90, 0, 0.15), inset 0 0 10px rgba(255, 90, 0, 0.05) !important;
-    background: linear-gradient(135deg, rgba(255, 90, 0, 0.08), transparent 60%), rgba(13, 13, 13, 0.95) !important;
+    /* Soften the border so it blends with the bloom */
+    border: 1px solid rgba(255, 90, 0, 0.8) !important;
+    
+    /* Stacked shadows to mimic the drop-shadow blur */
+    box-shadow: 
+      0 0 5px rgba(255, 90, 0, 1), 
+      0 0 20px rgba(255, 90, 0, 0.6), 
+      inset 0 0 10px rgba(255, 90, 0, 0.2) !important;
+      
+    /* A very dark background with a tiny hint of orange in the corner */
+    background: linear-gradient(135deg, rgba(255, 90, 0, 0.08), transparent 60%), #080808 !important;
   }
-
+  
   .inline-reply-form { margin-top: 0.6rem; display: none; }
   .inline-reply-form.open { display: block; }
   .inline-reply-form textarea { width: 100%; min-height: 50px; padding: 0.6rem 0.75rem; background: #080808; border: 1px solid #2a2a2a; color: var(--white); font: inherit; font-size: 0.85rem; resize: vertical; outline: none; border-radius: 2px; font-family: inherit; }
