@@ -196,7 +196,6 @@ export default async function handler(req, res) {
         args: [targetUser.id]
       });
 
-            // --- FETCH FORUM ACTIVITY FOR APP ---
       const userThreads = await client.execute({
         sql: `SELECT t.id, t.title, t.created_at, c.name AS category_name 
               FROM forum_threads t 
@@ -209,7 +208,7 @@ export default async function handler(req, res) {
         sql: `SELECT r.id, r.body, r.created_at, t.id AS thread_id, t.title AS thread_title 
               FROM forum_replies r 
               JOIN forum_threads t ON t.id = r.thread_id 
-              WHERE r.user_id = ? ORDER BY r.created_at DESC LIMIT 10`,
+              WHERE r.user_id = ? ORDER BY t.created_at DESC LIMIT 10`,
         args: [targetUser.id],
       });
 
@@ -231,6 +230,8 @@ export default async function handler(req, res) {
             following: followingRes.rows.length,
             comments: commentsCountRes.rows[0].count,
             votes: votesCountRes.rows[0].count
+          threads: userThreads.rows,
+          forumReplies: userReplies.rows
           },
           followers_list: followersRes.rows,
           following_list: followingRes.rows,
