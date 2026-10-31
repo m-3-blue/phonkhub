@@ -222,7 +222,7 @@ export default async function handler(req, res) {
         comment: {
           id: Number(result.lastInsertRowid), track_id: trackId, parent_id: parentId,
           body: body.trim(), created_at: now(), edited_at: null,
-          user: { id: user.id, username: user.username, display_name: user.display_name },
+          user: { id: user.id, username: user.username, display_name: user.display_name, is_booster: user.is_booster },
           like_count: 0, user_liked: false, replies: [],
         },
       });
