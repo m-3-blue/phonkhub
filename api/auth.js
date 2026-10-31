@@ -247,13 +247,13 @@ export default async function handler(req, res) {
       }
 
       const result = await client.execute({
-        sql: `SELECT u.id, u.username, u.display_name, u.is_admin, s.expires_at
+        sql: `SELECT u.id, u.username, u.display_name, u.is_admin, u.is_booster, s.expires_at
               FROM sessions s
               JOIN users u ON u.id = s.user_id
               WHERE s.token = ?`,
         args: [token],
       });
-
+      
       if (result.rows.length === 0) {
         clearSessionCookie(res);
         return res.status(200).json({ user: null });
@@ -272,10 +272,10 @@ export default async function handler(req, res) {
           id: row.id,
           username: row.username,
           display_name: row.display_name || row.username,
-          is_admin: !!row.is_admin,
+          is_admin: row.is_admin == 1 || row.is_admin === true,
+          is_booster: row.is_booster == 1 || row.is_booster === true
         },
       });
-    }
 
     return res.status(400).json({ error: 'Unknown action' });
   } catch (err) {
