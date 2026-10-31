@@ -84,16 +84,19 @@ function getSessionToken(req) {
   return null;
 }
 
-export default async function handler(req, res) {
-  // 1. STRICT CORS SETUP
-  const ALLOWED_ORIGINS = [
-    'https://o-phonkhub.vercel.app',
-    'https://phonkhub.vercel.app',
-    'https://localhost',
-    'capacitor://localhost',
-    'http://localhost:3000',
-    'http://localhost:5173'
-  ];
+  const origin = req.headers.origin;
+  
+  // Allow the live sites, plus ANY localhost port for development
+  if (origin && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  } else if (origin && ['https://o-phonkhub.vercel.app', 'https://phonkhub.vercel.app', 'capacitor://localhost', 'https://localhost'].includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  } else if (!origin) {
+    // Allow server-to-server or curl (no browser origin)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
 
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS.includes(origin)) {
@@ -107,7 +110,7 @@ export default async function handler(req, res) {
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  
+
   // 2. Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
