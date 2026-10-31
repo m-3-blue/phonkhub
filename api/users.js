@@ -71,7 +71,7 @@ export default async function handler(req, res) {
       try { socials = JSON.parse(user.socials); } catch (e) { socials = {}; }
     }
 
-      const [votesResult, commentsResult, countsResult, threadsResult, repliesResult] = await Promise.all([
+    const [votesResult, commentsResult, countsResult, threadsResult, repliesResult] = await Promise.all([
       client.execute({
         sql: `SELECT v.value, v.created_at AS voted_at,
                      t.id, t.youtube_id, t.title, t.artist
@@ -101,22 +101,6 @@ export default async function handler(req, res) {
       }),
 
       client.execute({
-        sql: `SELECT t.id, t.title, t.created_at, c.name AS category_name 
-              FROM forum_threads t 
-              JOIN forum_categories c ON c.id = t.category_id 
-              WHERE t.user_id = ? ORDER BY t.created_at DESC LIMIT 10`,
-        args: [user.id],
-      }),
-
-      client.execute({
-        sql: `SELECT r.id, r.body, r.created_at, t.id AS thread_id, t.title AS thread_title 
-              FROM forum_replies r 
-              JOIN forum_threads t ON t.id = r.thread_id 
-              WHERE r.user_id = ? ORDER BY r.created_at DESC LIMIT 10`,
-        args: [user.id],
-      }),
-
-              client.execute({
         sql: `SELECT t.id, t.title, t.created_at, c.name AS category_name 
               FROM forum_threads t 
               JOIN forum_categories c ON c.id = t.category_id 
