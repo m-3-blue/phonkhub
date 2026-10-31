@@ -17,7 +17,6 @@ function now() {
   return new Date().toISOString();
 }
 
-// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -82,23 +81,18 @@ async function getCurrentUser(client, req) {
 
 export default async function handler(req, res) {
   // 1. STRICT CORS SETUP
-  const ALLOWED_ORIGINS = [
-    'https://o-phonkhub.vercel.app',
-    'https://phonkhub.vercel.app',
-    'https://localhost',
-    'capacitor://localhost',
-    'http://localhost:3000',
-    'http://localhost:5173'
-  ];
-
   const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+  
+  if (origin && (origin.includes('localhost') || origin.includes('127.0.0.1') || origin === 'capacitor://localhost')) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  } else if (origin && ['https://o-phonkhub.vercel.app', 'https://phonkhub.vercel.app'].includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   } else if (!origin) {
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
-  
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -112,14 +106,12 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const sessionUser = await getCurrentUser(client, req);
-      
-      // Check if viewing someone else via ID or Username
+
       const targetId = req.query.id;
       const targetUsername = req.query.username;
-      
+
       let targetUser = sessionUser;
 
-      // If viewing another user, fetch their data
       if (targetId || targetUsername) {
         let result;
         if (targetId) {
@@ -127,15 +119,15 @@ export default async function handler(req, res) {
         } else if (targetUsername) {
           result = await client.execute({ sql: 'SELECT * FROM users WHERE username = ?', args: [targetUsername] });
         }
-        
+
         if (result.rows.length === 0) {
           return res.status(404).json({ error: 'User not found' });
         }
-        
+
         const row = result.rows[0];
         let socials = {};
         if (row.socials) { try { socials = JSON.parse(row.socials); } catch (e) {} }
-        
+
         targetUser = {
           id: row.id,
           username: row.username,
@@ -155,14 +147,13 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Log in first' });
       }
 
-      // Now fetch the stats and activity for the targetUser
       const followersRes = await client.execute({
         sql: `SELECT u.id, u.username, u.display_name, u.accent_color 
               FROM follows f JOIN users u ON u.id = f.follower_id 
               WHERE f.following_id = ?`,
         args: [targetUser.id]
       });
-      
+
       const followingRes = await client.execute({
         sql: `SELECT u.id, u.username, u.display_name, u.accent_color 
               FROM follows f JOIN users u ON u.id = f.following_id 
@@ -196,6 +187,7 @@ export default async function handler(req, res) {
         args: [targetUser.id]
       });
 
+      // --- FETCH FORUM ACTIVITY FOR APP ---
       const userThreads = await client.execute({
         sql: `SELECT t.id, t.title, t.created_at, c.name AS category_name 
               FROM forum_threads t 
@@ -208,11 +200,11 @@ export default async function handler(req, res) {
         sql: `SELECT r.id, r.body, r.created_at, t.id AS thread_id, t.title AS thread_title 
               FROM forum_replies r 
               JOIN forum_threads t ON t.id = r.thread_id 
-              WHERE r.user_id = ? ORDER BY t.created_at DESC LIMIT 10`,
+              WHERE r.user_id = ? ORDER BY r.created_at DESC LIMIT 10`,
         args: [targetUser.id],
       });
 
-      return res.status(200).json({
+          return res.status(200).json({
         profile: {
           id: targetUser.id,
           username: targetUser.username,
@@ -230,13 +222,13 @@ export default async function handler(req, res) {
             following: followingRes.rows.length,
             comments: commentsCountRes.rows[0].count,
             votes: votesCountRes.rows[0].count
-          threads: userThreads.rows,
-          forumReplies: userReplies.rows
           },
           followers_list: followersRes.rows,
           following_list: followingRes.rows,
           recent_comments: recentCommentsRes.rows,
-          recent_votes: recentVotesRes.rows
+          recent_votes: recentVotesRes.rows,
+          threads: userThreads.rows,
+          forumReplies: userReplies.rows
         },
         is_own_profile: sessionUser ? sessionUser.id === targetUser.id : false
       });
@@ -263,15 +255,10 @@ export default async function handler(req, res) {
         for (const platform of VALID_PLATFORMS) {
           if (typeof socials[platform] === 'string' && socials[platform].trim()) {
             let link = socials[platform].trim().slice(0, 120);
-            
-            // If they typed a slash (youtube.com/mika) or a common domain (discord.gg), add https://
-            // Otherwise, it's just a username (mika.987), so leave it alone.
             const looksLikeUrl = link.includes('/') || /\.(com|gg|to|me|co|io|org|net|link)(\/|$)/i.test(link);
-            
             if (looksLikeUrl && !link.startsWith('http://') && !link.startsWith('https://')) {
               link = 'https://' + link;
             }
-            
             finalSocials[platform] = link;
           }
         }
