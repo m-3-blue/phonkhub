@@ -477,7 +477,7 @@
     white-space: nowrap;
   }
 
-    .forum-item {
+  .forum-item {
     display: block;
     padding: 1rem;
     background: rgba(13, 13, 13, 0.85);
@@ -487,9 +487,11 @@
     text-decoration: none;
     transition: border-color 0.15s, background 0.15s;
   }
+  
   .forum-item:hover {
-    border-color: var(--accent);
-    background: rgba(20, 20, 20, 0.95);
+    /* Uses your profile's custom accent color */
+    border-color: var(--accent) !important;
+    background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), transparent 60%), rgba(20, 20, 20, 0.95) !important;
   }
   .forum-item-title {
     font-family: 'Barlow Condensed', sans-serif;
