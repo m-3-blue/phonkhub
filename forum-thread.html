@@ -202,6 +202,13 @@
   .reply-children { margin-top: 0.6rem; padding-left: 1.25rem; border-left: 2px solid #1d1d1d; display: flex; flex-direction: column; gap: 0.5rem; }
   .reply-children.deep { padding-left: 0.5rem; border-left-color: #161616; }
 
+    /* VIP Booster Glow for Forums */
+  .vip-glow {
+    border: 1px solid rgba(255, 90, 0, 0.6) !important;
+    box-shadow: 0 0 15px rgba(255, 90, 0, 0.15), inset 0 0 10px rgba(255, 90, 0, 0.05) !important;
+    background: linear-gradient(135deg, rgba(255, 90, 0, 0.08), transparent 60%), rgba(13, 13, 13, 0.95) !important;
+  }
+
   .inline-reply-form { margin-top: 0.6rem; display: none; }
   .inline-reply-form.open { display: block; }
   .inline-reply-form textarea { width: 100%; min-height: 50px; padding: 0.6rem 0.75rem; background: #080808; border: 1px solid #2a2a2a; color: var(--white); font: inherit; font-size: 0.85rem; resize: vertical; outline: none; border-radius: 2px; font-family: inherit; }
@@ -536,7 +543,7 @@
     var repliesHtml = (!t.replies || t.replies.length === 0) ? '<div class="no-replies">No replies yet. Be the first.</div>' : t.replies.map(function (r) { return renderReply(r, 0); }).join('');
 
     main.innerHTML = '<div class="breadcrumb"><a href="/forums">Forums</a><span class="breadcrumb-sep">/</span><a href="/forums/' + esc(t.category.slug) + '">' + esc(t.category.name) + '</a></div>' +
-      '<div class="thread-post"><div class="thread-post-title">' + esc(t.title) + '</div><div class="thread-post-meta"><span>by <a class="post-author" href="/@' + esc(t.user.username) + '">' + esc(displayName) + '</a></span><span>' + timeAgo(t.created_at) + '</span>' + editedTag + '</div><div class="thread-post-body">' + renderBody(t.body) + '</div>' + voteWidgetHtml + '</div>' +
+      '<div class="thread-post' + (t.user.is_booster == 1 ? ' vip-glow' : '') + '"><div class="thread-post-title">' + esc(t.title) + '</div><div class="thread-post-meta"><span>by <a class="post-author" href="/@' + esc(t.user.username) + '">' + esc(displayName) + '</a></span><span>' + timeAgo(t.created_at) + '</span>' + editedTag + '</div><div class="thread-post-body">' + renderBody(t.body) + '</div>' + voteWidgetHtml + '</div>' +
       '<div class="replies-section"><div class="replies-heading"><div class="replies-heading-title">Replies</div></div>' + replyFormHtml + '<div id="replyList">' + repliesHtml + '</div></div>';
 
     attachThreadHandlers();
@@ -559,7 +566,7 @@
     if (currentUser) { actionsHtml += '<button data-reply-to="' + r.id + '">Reply</button>'; }
     if (isOwn) { actionsHtml += '<button data-delete-reply="' + r.id + '">Delete</button>'; }
 
-    return '<div class="reply" data-reply-id="' + r.id + '"><div class="reply-header"><a class="reply-author" href="/@' + esc(r.user.username) + '">' + esc(displayName) + '</a><span class="reply-time">' + timeAgo(r.created_at) + '</span>' + editedTag + '</div><div class="reply-body">' + renderBody(r.body) + '</div>' +
+    return '<div class="reply' + (r.user.is_booster == 1 ? ' vip-glow' : '') + '" data-reply-id="' + r.id + '"><div class="reply-header"><a class="reply-author" href="/@' + esc(r.user.username) + '">' + esc(displayName) + '</a><span class="reply-time">' + timeAgo(r.created_at) + '</span>' + editedTag + '</div><div class="reply-body">' + renderBody(r.body) + '</div>' +
         '<div class="reply-actions"><div class="reply-score-inline' + scoreClass + '" data-score-for="reply:' + r.id + '"><button class="up' + upActive + '" data-vote-type="reply" data-vote-id="' + r.id + '" data-vote-value="1"' + (currentUser ? '' : ' disabled') + '>▲</button><span class="reply-score-num">' + r.score + '</span><button class="down' + downActive + '" data-vote-type="reply" data-vote-id="' + r.id + '" data-vote-value="-1"' + (currentUser ? '' : ' disabled') + '>▼</button></div>' + actionsHtml + '</div>' +
         reactionsHtmlFor('reply', r.id) +
         '<div class="inline-reply-form" data-inline-reply-form="' + r.id + '"><textarea placeholder="Reply to ' + esc(displayName) + '…" maxlength="' + MAX_REPLY + '" data-inline-reply-body="' + r.id + '"></textarea><div class="inline-reply-actions"><button data-inline-reply-submit="' + r.id + '">Post Reply</button><button class="ghost" data-inline-reply-cancel="' + r.id + '">Cancel</button></div></div>' + childrenHtml + '</div>';

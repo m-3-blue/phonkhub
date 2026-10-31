@@ -137,7 +137,7 @@ export default async function handler(req, res) {
       const threadsResult = await client.execute({
         sql: `SELECT
                 t.id, t.title, t.created_at, t.edited_at, t.score,
-                u.id AS user_id, u.username, u.display_name,
+                u.id AS user_id, u.username, u.display_name, u.is_booster,
                 (SELECT COUNT(*) FROM forum_replies r WHERE r.thread_id = t.id) AS reply_count
               FROM forum_threads t
               JOIN users u ON u.id = t.user_id
@@ -160,7 +160,7 @@ export default async function handler(req, res) {
       const threadResult = await client.execute({
         sql: `SELECT
                 t.id, t.title, t.body, t.created_at, t.edited_at, t.score, t.category_id,
-                u.id AS user_id, u.username, u.display_name,
+                u.id AS user_id, u.username, u.display_name, u.is_booster,
                 c.slug AS category_slug, c.name AS category_name, c.admin_only
               FROM forum_threads t
               JOIN users u ON u.id = t.user_id
@@ -178,7 +178,7 @@ export default async function handler(req, res) {
       const repliesResult = await client.execute({
         sql: `SELECT
                 r.id, r.body, r.parent_id, r.created_at, r.edited_at, r.score,
-                u.id AS user_id, u.username, u.display_name
+                u.id AS user_id, u.username, u.display_name, u.is_booster
               FROM forum_replies r
               JOIN users u ON u.id = r.user_id
               WHERE r.thread_id = ?
@@ -201,6 +201,7 @@ export default async function handler(req, res) {
             id: row.user_id,
             username: row.username,
             display_name: row.display_name || row.username,
+            is_booster: row.is_booster, // ADD THIS
           },
           replies: [],
         };
@@ -269,6 +270,7 @@ export default async function handler(req, res) {
             id: thread.user_id,
             username: thread.username,
             display_name: thread.display_name || thread.username,
+            is_booster: thread.is_booster, // ADD THIS
           },
         },
         replies: topLevel,
