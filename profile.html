@@ -1028,12 +1028,12 @@
       var votesCountHtml = counts.votes > 0 ? '<span class="tab-count">' + counts.votes + '</span>' : '';
 
       var commentsHtml = comments.length === 0 ? '<div class="empty-section">No comments yet</div>' : comments.map(function (c) {
-        return '<div class="post-item"><div class="post-context">on <a href="/track-' + c.track_id + '">' + esc(c.track_title) + '</a></div><div class="post-body">' + esc(c.body) + '</div><div class="post-time">' + timeAgo(c.created_at) + '</div></div>';
+        return '<div class="post-item"><div class="post-context">on <a href="/track/' + c.youtube_id + '">' + esc(c.track_title) + '</a></div><div class="post-body">' + esc(c.body) + '</div><div class="post-time">' + timeAgo(c.created_at) + '</div></div>';
       }).join('');
 
       var votesHtml = votes.length === 0 ? '<div class="empty-section">No votes yet</div>' : votes.map(function (v) {
         var arrow = v.value > 0 ? '▲' : '▼', cls = v.value > 0 ? 'up' : 'down';
-        return '<a class="vote-item" href="/track-' + v.id + '"><div class="vote-arrow ' + cls + '">' + arrow + '</div><div class="vote-info"><div class="vote-title">' + esc(v.title) + '</div><div class="vote-artist">' + esc(v.artist) + '</div></div><div class="vote-time">' + timeAgo(v.voted_at) + '</div></a>';
+        return '<a class="vote-item" href="/track/' + v.youtube_id + '"><div class="vote-arrow ' + cls + '">' + arrow + '</div><div class="vote-info"><div class="vote-title">' + esc(v.title) + '</div><div class="vote-artist">' + esc(v.artist) + '</div></div><div class="vote-time">' + timeAgo(v.voted_at) + '</div></a>';
       }).join('');
 
       var aboutHtml = '';

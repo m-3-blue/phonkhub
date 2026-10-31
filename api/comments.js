@@ -112,8 +112,11 @@ export default async function handler(req, res) {
 
       const result = await client.execute({
         sql: `SELECT c.id, c.track_id, c.parent_id, c.body, c.created_at, c.edited_at,
-                     u.id AS user_id, u.username, u.display_name, u.is_booster
-              FROM comments c JOIN users u ON u.id = c.user_id
+                     u.id AS user_id, u.username, u.display_name, u.is_booster,
+                     t.youtube_id, t.title AS track_title
+              FROM comments c 
+              JOIN users u ON u.id = c.user_id
+              JOIN tracks t ON t.id = c.track_id
               WHERE c.track_id = ? ORDER BY c.created_at ASC`,
         args: [trackId],
       });
@@ -145,6 +148,7 @@ export default async function handler(req, res) {
         byId[row.id] = {
           id: row.id, track_id: row.track_id, parent_id: row.parent_id,
           body: row.body, created_at: row.created_at, edited_at: row.edited_at || null,
+          youtube_id: row.youtube_id, track_title: row.track_title, // <-- ADD THESE
           user: { id: row.user_id, username: row.username, display_name: row.display_name || row.username, is_booster: row.is_booster },
           like_count: likeCounts[row.id] || 0, user_liked: !!userLikes[row.id], replies: [],
         };
