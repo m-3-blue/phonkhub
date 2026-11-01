@@ -14,6 +14,13 @@ function now() {
 }
 
 function getSessionToken(req) {
+  // 1. Check Authorization header first (for the App)
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
+  // 2. Fallback to cookie (for the Main Site)
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
