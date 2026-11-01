@@ -60,7 +60,7 @@ export default async function handler(req, res) {
   }
 
   const client = getClient();
-  const action = req.query.action;
+  const action = (req.query.action || '').toLowerCase();
 
   try {
     // GET FOLLOWERS / FOLLOWING LISTS
