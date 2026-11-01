@@ -74,9 +74,9 @@ export default async function handler(req, res) {
 
       let sql;
       if (action === 'followers') {
-        sql = `SELECT u.username, u.display_name FROM follows f JOIN users u ON u.id = f.follower_id WHERE f.following_id = ? ORDER BY f.created_at DESC`;
+        sql = `SELECT u.username, u.display_name, u.accent_color FROM follows f JOIN users u ON u.id = f.follower_id WHERE f.following_id = ? ORDER BY f.created_at DESC`;
       } else {
-        sql = `SELECT u.username, u.display_name FROM follows f JOIN users u ON u.id = f.following_id WHERE f.follower_id = ? ORDER BY f.created_at DESC`;
+        sql = `SELECT u.username, u.display_name, u.accent_color FROM follows f JOIN users u ON u.id = f.following_id WHERE f.follower_id = ? ORDER BY f.created_at DESC`;
       }
 
       const result = await client.execute({ sql, args: [userId] });
