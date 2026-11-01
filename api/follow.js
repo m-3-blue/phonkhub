@@ -2,6 +2,13 @@ import { createClient } from '@libsql/client';
 
 const SESSION_COOKIE = 'ph_session';
 
+// ─── CORS helper ───────────────────────────────────────────────────────────────
+function setCors(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
+
 function getClient() {
   return createClient({
     url: process.env.TURSO_DATABASE_URL,
@@ -46,6 +53,12 @@ async function getCurrentUser(client, req) {
 }
 
 export default async function handler(req, res) {
+  // Handle CORS preflight
+  setCors(res);
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   const client = getClient();
   const action = req.query.action;
 
@@ -99,7 +112,7 @@ export default async function handler(req, res) {
         });
         following = true;
 
-        // Notification Trigger
+        // Notification
         await client.execute({
           sql: 'INSERT INTO notifications (user_id, actor_id, type, link, created_at) VALUES (?, ?, ?, ?, ?)',
           args: [targetId, me.id, 'follow', '/@' + me.username, now()],
