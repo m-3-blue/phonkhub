@@ -5,6 +5,33 @@ import crypto from 'crypto';
 const SESSION_COOKIE = 'ph_session';
 const SESSION_DAYS = 30;
 
+function setSessionCookie(req, res, token, expiresAt) {
+  const isLocalhost = req.headers.host && (req.headers.host.includes('localhost') || req.headers.host.includes('127.0.0.1'));
+  const secureFlag = isLocalhost ? '; SameSite=Lax' : '; Secure; SameSite=None';
+
+  res.setHeader('Set-Cookie',
+    SESSION_COOKIE + '=' + token +
+    '; Path=/; HttpOnly' + secureFlag + '; Expires=' + new Date(expiresAt).toUTCString()
+  );
+}
+
+function getSessionToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
+  const raw = req.headers.cookie || '';
+  const parts = raw.split(';');
+  for (const part of parts) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === SESSION_COOKIE) {
+      return rest.join('=') || null;
+    }
+  }
+  return null;
+}
+
 function getClient() {
   return createClient({
     url: process.env.TURSO_DATABASE_URL,
@@ -51,34 +78,10 @@ function isValidEmail(e) {
   return typeof e === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 }
 
-function setSessionCookie(res, token, expiresAt) {
-  res.setHeader('Set-Cookie',
-    SESSION_COOKIE + '=' + token +
-    '; Path=/; HttpOnly; Secure; SameSite=None; Expires=' + new Date(expiresAt).toUTCString()
-  );
-}
-
 function clearSessionCookie(res) {
   res.setHeader('Set-Cookie',
     SESSION_COOKIE + '=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0'
   );
-}
-
-function getSessionToken(req) {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    return authHeader.substring(7);
-  }
-
-  const raw = req.headers.cookie || '';
-  const parts = raw.split(';');
-  for (const part of parts) {
-    const [key, ...rest] = part.trim().split('=');
-    if (key === SESSION_COOKIE) {
-      return rest.join('=') || null;
-    }
-  }
-  return null;
 }
 
 export default async function handler(req, res) {
@@ -108,6 +111,14 @@ export default async function handler(req, res) {
   const ip = getClientIp(req);
 
   try {
+    // --- CHECK LOCKDOWN ---
+    const lockCheck = await client.execute("SELECT value FROM site_settings WHERE key = 'lockdown'");
+    if (lockCheck.rows.length > 0 && lockCheck.rows[0].value === '1') {
+      if (action !== 'me' && action !== 'logout') {
+        return res.status(403).json({ error: 'PhonkHub is currently in lockdown. Try again later.' });
+      }
+    }
+
     if (action === 'signup' && req.method === 'POST') {
       if (await isIpBanned(client, ip)) return res.status(403).json({ error: 'Access denied' });
       const { username, email, password, display_name } = req.body || {};
@@ -143,19 +154,20 @@ export default async function handler(req, res) {
         args: [token, userId, ip, now(), expiresAt],
       });
 
-      setSessionCookie(res, token, expiresAt);
+      setSessionCookie(req, res, token, expiresAt);
       return res.status(200).json({
         user: { id: userId, username, display_name: finalDisplayName, is_admin: false, is_booster: false },
         token: token
       });
     }
 
-      if (action === 'login' && req.method === 'POST') {
+    if (action === 'login' && req.method === 'POST') {
       if (await isIpBanned(client, ip)) return res.status(403).json({ error: 'Access denied' });
       const { username, password } = req.body || {};
 
       if (!username || !password) return res.status(400).json({ error: 'Missing username or password' });
 
+      // 1. Fetch the user from the database FIRST
       const result = await client.execute({
         sql: 'SELECT id, username, display_name, password_hash, is_admin, is_booster FROM users WHERE username = ? OR email = ?',
         args: [username, username],
@@ -164,9 +176,12 @@ export default async function handler(req, res) {
       if (result.rows.length === 0) return res.status(401).json({ error: 'Invalid username or password' });
 
       const user = result.rows[0];
+      
+      // 2. Verify the password
       const ok = await bcrypt.compare(password, user.password_hash);
       if (!ok) return res.status(401).json({ error: 'Invalid username or password' });
 
+      // 4. Create the session and log them in
       await client.execute({ sql: 'UPDATE users SET ip = ? WHERE id = ?', args: [ip, user.id] });
 
       const token = crypto.randomBytes(32).toString('hex');
@@ -177,7 +192,7 @@ export default async function handler(req, res) {
         args: [token, user.id, ip, now(), expiresAt],
       });
 
-      setSessionCookie(res, token, expiresAt);
+      setSessionCookie(req, res, token, expiresAt);
       return res.status(200).json({
         user: {
           id: user.id,
@@ -203,7 +218,6 @@ export default async function handler(req, res) {
       const token = getSessionToken(req);
       if (!token) return res.status(200).json({ user: null });
 
-      // FIXED: Now correctly selects is_booster alongside is_admin
       const result = await client.execute({
         sql: `SELECT u.id, u.username, u.display_name, u.is_admin, u.is_booster, s.expires_at
               FROM sessions s

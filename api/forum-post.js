@@ -29,7 +29,6 @@ async function isIpBanned(client, ip) {
   return result.rows.length > 0;
 }
 
-// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -39,7 +38,9 @@ function getSessionToken(req) {
   const parts = raw.split(';');
   for (const part of parts) {
     const [key, ...rest] = part.trim().split('=');
-    if (key === SESSION_COOKIE) return rest.join('=') || null;
+    if (key === 'ph_session') {
+      return rest.join('=') || null;
+    }
   }
   return null;
 }
@@ -107,8 +108,28 @@ export default async function handler(req, res) {
   const action = req.query.action;
 
   try {
+    // --- CHECK LOCKDOWN ---
+    const lockCheck = await client.execute("SELECT value FROM site_settings WHERE key = 'lockdown'");
+    if (lockCheck.rows.length > 0 && lockCheck.rows[0].value === '1') {
+      const token = getSessionToken(req);
+      let isAdmin = false;
+      if (token) {
+        const adminCheck = await client.execute({
+          sql: 'SELECT u.is_admin FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ?',
+          args: [token]
+        });
+        if (adminCheck.rows.length > 0 && adminCheck.rows[0].is_admin == 1) isAdmin = true;
+      }
+      if (!isAdmin) {
+        return res.status(403).json({ error: 'PhonkHub is currently in lockdown. Try again later.' });
+      }
+    }
+
+    if (await isIpBanned(client, ip)) {
+
     if (await isIpBanned(client, ip)) {
       return res.status(403).json({ error: 'Access denied' });
+    }
     }
 
     const user = await getCurrentUser(client, req);
@@ -249,8 +270,9 @@ export default async function handler(req, res) {
     }
 
     return res.status(400).json({ error: 'Unknown action' });
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Server error' });
-  }
+  };
 }

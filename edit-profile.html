@@ -703,7 +703,7 @@
     var actionsEl = document.getElementById('headerActions');
     if (!actionsEl) return;
     try {
-      var authRes = await fetch('/api/auth?action=me');
+      var authRes = await fetch('/api/auth?action=me', { credentials: 'include' });
       var authData = await authRes.json();
       if (!authData.user) return;
 
@@ -736,7 +736,7 @@
       async function loadNotifications() {
         try {
           var res = await fetch('/api/notifications');
-          if (!res.ok) return;
+          if (!res.ok) return; 
           var data = await res.json();
           if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
           if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }

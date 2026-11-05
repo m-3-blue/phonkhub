@@ -133,6 +133,32 @@
     .forum-main { padding: 1.5rem 1rem 3rem; }
     .form-box { padding: 1.25rem 1rem; }
   }
+
+    /* HIDE USER UI DURING LOCKDOWN */
+  body.lockdown-active #headerActions a[href^="/@"],
+  body.lockdown-active #headerActions a[href="#"],
+  body.lockdown-active #headerActions a[href$="/login"],
+  body.lockdown-active #headerActions a[href$="/signup"],
+  body.lockdown-active .notif-wrapper {
+    display: none !important;
+  }
+
+  /* ADD THE LOCKDOWN BADGE VIA CSS */
+  body.lockdown-active #headerActions::after {
+    content: 'LOCKDOWN ACTIVE';
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: var(--red);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    pointer-events: none;
+  }
 </style>
 </head>
 
@@ -165,6 +191,17 @@
     </nav>
   </header>
 
+  <!-- LOCKDOWN BANNER -->
+  <div id="lockdownBanner" style="display: none; background: #000; border-bottom: 1px solid #ff9900; text-align: center; padding: 10px; position: relative; z-index: 90; align-items: center; justify-content: center; gap: 8px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; color: #ff9900 !important;">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span style="font-family: 'Barlow Condensed', sans-serif !important; font-weight: 700 !important; font-size: 14px !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; color: #ff9900 !important; display: inline-block; vertical-align: middle;">
+      PhonkHub is in lockdown.
+    </span>
+  </div>
+
   <div class="forum-shell">
     <aside class="forum-sidebar" id="forumSidebar">
       <div class="loading-msg" style="padding:1rem 0;">Loading…</div>
@@ -187,7 +224,7 @@
     var actionsEl = document.getElementById('headerActions');
     if (!actionsEl) return;
     try {
-      var authRes = await fetch('/api/auth?action=me');
+      var authRes = await fetch('/api/auth?action=me', { credentials: 'include' });
       var authData = await authRes.json();
       if (!authData.user) return;
       var wrapper = document.createElement('div');
@@ -216,7 +253,7 @@
       async function loadNotifications() {
         try {
           var res = await fetch('/api/notifications');
-          if (!res.ok) return;
+          if (!res.ok) return; 
           var data = await res.json();
           if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
           if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
@@ -360,11 +397,73 @@
         var res = await fetch('/api/forum-post?action=create-thread', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ category_slug: subCategory.slug, title: title, body: body }) });
         var data = await res.json();
         if (!res.ok) { statusMsg.className = 'status-msg err'; statusMsg.textContent = data.error || 'Failed to post'; submitBtn.disabled = false; return; }
+        
         statusMsg.textContent = 'Posted! Redirecting…';
         window.location.href = '/forums/thread-' + data.thread_id;
       } catch (err) { statusMsg.className = 'status-msg err'; statusMsg.textContent = 'Network error'; submitBtn.disabled = false; }
     });
+        submitBtn.addEventListener('click', async function () {
+      // ... existing submit logic
+    });
+
+    // --- APPLY LOCKDOWN TO NEW THREAD FORM ---
+    fetch('/api/lockdown-status').then(r => r.json()).then(data => {
+      if (data.lockdown === '1') {
+        const user = JSON.parse(localStorage.getItem('ph_user') || '{}');
+        if (user.is_admin === 1) return; // Admin bypass
+
+        document.querySelectorAll('input, textarea, .btn-submit').forEach(el => {
+          el.disabled = true;
+          el.style.opacity = '0.5';
+          el.style.cursor = 'not-allowed';
+          if (el.tagName === 'TEXTAREA') el.placeholder = "PhonkHub is currently in lockdown.";
+        });
+      }
+    });
   }
 </script>
+
+  <script>
+    // --- LOCKDOWN CHECK ---
+    fetch('/api/lockdown-status')
+      .then(res => res.json())
+      .then(data => {
+        if (data.lockdown === '1') {
+          
+          document.body.classList.add('lockdown-active');
+          
+          const banner = document.getElementById('lockdownBanner');
+          if (banner) banner.style.display = 'flex';
+
+          // Check if user is logged in
+          const user = JSON.parse(localStorage.getItem('ph_user') || '{}');
+          const isAdmin = user.is_admin === 1 || user.is_admin === true;
+          const isLoggedIn = !!localStorage.getItem('ph_session_token') || !!user.id;
+
+          // If they are an admin, don't lock them out
+          if (isAdmin) return;
+
+          if (!isLoggedIn) {
+            // --- FOR GUESTS (No Account) ---
+            // Hide the login prompts and comment boxes completely
+            document.querySelectorAll('.comment-login-prompt, .login-prompt, .reply-form-box').forEach(el => {
+              el.style.display = 'none';
+            });
+          } else {
+            // --- FOR LOGGED IN USERS (Non-Admins) ---
+            // Disable the text boxes so they can see them but can't type
+            document.querySelectorAll('textarea, input[type="text"], input[type="submit"], form button, .btn-orange, .vote-btn').forEach(el => {
+              el.disabled = true;
+              el.style.opacity = '0.5';
+              el.style.cursor = 'not-allowed';
+              if (el.tagName === 'TEXTAREA') {
+                el.placeholder = "PhonkHub is currently in lockdown.";
+              }
+            });
+          }
+        }
+      })
+      .catch(err => console.error('Lockdown check failed:', err));
+  </script>
 </body>
 </html>

@@ -290,6 +290,32 @@
     .reply-children { padding-left: 0.75rem; }
     .emoji-picker { left: auto; right: 0; }
   }
+
+    /* HIDE USER UI DURING LOCKDOWN */
+  body.lockdown-active #headerActions a[href^="/@"],
+  body.lockdown-active #headerActions a[href="#"],
+  body.lockdown-active #headerActions a[href$="/login"],
+  body.lockdown-active #headerActions a[href$="/signup"],
+  body.lockdown-active .notif-wrapper {
+    display: none !important;
+  }
+
+  /* ADD THE LOCKDOWN BADGE VIA CSS */
+  body.lockdown-active #headerActions::after {
+    content: 'LOCKDOWN ACTIVE';
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: var(--red);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    pointer-events: none;
+  }
 </style>
 </head>
 
@@ -322,6 +348,17 @@
     </nav>
   </header>
 
+  <!-- LOCKDOWN BANNER -->
+  <div id="lockdownBanner" style="display: none; background: #000; border-bottom: 1px solid #ff9900; text-align: center; padding: 10px; position: relative; z-index: 90; align-items: center; justify-content: center; gap: 8px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; color: #ff9900 !important;">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span style="font-family: 'Barlow Condensed', sans-serif !important; font-weight: 700 !important; font-size: 14px !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; color: #ff9900 !important; display: inline-block; vertical-align: middle;">
+      PhonkHub is in lockdown.
+    </span>
+  </div>
+
   <div class="forum-shell">
     <aside class="forum-sidebar" id="forumSidebar">
       <div class="loading-msg" style="padding:1rem 0;">Loading…</div>
@@ -344,7 +381,7 @@
     var actionsEl = document.getElementById('headerActions');
     if (!actionsEl) return;
     try {
-      var authRes = await fetch('/api/auth?action=me');
+            var authRes = await fetch('/api/auth?action=me', { credentials: 'include' });
       var authData = await authRes.json();
       if (!authData.user) return;
       var wrapper = document.createElement('div');
@@ -373,7 +410,7 @@
       async function loadNotifications() {
         try {
           var res = await fetch('/api/notifications');
-          if (!res.ok) return;
+          if (!res.ok) return; 
           var data = await res.json();
           if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
           if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
@@ -556,6 +593,34 @@
 
     attachThreadHandlers();
     attachTopReplyForm();
+
+        attachThreadHandlers();
+    attachTopReplyForm();
+
+    // --- APPLY LOCKDOWN TO FORUM THREAD ---
+    fetch('/api/lockdown-status').then(r => r.json()).then(data => {
+      if (data.lockdown === '1') {
+        const user = JSON.parse(localStorage.getItem('ph_user') || '{}');
+        const isAdmin = user.is_admin === 1 || user.is_admin === true;
+        const isLoggedIn = !!localStorage.getItem('ph_session_token') || !!user.id;
+        
+        if (isAdmin) return; // Admins bypass
+
+        if (!isLoggedIn) {
+          // Hide reply prompts for guests
+          document.querySelectorAll('.login-prompt').forEach(el => el.style.display = 'none');
+        } else {
+          // Disable reply boxes for logged-in non-admins
+          document.querySelectorAll('textarea, form button, .reply-form-actions button').forEach(el => {
+            el.disabled = true;
+            el.style.opacity = '0.5';
+            el.style.cursor = 'not-allowed';
+            if (el.tagName === 'TEXTAREA') el.placeholder = "PhonkHub is currently in lockdown.";
+          });
+        }
+      }
+    }).catch(err => console.error(err));
+    // --------------------------------------
   }
 
   function renderReply(r, depth) {
@@ -738,5 +803,56 @@ l.parentNode.insertBefore(s, l);
 })({})
 </script>
 
+  <script>
+    // --- LOCKDOWN CHECK ---
+    fetch('/api/lockdown-status')
+      .then(res => res.json())
+      .then(data => {
+        if (data.lockdown === '1') {
+          
+          // 1. Show the banner
+          const banner = document.getElementById('lockdownBanner');
+          if (banner) banner.style.display = 'flex';
+          
+          // 2. Add lockdown class to body
+          document.body.classList.add('lockdown-active');
+
+          // 3. Check user status
+          const user = JSON.parse(localStorage.getItem('ph_user') || '{}');
+          const isAdmin = user.is_admin === 1 || user.is_admin === true;
+          const isLoggedIn = !!localStorage.getItem('ph_session_token') || !!user.id;
+
+          // If they are an admin, let them use the site normally
+          if (isAdmin) return; 
+
+          // --- HIDE / DISABLE UI ---
+          // Hide the login prompt for guests
+          document.querySelectorAll('.login-prompt').forEach(el => el.style.display = 'none');
+
+          // Disable all text boxes
+          document.querySelectorAll('textarea').forEach(el => {
+            el.disabled = true;
+            el.style.opacity = '0.5';
+            el.placeholder = "PhonkHub is currently in lockdown.";
+          });
+
+          // Hide/Disable ALL reply buttons
+          document.querySelectorAll('[data-reply-to], [data-inline-reply-submit], [data-reply-submit], #topReplySubmit').forEach(el => {
+            if (el.tagName === 'BUTTON') {
+              el.disabled = true;
+              el.style.opacity = '0.5';
+              el.style.cursor = 'not-allowed';
+            }
+          });
+          
+          // Completely hide the main reply form for guests
+          if (!isLoggedIn) {
+             const replyBox = document.getElementById('replyFormBox');
+             if (replyBox) replyBox.style.display = 'none';
+          }
+        }
+      })
+      .catch(err => console.error('Lockdown check failed:', err));
+  </script>
 </body>
 </html>
