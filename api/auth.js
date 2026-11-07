@@ -4,6 +4,25 @@ import crypto from 'crypto';
 
 const SESSION_COOKIE = 'ph_session';
 const SESSION_DAYS = 30;
+const signupAttempts = new Map();
+const RATE_LIMIT_MAX = 3; // Max 3 signups per IP
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
+
+async function verifyTurnstile(token) {
+  if (!token) return false;
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `secret=${process.env.TURNSTILE_SECRET_KEY}&response=${token}`
+    });
+    const data = await res.json();
+    return data.success;
+  } catch (err) {
+    console.error("Turnstile verification error:", err);
+    return false;
+  }
+}
 
 function setSessionCookie(req, res, token, expiresAt) {
   const isLocalhost = req.headers.host && (req.headers.host.includes('localhost') || req.headers.host.includes('127.0.0.1'));
@@ -121,7 +140,30 @@ export default async function handler(req, res) {
 
     if (action === 'signup' && req.method === 'POST') {
       if (await isIpBanned(client, ip)) return res.status(403).json({ error: 'Access denied' });
-      const { username, email, password, display_name } = req.body || {};
+
+      // --- RATE LIMITING CHECK ---
+      const nowTs = Date.now();
+      const attempts = signupAttempts.get(ip) || { count: 0, firstAttempt: nowTs };
+      
+      if (nowTs - attempts.firstAttempt > RATE_LIMIT_WINDOW) {
+        attempts.count = 0;
+        attempts.firstAttempt = nowTs;
+      }
+      
+      if (attempts.count >= RATE_LIMIT_MAX) {
+        return res.status(429).json({ error: 'Too many accounts created from this IP. Try again in an hour.' });
+      }
+      
+      attempts.count++;
+      signupAttempts.set(ip, attempts);
+
+      const { username, email, password, display_name, captchaToken } = req.body || {};
+
+            // --- VERIFY CAPTCHA ---
+      const isHuman = await verifyTurnstile(captchaToken);
+      if (!isHuman) {
+        return res.status(400).json({ error: 'CAPTCHA verification failed. Please try again.' });
+      }
 
       if (!isValidUsername(username)) return res.status(400).json({ error: 'Username must be 3-20 characters, letters/numbers/underscores only' });
       if (!isValidEmail(email)) return res.status(400).json({ error: 'Invalid email' });
@@ -163,7 +205,13 @@ export default async function handler(req, res) {
 
     if (action === 'login' && req.method === 'POST') {
       if (await isIpBanned(client, ip)) return res.status(403).json({ error: 'Access denied' });
-      const { username, password } = req.body || {};
+      const { username, password, captchaToken } = req.body || {};
+
+            // --- VERIFY CAPTCHA ---
+      const isHuman = await verifyTurnstile(captchaToken);
+      if (!isHuman) {
+        return res.status(400).json({ error: 'CAPTCHA verification failed. Please try again.' });
+      }
 
       if (!username || !password) return res.status(400).json({ error: 'Missing username or password' });
 

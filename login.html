@@ -130,6 +130,9 @@
   }
   .alt a:hover { text-decoration: underline; }
 </style>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 </head>
 
 <body>
@@ -142,6 +145,9 @@
 
     <label for="password">Password</label>
     <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+
+        <!-- ADD THIS LINE HERE -->
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAAF3CK6Oaj8-7zunu" data-theme="dark" style="margin-bottom: 1rem;"></div>
 
     <button id="submitBtn">Log In</button>
     <div class="msg" id="msg"></div>
@@ -163,6 +169,12 @@
   async function submit() {
     var username = document.getElementById('username').value.trim();
     var password = document.getElementById('password').value;
+    var captchaToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+    
+    if (!captchaToken) {
+      setMsg('Please wait for the CAPTCHA to verify.', true);
+      return;
+    }
 
     if (!username || !password) {
       setMsg('Fill in all fields', true);
@@ -176,7 +188,7 @@
       var res = await fetch('/api/auth?action=login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username, password: password }),
+        body: JSON.stringify({ username: username, password: password, captchaToken: captchaToken }),
       });
       var data = await res.json();
 
