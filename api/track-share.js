@@ -19,8 +19,8 @@ export default async function handler(req, res) {
     if (trackRes.rows.length === 0) return res.status(404).send('Track not found');
 
     const track = trackRes.rows[0];
-    const title = `${track.title} - ${track.artist}`;
-    const description = `Ranked #${track.position} on PhonkHub with ${track.score} upvotes. Listen now!`;
+    const title = `${track.title}`;
+    const description = `by **${track.artist}**\n\nRanked #${track.position} on PhonkHub with ${track.score} upvotes. Listen now!`;
     const imageUrl = `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`;
 
     // We fetch the raw HTML of track.html from your site
