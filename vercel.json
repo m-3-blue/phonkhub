@@ -1,5 +1,16 @@
 {
   "rewrites": [
+    {
+      "source": "/track/:youtube_id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Discordbot|Twitterbot|facebookexternalhit|WhatsApp|TelegramBot|Slackbot|LinkedInBot|Pinterest|redditbot).*"
+        }
+      ],
+      "destination": "/api/track-share?youtube_id=:youtube_id"
+    },
     { "source": "/track/:youtube_id", "destination": "/track.html" },
     { "source": "/signup", "destination": "/signup.html" },
     { "source": "/login", "destination": "/login.html" },
