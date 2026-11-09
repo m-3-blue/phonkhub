@@ -53,8 +53,7 @@ export default async function handler(req, res) {
       </div>
     `;
 
-    const imageUrl = `https://api.microlink.io/?url=${encodeURIComponent('data:text/html,' + customHtml)}&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1200&viewport.height=630`;
-
+    const imageUrl = `https://phonkhub.online/api/forum-image?id=${threadId}`;
     // 2. Fetch the base HTML
     const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
     const htmlRes = await fetch(`${baseUrl}/forum-thread.html`);
