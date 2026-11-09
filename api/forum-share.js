@@ -35,7 +35,7 @@ export default async function handler(req, res) {
       
       <meta property="og:site_name" content="PhonkHub Forums" />
       <meta property="og:title" content="${thread.title}" />
-      <meta property="og:description" content="Posted by ${author} in r/${thread.category_name} • ▲ ${thread.score} upvotes" />
+      <meta property="og:description" content="Posted by ${author} • ▲ ${thread.score} upvotes in ${thread.category_name}" />
       <meta property="og:image" content="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" />
       <meta property="og:url" content="https://phonkhub.online/forums/thread-${threadId}" />
       <meta property="og:type" content="article" />
