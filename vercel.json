@@ -11,6 +11,17 @@
       ],
       "destination": "/api/track-share?youtube_id=:youtube_id"
     },
+    {
+      "source": "/forums/thread-:id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Discordbot|Twitterbot|facebookexternalhit|WhatsApp|TelegramBot|Slackbot|LinkedInBot|Pinterest|redditbot).*"
+        }
+      ],
+      "destination": "/api/forum-share.jsx?id=:id"
+    },
     { "source": "/track/:youtube_id", "destination": "/track.html" },
     { "source": "/signup", "destination": "/signup.html" },
     { "source": "/login", "destination": "/login.html" },
