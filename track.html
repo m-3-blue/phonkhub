@@ -268,6 +268,55 @@
     color: #666;
   }
 
+  /* SAVE MODAL CSS */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #0d0d0d; border: 1px solid #2a2a2a; border-top: 3px solid var(--red); border-radius: 4px; width: 100%; max-width: 360px; display: flex; flex-direction: column; max-height: 80vh; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid #1d1d1d; }
+  .modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); }
+  .modal-close { background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer; line-height: 1; }
+  .modal-close:hover { color: var(--red); }
+  .modal-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+  
+  .playlist-checkbox-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 4px; cursor: pointer; transition: background 0.15s; }
+  .playlist-checkbox-row:hover { background: #1a1a1a; }
+  
+  /* CUSTOM CHECKBOX */
+  .playlist-checkbox-row input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #444;
+    border-radius: 4px;
+    background: #000;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  
+  .playlist-checkbox-row input[type="checkbox"]:checked {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  
+  .playlist-checkbox-row input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: #000;
+    font-size: 14px;
+    font-weight: 900;
+  }
+  
+  .playlist-checkbox-name { font-family: 'Barlow', sans-serif; font-size: 0.95rem; color: #ddd; }
+  
+  .modal-footer { padding: 1rem; border-top: 1px solid #1d1d1d; }
+  .create-playlist-btn { width: 100%; padding: 0.75rem; background: transparent; border: 1px dashed #444; color: #aaa; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
+  .create-playlist-btn:hover { border-color: var(--red); color: var(--red); background: rgba(255,153,0,0.05); }
+
   .section-title {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: clamp(1rem, 2vw, 1.35rem);
@@ -740,8 +789,36 @@
   @media (max-width: 480px) {
     .header-main { padding: 0.65rem 0.75rem; }
     .rank { font-size: 2.5rem; }
-    .vote-row { flex-wrap: wrap; }
-    .vote-note { width: 100%; margin-left: 0; text-align: center; margin-top: 0.5rem; }
+    .vote-row { 
+      flex-wrap: wrap; 
+      justify-content: space-between; 
+      gap: 0.5rem; 
+    }
+    .vote-note { 
+      width: 100%; 
+      margin-left: 0; 
+      text-align: center; 
+      margin-top: 0.5rem; 
+      order: 5; /* Puts it at the bottom */
+    }
+
+  /* FIX SAVE BUTTON SIZE */
+  .save-btn {
+    margin-left: auto !important;
+    border-color: #444 !important;
+    padding: 0.5rem 1rem !important;
+    height: 2.35rem !important; /* Matches the exact height of vote buttons */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important; /* Space between icon and text */
+  }
+
+  .save-btn svg {
+    width: 15px;
+    height: 15px;
+    display: block;
+  }
   }
 
     /* HIDE USER UI DURING LOCKDOWN */
@@ -791,8 +868,8 @@
       <div class="nav-inner">
         <a class="nav-link" href="/">Home</a>
         <a class="nav-link" href="/forums">Forums</a>
+        <a class="nav-link" href="/library">Library</a>
         <a class="nav-link">About</a>
-        <a class="nav-link">All Tracks</a>
         <a class="nav-link">Genres</a>
       </div>
     </nav>
@@ -1386,7 +1463,7 @@
         var t = data.track;
         var recs = data.recommended || [];
         
-        currentTrackId = t.id; // Store the actual DB ID for votes/comments
+        window.currentTrackId = t.id; // Store the actual DB ID globally
         voteScore = data.score || 0;
         currentUserVote = data.userVote || 0;
         loggedIn = !!data.user;
@@ -1430,6 +1507,10 @@
             '<div class="vote-score" id="voteScore">0</div>' +
             '<button class="vote-btn down" id="downBtn">▼</button>' +
             '<div class="vote-note" id="voteNote"></div>' +
+            '<button class="vote-btn save-btn" id="saveBtn" style="margin-left: auto; border-color: #444; gap: 0.4rem;">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>' +
+              'Save' +
+            '</button>' +
           '</div>' +
           '<div class="section-heading"><h2 class="section-title">Recommended</h2></div>' +
           '<div class="track-list">' +
@@ -1449,10 +1530,11 @@
         attachTopLevelCommentForm();
         loadComments();
 
-                attachVoteHandlers();
-        renderVotes();
-        attachTopLevelCommentForm();
-        loadComments();
+        // Re-attach the Save button listener HERE
+        var newSaveBtn = document.getElementById('saveBtn');
+        if (newSaveBtn) {
+          newSaveBtn.addEventListener('click', openSaveModal);
+        }
 
         // --- APPLY LOCKDOWN TO FRESHLY LOADED UI ---
         fetch('/api/lockdown-status').then(r => r.json()).then(data => {
@@ -1559,5 +1641,105 @@ l.parentNode.insertBefore(s, l);
       })
       .catch(err => console.error('Lockdown check failed:', err));
   </script>
+
+    <!-- SAVE TO PLAYLIST MODAL -->
+  <div class="modal-overlay" id="playlistModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">Save to...</div>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="playlistModalList">
+        <!-- Playlists load here -->
+      </div>
+      <div class="modal-footer">
+        <button class="create-playlist-btn" id="modalCreateBtn">+ Create new playlist</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- ADD THIS NEW SCRIPT TAG AT THE VERY BOTTOM -->
+  <script>
+    // --- PLAYLIST SAVE LOGIC ---
+    function openSaveModal() {
+      // Use the global variable we set earlier
+      if (!window.currentTrackId) {
+        alert("Track data not loaded yet. Try again in a second.");
+        return;
+      }
+      document.getElementById('playlistModal').classList.add('open');
+      loadModalPlaylists();
+    }
+
+    async function loadModalPlaylists() {
+      var list = document.getElementById('playlistModalList');
+      list.innerHTML = '<div style="padding: 1rem; text-align: center; color: #666; font-size: 0.8rem;">Loading...</div>';
+
+      try {
+        var res = await fetch('/api/playlists?action=status&track_id=' + window.currentTrackId, { credentials: 'include' });
+        var data = await res.json();
+        
+        if (!data.playlists || data.playlists.length === 0) {
+          list.innerHTML = '<div style="padding: 1rem; text-align: center; color: #666; font-size: 0.8rem;">No playlists yet. Create one below!</div>';
+          return;
+        }
+
+        list.innerHTML = data.playlists.map(function(p) {
+          var checked = p.has_track ? 'checked' : '';
+          return `
+            <label class="playlist-checkbox-row">
+              <input type="checkbox" ${checked} onchange="togglePlaylistTrack(${p.id}, this.checked)">
+              <span class="playlist-checkbox-name">${p.name}</span>
+            </label>
+          `;
+        }).join('');
+      } catch (err) {
+        list.innerHTML = '<div style="color: #ff5555; padding: 1rem; text-align: center;">Error loading playlists</div>';
+      }
+    }
+
+    async function togglePlaylistTrack(playlistId, isAdding) {
+      try {
+        var res = await fetch('/api/playlists?action=toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ playlist_id: playlistId, track_id: window.currentTrackId })
+        });
+        if (!res.ok) throw new Error('Failed to update');
+        
+        var saveBtn = document.getElementById('saveBtn');
+        if (isAdding) {
+          saveBtn.style.borderColor = 'var(--red)';
+          saveBtn.style.color = 'var(--red)';
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    // Create new playlist from modal
+    document.getElementById('modalCreateBtn').addEventListener('click', async function() {
+      var name = prompt("Enter a name for your new playlist:");
+      if (!name || name.trim() === '') return;
+
+      try {
+        await fetch('/api/playlists?action=create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ name: name.trim() })
+        });
+        loadModalPlaylists(); // Refresh the list
+      } catch (err) {}
+    });
+
+    // Modal open/close handlers
+    document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('playlistModal').classList.remove('open'));
+    document.getElementById('playlistModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('playlistModal')) document.getElementById('playlistModal').classList.remove('open');
+    });
+  </script>
+
 </body>
 </html>

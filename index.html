@@ -165,13 +165,17 @@
   }
   .action-chip.accent { background: var(--red); border-color: var(--red); color: #080808; }
 
-  .primary-nav { border-top: 1px solid #181818; width: 100%; }
+  .primary-nav { 
+    border-top: 1px solid #181818; 
+    width: 100%; 
+    background: #050505; 
+  }
 
   .nav-inner {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: clamp(1rem, 3vw, 3rem);
+    justify-content: center; /* Forces the links to the exact center */
+    gap: 2rem; /* Adjust this to make the gap bigger or smaller */
     overflow-x: auto;
     padding: 0 1.25rem;
     width: 100%;
@@ -183,16 +187,18 @@
   .nav-link {
     position: relative;
     flex: 0 0 auto;
-    padding: 0.75rem 0.1rem 0.68rem;
+    padding: 0.75rem 0; /* Removed horizontal padding so the gap is exact */
     color: #d4d4d4;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-decoration: none;
     text-transform: uppercase;
   }
-  .nav-link:hover, .nav-link:focus-visible { color: var(--red); outline: none; }
+
+  .nav-link:hover { color: var(--red); }
+  
   .nav-link.active::after {
     content: '';
     position: absolute;
@@ -494,7 +500,7 @@
 
   @media (max-width: 480px) {
     .header-main { padding: 0.65rem 0.75rem; }
-    .nav-inner { justify-content: flex-start; gap: 1.25rem; }
+    .nav-inner { justify-content: center; gap: 1.25rem; }
     .section-heading { padding: 0.7rem 0; }
     .track-grid-3, .track-grid-4 { grid-template-columns: 1fr; padding: 0 8px; gap: 0.85rem; }
     .track-card { border-radius: 6px; background: rgba(5, 5, 5, 0.92); backdrop-filter: blur(4px); border-color: #2a2a2a; transform: none; }
@@ -558,8 +564,8 @@
       <div class="nav-inner">
         <a class="nav-link active" href="/">Home</a>
         <a class="nav-link" href="/forums">Forums</a>
+        <a class="nav-link" href="/library">Library</a>
         <a class="nav-link">About</a>
-        <a class="nav-link">All Tracks</a>
         <a class="nav-link">Genres</a>
       </div>
     </nav>

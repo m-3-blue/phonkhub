@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Library — PhonkHub</title>
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root { --red: #ff9900; --white: #f0ece4; --gray: #888; --border: #222; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #000; color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; }
+
+    .discord-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.15rem; height: 2.15rem; flex: 0 0 auto; border-radius: 50%; background: linear-gradient(135deg, rgba(88, 101, 242, 0.35), rgba(64, 78, 237, 0.35)); border: 1px solid rgba(88, 101, 242, 0.35); color: #fff; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+  .discord-btn:hover { background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5)); transform: translateY(-1px); }
+  .discord-btn svg { width: 1.25rem; height: 1.25rem; display: block; }
+  
+  /* --- HEADER & NAV CSS (Copied from main site) --- */
+  :root { --red: #ff9900; --white: #f0ece4; --gray: #888; }
+  header { position: relative; background: #050505; border-bottom: 1px solid #242424; }
+  .header-main { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.15rem; padding: 0.75rem 1.25rem; max-width: 1300px; margin: 0 auto; }
+  .brand-group { display: inline-flex; align-items: center; gap: 0.6rem; justify-self: start; }
+  .brand-lockup { display: inline-flex; align-items: center; }
+  .discord-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.15rem; height: 2.15rem; flex: 0 0 auto; border-radius: 50%; background: linear-gradient(135deg, rgba(88, 101, 242, 0.35), rgba(64, 78, 237, 0.35)); border: 1px solid rgba(88, 101, 242, 0.35); color: #fff; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+  .discord-btn:hover { background: linear-gradient(135deg, rgba(88, 101, 242, 0.5), rgba(64, 78, 237, 0.5)); transform: translateY(-1px); }
+  .discord-btn svg { width: 1.25rem; height: 1.25rem; display: block; }
+  #logo { display: block; width: clamp(8rem, 14vw, 11.5rem); height: auto; }
+  
+  .header-actions { display: flex; align-items: center; gap: 0.65rem; justify-self: end; }
+  .action-chip { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2.15rem; padding: 0.4rem 0.8rem; border: 1px solid #383838; border-radius: 999px; color: #ddd; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; text-transform: uppercase; }
+  .action-chip.accent { background: var(--red); border-color: var(--red); color: #080808; }
+
+  .primary-nav { border-top: 1px solid #181818; width: 100%; }
+  .nav-inner { display: flex; align-items: center; justify-content: center; gap: clamp(1rem, 3vw, 3rem); overflow-x: auto; padding: 0 1.25rem; width: 100%; max-width: 1320px; margin: 0 auto; box-sizing: border-box; }
+  .nav-link { position: relative; flex: 0 0 auto; padding: 0.75rem 0.1rem 0.68rem; color: #d4d4d4; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-decoration: none; text-transform: uppercase; }
+  .nav-link:hover { color: var(--red); }
+  .nav-link.active::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: var(--red); }
+
+  /* LIBRARY LAYOUT */
+  .library-shell { display: flex; max-width: 1320px; margin: 0 auto; min-height: calc(100vh - 130px); }
+  
+  .library-sidebar { width: 260px; flex-shrink: 0; background: #050505; border-right: 1px solid #1a1a1a; padding: 1.5rem 1rem; }
+  .sidebar-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); margin-bottom: 1rem; }
+  
+  /* DESKTOP */
+  .playlist-btn { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    width: 100%; 
+    padding: 0.75rem 1rem; 
+    background: transparent; 
+    border: none; 
+    border-left: 3px solid transparent; 
+    color: #bbb; 
+    font-family: 'Barlow Condensed', sans-serif; 
+    font-size: 0.9rem; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    cursor: pointer; 
+    transition: all 0.15s; 
+  }
+  
+  .playlist-btn:hover { background: rgba(255,153,0,0.05); color: var(--white); }
+  .playlist-btn.active { background: rgba(255,153,0,0.1); border-left-color: var(--red); color: var(--red); }
+  
+  .playlist-count { 
+    font-size: 0.7rem; 
+    background: #1a1a1a; 
+    padding: 0.1rem 0.4rem; 
+    border-radius: 999px; 
+    color: #888; 
+  }
+  .playlist-btn.active .playlist-count { background: rgba(255,153,0,0.2); color: var(--red); }
+  
+  .delete-playlist-btn {
+    color: #666;
+    cursor: pointer;
+    display: none;
+    transition: color 0.2s;
+  }
+  .delete-playlist-btn:hover { color: #ff5555; }
+  .playlist-btn:hover .delete-playlist-btn { display: flex; }
+  
+  .create-btn { 
+    width: 100%; 
+    padding: 0.8rem; 
+    margin-top: 1rem; 
+    background: transparent; 
+    border: 1px dashed #444; 
+    color: var(--gray); 
+    font-family: 'Barlow Condensed', sans-serif; 
+    font-size: 0.85rem; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+  }
+
+  .create-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* MAIN CONTENT */
+  .library-main { flex: 1; padding: 2rem 2.5rem; min-width: 0; }
+  .empty-state { display: flex; align-items: center; justify-content: center; height: 100%; color: #666; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; }
+  
+  .playlist-header { margin-bottom: 2rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 1rem; }
+  .playlist-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.25rem; }
+  .playlist-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; text-transform: uppercase; color: var(--gray); letter-spacing: 0.1em; }
+
+  /* TRACK GRID */
+  .track-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 1rem; 
+  }
+
+  /* THE CARD */
+  .track-card { 
+    background: #080808; 
+    border: 1px solid #1d1d1d; 
+    border-radius: 2px; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    text-decoration: none; 
+    transition: border-color 0.2s, transform 0.2s; 
+    outline: none;
+    color: #f0ece4; /* Hardcoded White */
+  }
+
+  .track-card:hover { 
+    border-color: #cb7603; /* Hardcoded Red-Dim */
+    transform: translateY(-2px); 
+    background: #111111;
+  }
+
+  /* THE TEXT (Hardcoded colors) */
+  .card-title { 
+    color: #f0ece4 !important; 
+  }
+  .card-artist { 
+    color: #a2a2a2 !important; 
+  }
+  .card-rank { 
+    color: #ff9900 !important; 
+    font-family: 'Bebas Neue', sans-serif; 
+    font-size: 1.35rem; 
+    line-height: 1; 
+    flex-shrink: 0; 
+    opacity: 0.8; 
+  }
+
+  /* THE IMAGE */
+  .thumb-wrap { 
+    position: relative; 
+    width: 100%; 
+    padding-bottom: 56.25%; 
+    height: 0; 
+    background: #000; 
+    overflow: hidden; 
+  }
+  .thumb-wrap img { 
+    position: absolute; 
+    top: 0; left: 0; 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.25s; 
+  }
+  .track-card:hover .thumb-wrap img { 
+    transform: scale(1.04); 
+  }
+  
+  /* THE HEADER */
+  .track-header { 
+    display: flex; 
+    align-items: flex-start; 
+    gap: 0.65rem; 
+    padding: 0.65rem 0.75rem 0.85rem; 
+    border-top: 1px solid #181818; 
+  }
+  .track-meta { 
+    display: flex; 
+    flex: 1; 
+    min-width: 0; 
+    flex-direction: column; 
+  }
+  .card-title { 
+    order: 2; 
+    font-family: 'Barlow Condensed', sans-serif; 
+    font-size: 0.92rem; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+  }
+  .card-artist { 
+    order: 1; 
+    margin: 0 0 0.25rem; 
+    font-size: 0.68rem; 
+    text-transform: uppercase; 
+  }
+
+  /* REST OF THE CARD CSS */
+  .thumb-wrap { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000; overflow: hidden; }
+  .thumb-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s; }
+  .track-card:hover .thumb-wrap img { transform: scale(1.04); }
+  
+  .track-header { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.65rem 0.75rem 0.85rem; border-top: 1px solid #181818; }
+  .card-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; line-height: 1; flex-shrink: 0; opacity: 0.8; }
+  .track-meta { display: flex; flex: 1; min-width: 0; flex-direction: column; }
+  .card-title { order: 2; font-family: 'Barlow Condensed', sans-serif; font-size: 0.92rem; font-weight: 700; text-transform: uppercase; }
+  .card-artist { order: 1; margin: 0 0 0.25rem; font-size: 0.68rem; text-transform: uppercase; }
+
+   @media (max-width: 780px) {
+    /* --- HEADER FIX --- */
+    .header-main { 
+      grid-template-columns: 1fr auto; 
+      gap: 0.5rem; 
+      padding: 0.65rem 0.75rem;
+    }
+    .brand-group { grid-column: 1; grid-row: 1; }
+    .header-actions { grid-column: 2; grid-row: 1; justify-self: end; gap: 0.35rem; }
+
+    #logo { width: clamp(8rem, 14vw, 11.5rem); }
+    .discord-btn { display: inline-flex; }
+
+    .action-chip { padding: 0.35rem 0.55rem; font-size: 0.62rem; white-space: nowrap; }
+
+    /* --- NOTIFICATION DROPDOWN FIX --- */
+    .notif-dropdown {
+      position: fixed !important;
+      top: 60px !important; left: 10px !important; right: 10px !important;
+      width: auto !important; max-width: none !important;
+      z-index: 9999 !important;
+    }
+
+    /* --- LIBRARY LAYOUT FIX --- */
+    .library-shell { flex-direction: column; }
+
+    .library-sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 1.5rem 1rem;
+    }
+
+    .library-main { padding: 1.5rem 1rem; }
+
+    /* Vertical list of full-width pills */
+    #playlistList {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .playlist-btn {
+      width: 100% !important;
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 1rem !important;
+      border-left: 3px solid transparent;
+      border-bottom: none;
+      background: #0a0a0a;
+      border-radius: 4px;
+      margin: 0;
+    }
+
+    .playlist-btn.active {
+      border-left-color: var(--red);
+      background: rgba(255, 153, 0, 0.1);
+    }
+
+    .delete-playlist-btn {
+      display: flex !important;
+    }
+
+    /* Make the create button match the list */
+    .create-btn {
+      margin-top: 1rem;
+      width: 100%;
+      border: 1px dashed #333;
+      background: transparent;
+    }
+  }
+
+  /* NOTIFICATION CSS */
+  .notif-wrapper { position: relative; display: inline-block; }
+  .notif-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s; position: relative; }
+  .notif-btn:hover { color: var(--white); }
+  .notif-badge { position: absolute; top: 0; right: 0; background: var(--red); color: #000; font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 700; padding: 0.1rem 0.3rem; border-radius: 999px; transform: translate(25%, -25%); display: none; }
+  .notif-badge.show { display: block; }
+  .notif-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 320px; background: #0d0d0d; border: 1px solid #2a2a2a; border-top: 3px solid var(--red); border-radius: 2px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: none; z-index: 1000; max-height: 400px; overflow-y: auto; }
+  .notif-dropdown.open { display: block; }
+  .notif-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid #1a1a1a; background: #050505; }
+  .notif-header-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); }
+  .notif-mark-read { background: none; border: none; color: var(--red); font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.05em; cursor: pointer; }
+  .notif-mark-read:hover { text-decoration: underline; }
+  .notif-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; border-bottom: 1px solid #1a1a1a; text-decoration: none; transition: background 0.15s; }
+  .notif-item:hover { background: #1a1a1a; }
+  .notif-item.unread { background: rgba(255, 153, 0, 0.05); }
+  .notif-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #1a1a1a; color: #888; flex-shrink: 0; font-size: 0.8rem; }
+  .notif-item.unread .notif-icon { background: var(--red); color: #000; }
+  .notif-text { font-family: 'Barlow', sans-serif; font-size: 0.85rem; color: #ddd; line-height: 1.4; }
+  .notif-text strong { color: var(--white); font-weight: 600; }
+  .notif-time { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: #666; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .notif-empty { padding: 2rem 1rem; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="header-main">
+      <div class="brand-group">
+        <a class="brand-lockup" href="/" aria-label="PhonkHub home">
+          <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+        </a>
+        <a class="discord-btn" href="https://discord.gg/b7gQNCpjy4" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.029ZM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg>
+        </a>
+      </div>
+      <div></div>
+      <div class="header-actions" id="headerActions"></div>
+    </div>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <div class="nav-inner">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/forums">Forums</a>
+        <a class="nav-link active" href="/library">Library</a>
+        <a class="nav-link">About</a>
+        <a class="nav-link">Genres</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="library-shell">
+    <!-- SIDEBAR -->
+    <aside class="library-sidebar">
+      <div class="sidebar-title">My Playlists</div>
+      <div id="playlistList" style="display: flex; flex-direction: column; gap: 0.2rem;">
+        <div style="color: #666; font-size: 0.8rem; padding: 1rem;">Loading...</div>
+      </div>
+      <button class="create-btn" id="createPlaylistBtn">+ Create Playlist</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="library-main" id="libraryMain">
+      <div class="empty-state">Select a playlist to view its tracks</div>
+    </main>
+  </div>
+
+  <script>
+    var currentUser = null;
+
+    // --- NOTIFICATIONS & HEADER (Standard) ---
+    (async function () {
+      var actionsEl = document.getElementById('headerActions');
+      if (!actionsEl) return;
+      try {
+        var authRes = await fetch('/api/auth?action=me', { credentials: 'include' });
+        var authData = await authRes.json();
+        currentUser = authData.user;
+        
+        if (authData.user) {
+          actionsEl.innerHTML = `
+            <a class="action-chip" href="/@${authData.user.username}">${authData.user.display_name || authData.user.username}</a>
+            <a class="action-chip accent" href="#" id="logoutBtn">Log Out</a>
+          `;
+          document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); window.location.href = '/';
+          });
+        } else {
+          actionsEl.innerHTML = `<a class="action-chip" href="/login">Log In</a><a class="action-chip accent" href="/signup">Sign Up</a>`;
+          document.getElementById('libraryMain').innerHTML = '<div class="empty-state">Log in to view your library</div>';
+          document.getElementById('createPlaylistBtn').style.display = 'none';
+        }
+      } catch (err) {}
+    })();
+
+    // --- LOAD PLAYLISTS ---
+    async function loadPlaylists(selectId = null) {
+      try {
+        var res = await fetch('/api/playlists?action=list', { credentials: 'include' });
+        var data = await res.json();
+        
+        if (!data.playlists || data.playlists.length === 0) {
+          document.getElementById('playlistList').innerHTML = '<div style="color: #666; font-size: 0.8rem; padding: 0.5rem;">No playlists yet.</div>';
+          return;
+        }
+
+        document.getElementById('playlistList').innerHTML = data.playlists.map(function(p) {
+          var active = (p.id == selectId) ? ' active' : '';
+          return `<button class="playlist-btn${active}" onclick="viewPlaylist(${p.id}, this)">
+            <span style="display:flex; align-items:center; gap: 0.75rem; overflow:hidden;">
+              <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</span>
+              <span class="playlist-count">${p.track_count}</span>
+            </span>
+            <span class="delete-playlist-btn" onclick="event.stopPropagation(); deletePlaylist(${p.id}, this)" title="Delete Playlist">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </span>
+          </button>`;
+        }).join('');
+
+        // Auto-select first playlist if none selected
+        if (!selectId && data.playlists.length > 0) {
+          var firstBtn = document.querySelector('.playlist-btn');
+          if (firstBtn) firstBtn.click();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // --- VIEW A PLAYLIST ---
+    async function viewPlaylist(id, btn) {
+      // Update active state
+      document.querySelectorAll('.playlist-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      var main = document.getElementById('libraryMain');
+      main.innerHTML = '<div class="empty-state">Loading tracks...</div>';
+
+      try {
+        var res = await fetch('/api/playlists?action=view&id=' + id, { credentials: 'include' });
+        var data = await res.json();
+        
+        if (!res.ok) throw new Error(data.error);
+
+        var html = `
+          <div class="playlist-header">
+            <div class="playlist-title">${data.playlistName}</div>
+            <div class="playlist-meta">${data.tracks.length} track${data.tracks.length === 1 ? '' : 's'}</div>
+          </div>
+        `;
+
+        if (data.tracks.length === 0) {
+          html += '<div class="empty-state">This playlist is empty. Go save some tracks!</div>';
+        } else {
+          html += '<div class="track-grid">' + data.tracks.map(function(t) {
+            return `
+              <a class="track-card" href="/track/${t.youtube_id}">
+                <div class="thumb-wrap"><img loading="lazy" src="https://i.ytimg.com/vi/${t.youtube_id}/hqdefault.jpg" alt="${t.title}"></div>
+                <div class="track-header">
+                  <span class="card-rank">${t.position}</span>
+                  <div class="track-meta">
+                    <div class="card-title">${t.title}</div>
+                    <div class="card-artist">${t.artist}</div>
+                  </div>
+                </div>
+              </a>`;
+          }).join('') + '</div>';
+        }
+        
+        main.innerHTML = html;
+      } catch (err) {
+        main.innerHTML = '<div class="empty-state">Error loading playlist</div>';
+      }
+    }
+
+    // --- CREATE PLAYLIST ---
+    document.getElementById('createPlaylistBtn').addEventListener('click', async function() {
+      var name = prompt("Enter a name for your new playlist:");
+      if (!name || name.trim() === '') return;
+
+      try {
+        var res = await fetch('/api/playlists?action=create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ name: name.trim() })
+        });
+        if (!res.ok) throw new Error('Failed to create');
+        loadPlaylists(); // Refresh the list
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    // Init: Just load the playlists directly!
+    // If they aren't logged in, the API returns an empty list and handles it gracefully.
+    setTimeout(() => { loadPlaylists(); }, 100); 
+
+        // --- DELETE PLAYLIST ---
+    async function deletePlaylist(id, btn) {
+      if (!confirm("Are you sure you want to delete this playlist? All saved tracks inside it will be removed.")) return;
+
+      try {
+        var res = await fetch('/api/playlists?action=delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ id: id })
+        });
+        
+        if (!res.ok) throw new Error('Failed to delete');
+        
+        // Refresh the list and clear the main area
+        loadPlaylists();
+        document.getElementById('libraryMain').innerHTML = '<div class="empty-state">Select a playlist to view its tracks</div>';
+      } catch (err) {
+        alert("Error deleting playlist");
+      }
+    }
+  </script>
+
+    <script>
+    // ---- Notification System ----
+    (async function () {
+      var actionsEl = document.getElementById('headerActions');
+      if (!actionsEl) return;
+      try {
+        var authRes = await fetch('/api/auth?action=me', { credentials: 'include' });
+        var authData = await authRes.json();
+        if (!authData.user) return;
+
+        var wrapper = document.createElement('div');
+        wrapper.className = 'notif-wrapper';
+        wrapper.innerHTML = `
+          <button class="notif-btn" id="notifBtn" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notif-badge" id="notifBadge">0</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <span class="notif-header-title">Notifications</span>
+              <button class="notif-mark-read" id="markReadBtn">Mark all as read</button>
+            </div>
+            <div id="notifList"></div>
+          </div>
+        `;
+        actionsEl.insertBefore(wrapper, actionsEl.firstChild);
+
+        var btn = document.getElementById('notifBtn');
+        var dropdown = document.getElementById('notifDropdown');
+        var badge = document.getElementById('notifBadge');
+        var list = document.getElementById('notifList');
+        var markReadBtn = document.getElementById('markReadBtn');
+
+        btn.addEventListener('click', function (e) { e.stopPropagation(); dropdown.classList.toggle('open'); });
+        document.addEventListener('click', function (e) { if (!wrapper.contains(e.target)) dropdown.classList.remove('open'); });
+
+        async function loadNotifications() {
+          try {
+            var res = await fetch('/api/notifications');
+            if (!res.ok) return; 
+            var data = await res.json();
+            if (data.unreadCount > 0) { badge.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount; badge.classList.add('show'); } else { badge.classList.remove('show'); }
+            if (data.notifications.length === 0) { list.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
+
+            var icons = { follow: '👤', reply: '💬', mention: '@' };
+            list.innerHTML = data.notifications.map(function(n) {
+              var isUnread = !n.is_read;
+              var actorName = n.actor_display_name || n.actor_username;
+              var text = n.type === 'follow' ? '<strong>' + actorName + '</strong> followed you' : n.type === 'reply' ? '<strong>' + actorName + '</strong> replied to your comment' : '<strong>' + actorName + '</strong> mentioned you';
+              var mins = Math.floor((Date.now() - new Date(n.created_at).getTime()) / 60000);
+              var timeStr = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
+
+              return `<a href="${n.link}" class="notif-item ${isUnread ? 'unread' : ''}"><div class="notif-icon">${icons[n.type] || '🔔'}</div><div class="notif-text">${text}<span class="notif-time">${timeStr}</span></div></a>`;
+            }).join('');
+          } catch (err) {}
+        }
+        
+        markReadBtn.addEventListener('click', async function() { 
+          await fetch('/api/notifications?action=read-all', { method: 'POST' }); 
+          loadNotifications(); 
+        });
+        
+        loadNotifications();
+        setInterval(loadNotifications, 30000);
+      } catch (err) {}
+    })();
+  </script>
+</body>
+</html>
