@@ -53,7 +53,7 @@ export default async function handler(req, res) {
       </div>
     `;
 
-    const imageUrl = `https://phonkhub.online/api/forum-image?id=${threadId}`;
+    const imageUrl = 'https://i.ibb.co/FbnNpjpp/phonk-Hub.png';
     // 2. Fetch the base HTML
     const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
     const htmlRes = await fetch(`${baseUrl}/forum-thread.html`);
