@@ -1,18 +1,13 @@
-import { ImageResponse } from '@vercel/og';
 import { createClient } from '@libsql/client';
 
-export const config = { runtime: 'edge' };
-
-export default async function handler(req) {
+export default async function handler(req, res) {
   const client = createClient({
     url: process.env.TURSO_DATABASE_URL,
     authToken: process.env.TURSO_AUTH_TOKEN,
   });
 
-  const { searchParams } = new URL(req.url);
-  const threadId = searchParams.get('id');
-  
-  if (!threadId) return new Response('Missing ID', { status: 400 });
+  const threadId = req.query.id;
+  if (!threadId) return res.status(400).send('Missing ID');
 
   try {
     const threadRes = await client.execute({
@@ -24,39 +19,35 @@ export default async function handler(req) {
       args: [threadId]
     });
 
-    if (threadRes.rows.length === 0) return new Response('Thread not found', { status: 404 });
+    if (threadRes.rows.length === 0) return res.status(404).send('Thread not found');
     
     const thread = threadRes.rows[0];
     const author = thread.display_name || thread.username;
-    const snippet = thread.body.length > 90 ? thread.body.substring(0, 90) + '...' : thread.body;
 
-    const imageHtml = `
-      <div style="height: 100%; width: 100%; display: flex; flex-direction: column; background-color: #080808; padding: 40px; font-family: sans-serif; border-top: 10px solid #ff9900; box-sizing: border-box;">
-        
-        <div style="display: flex; align-items: center; margin-bottom: 20px;">
-          <img src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" height="40" />
-          <span style="margin-left: 15px; color: #888; font-size: 20px;">r/${thread.category_name}</span>
-        </div>
+    // Fetch track.html to use as a base template
+    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+    const htmlRes = await fetch(`${baseUrl}/forum-thread.html`);
+    let html = await htmlRes.text();
 
-        <div style="display: flex; color: #f0ece4; font-size: 42px; font-weight: bold; line-height: 1.2; margin-bottom: 15px;">
-          ${thread.title}
-        </div>
-
-        <div style="display: flex; color: #aaaaaa; font-size: 24px; margin-bottom: auto;">
-          "${snippet}"
-        </div>
-
-        <div style="display: flex; align-items: center; color: #ff9900; font-size: 26px; font-weight: bold;">
-          <span>▲ ${thread.score} upvotes</span>
-          <span style="color: #666; margin-left: 20px; font-weight: normal;">by @${author}</span>
-        </div>
-      </div>
+    // Inject meta tags
+    const metaTags = `
+      <meta name="theme-color" content="#ff9900" />
+      
+      <meta property="og:site_name" content="PhonkHub Forums" />
+      <meta property="og:title" content="${thread.title}" />
+      <meta property="og:description" content="Posted by ${author} in r/${thread.category_name} • ▲ ${thread.score} upvotes" />
+      <meta property="og:image" content="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" />
+      <meta property="og:url" content="https://phonkhub.online/forums/thread-${threadId}" />
+      <meta property="og:type" content="article" />
     `;
 
-    return new ImageResponse(imageHtml, { width: 1200, height: 630 });
+    html = html.replace('</head>', `${metaTags}</head>`);
+
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(200).send(html);
 
   } catch (err) {
     console.error(err);
-    return new Response('Server Error', { status: 500 });
+    return res.status(500).send('Server Error');
   }
 }
