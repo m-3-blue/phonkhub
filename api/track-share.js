@@ -33,7 +33,7 @@ export default async function handler(req, res) {
       
       <meta property="og:site_name" content="PhonkHub" />
       <meta property="og:title" content="${track.title}" />
-      <meta property="og:description" content="by ${track.artist} • ${track.score} upvotes • #${track.position}" />
+      <meta property="og:description" content="by ${track.artist} • ${track.score} upvotes • Ranked #${track.position}" />
       
       <!-- THIS IS THE MAGIC PART -->
       <meta property="og:image" content="${imageUrl}" />
