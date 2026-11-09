@@ -1,6 +1,8 @@
 import { ImageResponse } from '@vercel/og';
 import { createClient } from '@libsql/client';
 
+export const config = { runtime: 'edge' };
+
 export default async function handler(req, res) {
   const client = createClient({
     url: process.env.TURSO_DATABASE_URL,
