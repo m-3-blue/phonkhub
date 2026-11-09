@@ -29,6 +29,7 @@ export default async function handler(req, res) {
     let html = await htmlRes.text();
 
     const metaTags = `
+      <meta name="theme-color" content="#ff9900" />
       <meta property="og:title" content="${title}" />
       <meta property="og:description" content="${description}" />
       <meta property="og:image" content="${imageUrl}" />
