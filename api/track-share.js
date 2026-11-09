@@ -30,15 +30,21 @@ export default async function handler(req, res) {
 
     const metaTags = `
       <meta name="theme-color" content="#ff9900" />
-      <meta property="og:title" content="${title}" />
-      <meta property="og:description" content="${description}" />
+      
+      <meta property="og:site_name" content="PhonkHub" />
+      <meta property="og:title" content="${track.title}" />
+      <meta property="og:description" content="by ${track.artist} • Ranked #${track.position}" />
+      
+      <!-- THIS IS THE MAGIC PART -->
       <meta property="og:image" content="${imageUrl}" />
+      <meta property="og:type" content="video.other" />
+      <meta property="og:video:url" content="https://www.youtube.com/embed/${youtubeId}" />
+      <meta property="og:video:secure_url" content="https://www.youtube.com/embed/${youtubeId}" />
+      <meta property="og:video:type" content="text/html" />
+      <meta property="og:video:width" content="1280" />
+      <meta property="og:video:height" content="720" />
+      
       <meta property="og:url" content="https://phonkhub.online/track/${youtubeId}" />
-      <meta property="og:type" content="music.song" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="${title}" />
-      <meta name="twitter:description" content="${description}" />
-      <meta name="twitter:image" content="${imageUrl}" />
     `;
 
     // Inject the tags right before </head>
