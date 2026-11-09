@@ -20,7 +20,7 @@
           "value": ".*(Discordbot|Twitterbot|facebookexternalhit|WhatsApp|TelegramBot|Slackbot|LinkedInBot|Pinterest|redditbot).*"
         }
       ],
-      "destination": "/api/forum-share.jsx?id=:id"
+      "destination": "/api/forum-share?id=:id"
     },
     { "source": "/track/:youtube_id", "destination": "/track.html" },
     { "source": "/signup", "destination": "/signup.html" },
