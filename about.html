@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" data-type="software">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>About — PhonkHub</title>
+<meta name="description" content="PhonkHub is the underground platform for phonk, drift and electronic music. Algorithm-free, community-built, free forever." />
+<meta name="theme-color" content="#ff9900" />
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff9900;--red-dim:#cb7603;--white:#f0ece4;--bg:#000000;--surface:#080808;--border:#1c1c1c}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;overflow-x:hidden;display:flex;flex-direction:column;min-height:100vh}
+
+header{position:relative;background:#050505;border-bottom:1px solid #242424;z-index:100}
+
+.header-main{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1.5rem;max-width:1300px;margin:0 auto}
+
+.brand-group{display:inline-flex;align-items:center;gap:0.6rem}
+
+.brand-lockup{display:inline-flex;align-items:center}
+
+.discord-btn{display:inline-flex;align-items:center;justify-content:center;width:2.15rem;height:2.15rem;flex:0 0 auto;border-radius:50%;background:linear-gradient(135deg,rgba(88,101,242,0.35),rgba(64,78,237,0.35));border:1px solid rgba(88,101,242,0.35);color:#fff;text-decoration:none;transition:background 0.2s,transform 0.2s}
+
+.discord-btn:hover{background:linear-gradient(135deg,rgba(88,101,242,0.5),rgba(64,78,237,0.5));transform:translateY(-1px)}
+
+.discord-btn svg{width:1.25rem;height:1.25rem;display:block}
+
+#logo{display:block;width:clamp(8rem,14vw,11.5rem);height:auto}
+
+.header-actions{display:flex;align-items:center;gap:0.6rem;opacity:0;transition:opacity 0.3s}
+
+.header-actions.loaded{opacity:1}
+
+.action-chip{display:inline-flex;align-items:center;gap:0.35rem;min-height:2.1rem;padding:0.4rem 0.9rem;border:1px solid #333;border-radius:999px;color:#ccc;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-decoration:none;text-transform:uppercase;transition:border-color .2s,color .2s}
+
+.action-chip:hover{border-color:#666;color:var(--white)}
+
+.action-chip.accent{background:var(--red);border-color:var(--red);color:#000}
+
+.action-chip.accent:hover{background:var(--red-dim);border-color:var(--red-dim)}
+
+.primary-nav{border-top:1px solid #111}
+
+.nav-inner{display:flex;align-items:center;justify-content:center;gap:2rem;padding:0 1.5rem;max-width:1300px;margin:0 auto;overflow-x:auto}
+
+.nav-link{position:relative;flex:0 0 auto;padding:0.7rem 0;color:#888;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-decoration:none;text-transform:uppercase;transition:color .2s}
+
+.nav-link:hover{color:var(--white)}
+
+.nav-link.active{color:var(--white)}
+
+.nav-link.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red)}
+
+body.lockdown-active #headerActions a[href^="/@"],body.lockdown-active #headerActions a[href="#"],body.lockdown-active #headerActions a[href$="/login"],body.lockdown-active #headerActions a[href$="/signup"],body.lockdown-active .notif-wrapper{display:none !important}
+
+body.lockdown-active #headerActions::after{content:'LOCKDOWN ACTIVE';display:inline-flex;align-items:center;padding:0.4rem 0.8rem;background:var(--red);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-radius:999px;pointer-events:none}
+
+#lockdownBanner{display:none;background:#000;border-bottom:1px solid var(--red);text-align:center;padding:10px;align-items:center;justify-content:center;gap:8px}
+
+.notif-wrapper{position:relative}
+
+.notif-btn{background:transparent;border:none;color:#777;cursor:pointer;padding:0.4rem;display:flex;align-items:center;justify-content:center;transition:color .2s;position:relative}
+
+.notif-btn:hover{color:var(--white)}
+
+.notif-badge{position:absolute;top:0;right:0;background:var(--red);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;padding:0.1rem 0.3rem;border-radius:999px;transform:translate(25%,-25%);display:none}
+
+.notif-badge.show{display:block}
+
+.notif-dropdown{position:absolute;top:calc(100% + 10px);right:0;width:320px;background:#0d0d0d;border:1px solid #252525;border-top:3px solid var(--red);border-radius:2px;box-shadow:0 12px 40px rgba(0,0,0,.9);display:none;z-index:1000;max-height:400px;overflow-y:auto}
+
+.notif-dropdown.open{display:block}
+
+.notif-header{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1rem;border-bottom:1px solid #1a1a1a;background:#060606}
+
+.notif-header-title{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+
+.notif-mark-read{background:none;border:none;color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.05em;cursor:pointer}
+
+.notif-mark-read:hover{text-decoration:underline}
+
+.notif-item{display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border-bottom:1px solid #1a1a1a;text-decoration:none;transition:background .15s;color:var(--white)}
+
+.notif-item:hover{background:#131313}
+
+.notif-item.unread{background:rgba(255,153,0,.04)}
+
+.notif-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#1a1a1a;color:#888;flex-shrink:0;font-size:0.8rem}
+
+.notif-item.unread .notif-icon{background:var(--red);color:#000}
+
+.notif-text{font-size:0.85rem;color:#ccc;line-height:1.4}
+
+.notif-text strong{color:var(--white);font-weight:600}
+
+.notif-time{display:block;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;color:#555;margin-top:0.25rem;text-transform:uppercase;letter-spacing:0.05em}
+
+.notif-empty{padding:2rem 1rem;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:0.1em}
+
+main{flex:1;width:100%;max-width:100%;margin:0 auto;padding:5rem 0;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+
+.about-box{width:calc(100% - 3rem);max-width:1100px;background:var(--surface);border:1px solid #2a2a2a;position:relative;margin:0 auto 4rem auto;box-shadow:12px 12px 0 rgba(0,0,0,0.8);display:grid;grid-template-columns:340px 1fr}
+
+.about-box::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:5px;background:var(--red)}
+
+.about-sidebar{padding:3rem 2rem;background:#0d0d0d;border-right:1px dashed #333;display:flex;flex-direction:column}
+
+.s-label{display:inline-flex;align-items:center;gap:0.5rem;font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--red);margin-bottom:1.5rem}
+
+.s-label::before{content:'';display:block;width:20px;height:1px;background:var(--red)}
+
+.about-sidebar h1{font-family:'Bebas Neue',sans-serif;font-size:4rem;letter-spacing:0.04em;color:var(--white);line-height:0.95;text-shadow:4px 4px 0 rgba(0,0,0,0.6);margin-bottom:0.5rem}
+
+.about-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#888;margin-bottom:2rem}
+
+.about-stats-row{display:flex;flex-direction:column;gap:1rem;border-top:1px dashed #333;margin-top:auto;padding-top:1.5rem}
+
+.about-stat{display:flex;justify-content:space-between;align-items:center}
+
+.about-stat span{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:#666;letter-spacing:0.15em;text-transform:uppercase}
+
+.about-stat strong{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;color:var(--white);letter-spacing:0.05em;text-transform:uppercase}
+
+.stat-active{color:#00ff88 !important;text-shadow:0 0 12px rgba(0,255,136,0.4)}
+
+.about-box-body{padding:3rem;display:flex;flex-direction:column;justify-content:center}
+
+.about-box-body p{font-family:'Barlow',sans-serif;font-size:1.05rem;color:#bbb;line-height:1.8;margin-bottom:1.5rem;text-align:left}
+
+.about-box-body p:last-of-type{margin-bottom:0}
+
+.manifesto-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:2rem;padding-top:2rem;border-top:1px dashed #333}
+
+.m-tag{padding:0.4rem 0.8rem;border:1px solid #222;font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#666;transition:border-color .2s,color .2s}
+
+.m-tag:hover{border-color:var(--red);color:var(--red)}
+
+.features-section{width:100%;margin-top:2rem;overflow:hidden}
+
+.features-header{width:calc(100% - 3rem);max-width:1000px;margin:0 auto 2rem auto;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:1rem}
+
+.features-hed{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.04em;color:var(--white);line-height:1}
+
+.features-count{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#555}
+
+.features-grid{display:flex;width:max-content;animation:scrollMarquee 60s linear infinite}
+
+.features-grid:hover{animation-play-state:paused}
+
+.marquee-group{display:flex;gap:1.5rem;padding-right:1.5rem}
+
+.feature-card{flex:0 0 280px;background:var(--surface);border:1px solid var(--border);padding:2rem;display:flex;flex-direction:column;gap:1rem;transition:border-color .2s,transform .2s,background .2s;position:relative;overflow:hidden}
+
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+
+.feature-card:hover::before{transform:scaleX(1)}
+
+.feature-card:hover{border-color:#333;background:#0f0f0f;transform:translateY(-4px)}
+
+.feature-num{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:#444;text-transform:uppercase}
+
+.feature-icon{color:var(--red)}
+
+.feature-icon svg{width:1.5rem;height:1.5rem;display:block}
+
+.feature-card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;color:var(--white);letter-spacing:0.06em;text-transform:uppercase}
+
+.feature-card p{font-size:0.85rem;color:#888;line-height:1.5}
+
+@keyframes scrollMarquee{0%{transform:translateX(0)}100%{transform:translateX(-33.333%)}}
+
+.stats-section{width:100%;margin:2rem auto 4rem auto;display:flex;flex-direction:column}
+
+.stats-section-header{width:calc(100% - 3rem);max-width:1000px;margin:0 auto 2rem auto;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:1rem}
+
+.stats-hed{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.04em;color:var(--white);line-height:1}
+
+.stats-grid-3{width:calc(100% - 3rem);max-width:1000px;margin:0 auto 1.5rem auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+
+.big-stat{background:var(--surface);padding:3rem 1.5rem;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden}
+
+.big-stat::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100px;height:100px;background:var(--red);filter:blur(50px);opacity:0;transition:opacity 0.3s;pointer-events:none}
+
+.big-stat:hover::before{opacity:0.15}
+
+.bs-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,6vw,6rem);line-height:0.9;color:var(--white);letter-spacing:0.02em;position:relative;z-index:1}
+
+.bs-label{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#666;margin-top:0.75rem;position:relative;z-index:1}
+
+.stats-sub-label{width:calc(100% - 3rem);max-width:1000px;margin:1.5rem auto 1rem auto;font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#888}
+
+.daily-grid-3{width:calc(100% - 3rem);max-width:1000px;margin:0 auto 3rem auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+
+.daily-stat{background:var(--surface);padding:2rem 1rem;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;border-top:3px solid #3dff9b}
+
+.ds-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;line-height:1;color:#3dff9b;letter-spacing:0.02em}
+
+.ds-label{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#666;margin-top:0.5rem}
+
+.tech-section{width:calc(100% - 3rem);max-width:1000px;margin:0 auto;border-top:1px dashed #333;padding-top:3rem}
+
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+
+.tech-card{background:#0d0d0d;border:1px solid #222;padding:1.5rem;text-align:left;position:relative;transition:border-color 0.2s}
+
+.tech-card:hover{border-color:var(--red)}
+
+.tech-card::before{content:'';position:absolute;top:-1px;left:-1px;bottom:-1px;width:3px;background:var(--red);opacity:0;transition:opacity 0.2s}
+
+.tech-card:hover::before{opacity:1}
+
+.tc-label{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.5rem}
+
+.tc-value{font-family:'Barlow',sans-serif;font-size:0.95rem;font-weight:600;color:var(--white)}
+
+footer{background:#000000;text-align:center;padding:2rem;font-size:0.75rem;color:#ccc;letter-spacing:0.1em;border-top:1px solid var(--border);margin-top:0}
+
+.tagline{font-family:'Barlow Condensed',sans-serif;font-size:clamp(0.68rem,1.4vw,0.82rem);letter-spacing:0.32em;text-transform:uppercase;color:var(--red)}
+
+@media (max-width:900px){.about-box{grid-template-columns:1fr}.about-sidebar{border-right:none;border-bottom:1px dashed #333;padding:2rem}.about-box-body{padding:2rem}.about-stats-row{margin-top:2rem}.stats-grid-3,.daily-grid-3{grid-template-columns:1fr 1fr}.tech-grid{grid-template-columns:1fr 1fr}}
+
+@media (max-width:600px){.header-main{flex-direction:row;flex-wrap:nowrap;justify-content:space-between;gap:0.5rem;padding:0.75rem 1rem}.brand-group{gap:0.4rem}.header-actions{gap:0.4rem}#logo{width:7.5rem}.action-chip{padding:0.3rem 0.5rem;font-size:0.65rem;min-height:1.8rem}.discord-btn{width:1.8rem;height:1.8rem}.discord-btn svg{width:1rem;height:1rem}.notif-btn svg{width:18px;height:18px}.about-box{width:calc(100% - 2rem);box-shadow:8px 8px 0 rgba(0,0,0,0.8)}.about-box-header{padding:2rem 1.5rem 1.5rem}.about-box-header h1{font-size:3rem}.about-box-body{padding:1.5rem}.stats-grid-3,.daily-grid-3{grid-template-columns:1fr}.tech-grid{grid-template-columns:1fr}.bs-num{font-size:4rem}.big-stat{padding:2rem 1rem}.features-header{flex-direction:column;align-items:flex-start;gap:0.5rem}.notif-dropdown{position:fixed;top:60px;left:10px;right:10px;width:auto}}
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="header-main">
+    <div class="brand-group">
+      <a class="brand-lockup" href="/" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <a class="discord-btn" href="https://discord.gg/b7gQNCpjy4" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord" title="Join our Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.029ZM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg>
+      </a>
+    </div>
+    <div class="header-actions" id="headerActions"></div>
+  </div>
+  <nav class="primary-nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="nav-link" href="/">Home</a>
+      <a class="nav-link" href="/forums">Forums</a>
+      <a class="nav-link" href="/library">Library</a>
+      <a class="nav-link" href="/download">App</a>
+      <a class="nav-link active" href="/about" aria-current="page">About</a>
+    </div>
+  </nav>
+</header>
+
+<div id="lockdownBanner" role="alert" aria-live="polite">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:#ff9900;">PhonkHub is in lockdown.</span>
+</div>
+
+<main id="main">
+  <!-- THE WIDE BRUTALIST BOX -->
+  <div class="about-box">
+    <div class="about-sidebar">
+      <h1>About<br>PhonkHub</h1>
+      <div class="about-stats-row">
+        <div class="about-stat">
+          <span>Founded</span>
+          <strong>May 2026</strong>
+        </div>
+        <div class="about-stat">
+          <span>UI Version</span>
+          <strong>2.0</strong>
+        </div>
+      </div>
+    </div>
+    <div class="about-box-body">
+      <p>PhonkHub was made by ¥GoyMafia¥™ to become the ultimate free directory for phonk, made by the community for the community, we take pride in keeping this well oiled machine running with constant updates, vast expansions, and features for days. We screen everything that is made and posted on this site to keep this site a relatively safe experience to make sure that it is enjoyable by everyone and anyone, the developers and staff at ¥GoyMafia¥™ will make sure that this site stays alive and well for as long as we are here, we hope you enjoy the site and enjoy talking to the rest of the community in the forums, comments and discord server!</p>
+      <div class="manifesto-tags">
+        <span class="m-tag">No Paywalls</span>
+        <span class="m-tag">Community Owned</span>
+        <span class="m-tag">Free Forever</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFINITE MARQUEE FEATURES -->
+  <div class="features-section">
+    <div class="features-header">
+      <h2 class="features-hed">features</h2>
+    </div>
+    <div class="features-grid" role="list">
+      <!-- Group 1 -->
+      <div class="marquee-group">
+        <div class="feature-card"><div class="feature-num">01</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19V6l12-3v13"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h3>Full Library</h3><p>Every track on the site. Vote up or down, leave comments, and discover new phonk.</p></div>
+        <div class="feature-card"><div class="feature-num">02</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Community</h3><p>Follow users, build your profile, and see what your people are listening to.</p></div>
+        <div class="feature-card"><div class="feature-num">03</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg></div><h3>Forums</h3><p>Post threads, reply to discussions, and react with emojis.</p></div>
+        <div class="feature-card"><div class="feature-num">04</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><h3>Notifications</h3><p>Real-time alerts for follows, replies and mentions. Never miss a drop.</p></div>
+        <div class="feature-card"><div class="feature-num">05</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></div><h3>No Algorithms</h3><p>No shadowbans, no hidden feeds. The music speaks for itself.</p></div>
+        <div class="feature-card"><div class="feature-num">06</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Free Forever</h3><p>No paywalls, no restrictions. 100% free for the community.</p></div>
+      </div>
+      <!-- Group 2 -->
+      <div class="marquee-group" aria-hidden="true">
+        <div class="feature-card"><div class="feature-num">01</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19V6l12-3v13"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h3>Full Library</h3><p>Every track on the site. Vote up or down, leave comments, and discover new phonk.</p></div>
+        <div class="feature-card"><div class="feature-num">02</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Community</h3><p>Follow users, build your profile, and see what your people are listening to.</p></div>
+        <div class="feature-card"><div class="feature-num">03</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg></div><h3>Forums</h3><p>Post threads, reply to discussions, and react with emojis.</p></div>
+        <div class="feature-card"><div class="feature-num">04</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><h3>Notifications</h3><p>Real-time alerts for follows, replies and mentions. Never miss a drop.</p></div>
+        <div class="feature-card"><div class="feature-num">05</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></div><h3>No Algorithms</h3><p>No shadowbans, no hidden feeds. The music speaks for itself.</p></div>
+        <div class="feature-card"><div class="feature-num">06</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Free Forever</h3><p>No paywalls, no restrictions. 100% free for the community.</p></div>
+      </div>
+      <!-- Group 3 (For ultra-wide screens) -->
+      <div class="marquee-group" aria-hidden="true">
+        <div class="feature-card"><div class="feature-num">01</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19V6l12-3v13"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h3>Full Library</h3><p>Every track on the site. Vote up or down, leave comments, and discover new phonk.</p></div>
+        <div class="feature-card"><div class="feature-num">02</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Community</h3><p>Follow users, build your profile, and see what your people are listening to.</p></div>
+        <div class="feature-card"><div class="feature-num">03</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg></div><h3>Forums</h3><p>Post threads, reply to discussions, and react with emojis.</p></div>
+        <div class="feature-card"><div class="feature-num">04</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><h3>Notifications</h3><p>Real-time alerts for follows, replies and mentions. Never miss a drop.</p></div>
+        <div class="feature-card"><div class="feature-num">05</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></div><h3>No Algorithms</h3><p>No shadowbans, no hidden feeds. The music speaks for itself.</p></div>
+        <div class="feature-card"><div class="feature-num">06</div><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Free Forever</h3><p>No paywalls, no restrictions. 100% free for the community.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS & TECH STACK -->
+  <section class="stats-section">
+    <div class="stats-section-header">
+      <h2 class="stats-hed">Statistics</h2>
+    </div>
+    
+    <div class="stats-grid-3">
+      <div class="big-stat">
+        <div class="bs-num" id="statUsers">0</div>
+        <div class="bs-label">Registered Users</div>
+      </div>
+      <div class="big-stat">
+        <div class="bs-num" id="statTracks">0</div>
+        <div class="bs-label">Tracks Uploaded</div>
+      </div>
+      <div class="big-stat">
+        <div class="bs-num" id="statComments">0</div>
+        <div class="bs-label">Comments Posted</div>
+      </div>
+    </div>
+
+    <div class="stats-sub-label">Last 24 Hours</div>
+    
+    <div class="daily-grid-3">
+      <div class="daily-stat">
+        <div class="ds-num" id="statUsersToday">0</div>
+        <div class="ds-label">New Signups</div>
+      </div>
+      <div class="daily-stat">
+        <div class="ds-num" id="statCommentsToday">0</div>
+        <div class="ds-label">Comments</div>
+      </div>
+      <div class="daily-stat">
+        <div class="ds-num" id="statVotesToday">0</div>
+        <div class="ds-label">Votes</div>
+      </div>
+    </div>
+
+    <div class="tech-section">
+      <div class="s-label" style="justify-content: center; margin-bottom: 2rem;">Powered By</div>
+      <div class="tech-grid">
+        <div class="tech-card"><div class="tc-label">Frontend</div><div class="tc-value">HTML</div></div>
+        <div class="tech-card"><div class="tc-label">Backend</div><div class="tc-value">Node.js</div></div>
+        <div class="tech-card"><div class="tc-label">Hosting</div><div class="tc-value">Vercel</div></div>
+        <div class="tech-card"><div class="tc-label">Database</div><div class="tc-value">Turso</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>
+    <span class="tagline">New Tracks Added Periodically</span><br /> <br />
+    © 2026 PhonkHub  ·  Property Of ¥GoyMafia¥™  ·  All Rights To The Respective Artists
+  </p>
+</footer>
+
+<script>
+// --- AUTH & NOTIFICATIONS ---
+(async () => {
+  const actionsEl = document.getElementById('headerActions');
+  if (!actionsEl) return;
+  
+  try {
+    const authRes = await fetch('/api/auth?action=me', { credentials: 'include' });
+    const { user } = await authRes.json();
+    
+    if (!user) {
+      actionsEl.innerHTML = '<a class="action-chip" href="/login">Log In</a><a class="action-chip accent" href="/signup">Sign Up</a>';
+      actionsEl.classList.add('loaded');
+      return;
+    }
+    
+    // Notifications
+    const wrapper = document.createElement('div');
+    wrapper.className = 'notif-wrapper';
+    wrapper.innerHTML = `
+      <button class="notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge"></span>
+      </button>
+      <div class="notif-dropdown" id="notifDropdown" role="dialog">
+        <div class="notif-header">
+          <span class="notif-header-title">Notifications</span>
+          <button class="notif-mark-read" id="markReadBtn">Mark all read</button>
+        </div>
+        <div id="notifList"></div>
+      </div>`;
+    actionsEl.insertBefore(wrapper, actionsEl.firstChild);
+
+    const btn = document.getElementById('notifBtn'), dd = document.getElementById('notifDropdown');
+    const bdg = document.getElementById('notifBadge'), lst = document.getElementById('notifList');
+    
+    btn.addEventListener('click', e => { e.stopPropagation(); dd.classList.toggle('open'); });
+    document.addEventListener('click', e => { if (!wrapper.contains(e.target)) dd.classList.remove('open'); });
+    
+    async function loadNotifications() {
+      try {
+        const data = await fetch('/api/notifications').then(r => r.ok ? r.json() : null);
+        if (!data) return;
+        bdg.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount || '';
+        bdg.classList.toggle('show', data.unreadCount > 0);
+        if (!data.notifications.length) { lst.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
+        const icons = { follow: '👤', reply: '💬', mention: '@' };
+        lst.innerHTML = data.notifications.map(n => {
+          const actor = n.actor_display_name || n.actor_username;
+          const text = n.type === 'follow' ? `<strong>${actor}</strong> followed you`
+                     : n.type === 'reply' ? `<strong>${actor}</strong> replied to your comment`
+                     : `<strong>${actor}</strong> mentioned you`;
+          const mins = Math.floor((Date.now() - new Date(n.created_at)) / 60000);
+          const t = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
+          return `<a href="${n.link}" class="notif-item ${n.is_read ? '' : 'unread'}"><div class="notif-icon">${icons[n.type]||'🔔'}</div><div class="notif-text">${text}<span class="notif-time">${t}</span></div></a>`;
+        }).join('');
+      } catch {}
+    }
+    document.getElementById('markReadBtn').addEventListener('click', async () => {
+      await fetch('/api/notifications?action=read-all', { method: 'POST' });
+      loadNotifications();
+    });
+    loadNotifications();
+    setInterval(loadNotifications, 30000);
+
+    // User Chip
+    const chip = Object.assign(document.createElement('a'), { className: 'action-chip', href: '/@' + user.username, textContent: user.display_name || user.username });
+    const out = Object.assign(document.createElement('a'), { className: 'action-chip accent', href: '#', textContent: 'Log Out' });
+    out.addEventListener('click', async e => { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); location.reload(); });
+    actionsEl.append(chip, out);
+    actionsEl.classList.add('loaded');
+    
+  } catch (err) {
+    actionsEl.innerHTML = '<a class="action-chip" href="/login">Log In</a><a class="action-chip accent" href="/signup">Sign Up</a>';
+    actionsEl.classList.add('loaded');
+  }
+})();
+
+// --- LOCKDOWN ---
+fetch('/api/lockdown-status')
+  .then(r => r.json())
+  .then(({ lockdown }) => {
+    if (lockdown !== '1') return;
+    document.body.classList.add('lockdown-active');
+    document.getElementById('lockdownBanner').style.display = 'flex';
+    const user = JSON.parse(localStorage.getItem('ph_user') || '{}');
+    if (user.is_admin) return;
+    const loggedIn = !!localStorage.getItem('ph_session_token') || !!user.id;
+    if (!loggedIn) {
+      document.querySelectorAll('.comment-login-prompt, .login-prompt, .reply-form-box').forEach(el => el.style.display = 'none');
+    } else {
+      document.querySelectorAll('textarea, input[type="text"], input[type="submit"], form button, .btn-orange, .vote-btn').forEach(el => {
+        el.disabled = true;
+        el.style.cssText += 'opacity:.5;cursor:not-allowed';
+        if (el.tagName === 'TEXTAREA') el.placeholder = 'PhonkHub is currently in lockdown.';
+      });
+    }
+  }).catch(console.error);
+
+// --- FETCH REAL STATS (WITH 500 ERROR FALLBACK) ---
+(async function fetchRealStats() {
+  const format = (num) => {
+    const value = Number(num);
+    if (!Number.isFinite(value)) return '0';
+    return value > 999 ? (value / 1000).toFixed(1) + 'k' : String(value);
+  };
+
+  try {
+    // 1. Try fetching from the new public-stats endpoint
+    const res = await fetch('/api/public-stats');
+    
+    // If the endpoint returns a 500 error or isn't created yet, throw to fallback
+    if (!res.ok) throw new Error('Endpoint not ready');
+    
+    const data = await res.json();
+    
+    document.getElementById('statUsers').textContent = format(data.users);
+    document.getElementById('statTracks').textContent = format(data.tracks);
+    document.getElementById('statComments').textContent = format(data.comments);
+    
+    document.getElementById('statUsersToday').textContent = format(data.usersToday || 0);
+    document.getElementById('statCommentsToday').textContent = format(data.commentsToday || 0);
+    document.getElementById('statVotesToday').textContent = format(data.votesToday || 0);
+
+  } catch (err) {
+    console.warn('Public stats endpoint failed (500 or missing). Falling back to /api/home for tracks.');
+    
+    // 2. Fallback: Fetch Tracks from the endpoint we KNOW works
+    try {
+      const fallbackRes = await fetch('/api/home');
+      if (fallbackRes.ok) {
+        const trackData = await fallbackRes.json();
+        const trackCount = trackData.tracks ? trackData.tracks.length : 0;
+        
+        document.getElementById('statTracks').textContent = format(trackCount);
+        // Fill other stats with a placeholder so it doesn't look broken
+        document.getElementById('statUsers').textContent = '—';
+        document.getElementById('statComments').textContent = '—';
+      }
+    } catch (fallbackErr) {
+      console.error('Fallback also failed:', fallbackErr);
+      // If both fail, they stay at 0 from the HTML
+    }
+  }
+})();
+</script>
+
+<script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//relieved-understanding.com/bTX-Vus.d/GEln0LYpWqcH/peQmP9vuvZWUIlCkmPTTOcWzJNhj/kIwtMTTjcbttNEzCME2nOYTrAiybMSQ-";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+<script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//unfolded-uncle.com/cVD.9p6Kbo2E5/l/S_WbQD9fNQzzM_2MOGD/k/3kN/y/0Q3wM/ziYJ4/OkThgCxw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+<script>
+(function(pqby){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = pqby || {};
+s.src = "//relieved-understanding.com/bgXGV.sQdkGrlt0nYSWAcR/meomJ9OuFZeUalZk/PRTwc-zCNMjmkowYN/TacttjNTzaMi2pOfTcAN2KMuQw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+</body>
+</html>

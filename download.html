@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en" data-type="software">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Download — PhonkHub</title>
+<meta name="description" content="Download the official PhonkHub Android app." />
+<meta name="theme-color" content="#ff9900" />
+<link rel="icon" type="image/png" href="https://ei.phncdn.com/www-static/favicon.ico?cache=2026050702">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff9900;--red-dim:#cb7603;--white:#f0ece4;--bg:#000000;--surface:#080808;--border:#1c1c1c}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;overflow-x:hidden;display:flex;flex-direction:column;min-height:100vh}
+
+/* ── HEADER ── */
+header{position:relative;background:#050505;border-bottom:1px solid #242424;z-index:100}
+
+.header-main{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1.5rem;max-width:1300px;margin:0 auto}
+
+.brand-group{display:inline-flex;align-items:center;gap:0.6rem}
+
+.brand-lockup{display:inline-flex;align-items:center}
+
+.discord-btn{display:inline-flex;align-items:center;justify-content:center;width:2.15rem;height:2.15rem;flex:0 0 auto;border-radius:50%;background:linear-gradient(135deg,rgba(88,101,242,0.35),rgba(64,78,237,0.35));border:1px solid rgba(88,101,242,0.35);color:#fff;text-decoration:none;transition:background 0.2s,transform 0.2s}
+
+.discord-btn:hover{background:linear-gradient(135deg,rgba(88,101,242,0.5),rgba(64,78,237,0.5));transform:translateY(-1px)}
+
+.discord-btn svg{width:1.25rem;height:1.25rem;display:block}
+
+#logo{display:block;width:clamp(8rem,14vw,11.5rem);height:auto}
+
+.header-actions{display:flex;align-items:center;gap:0.6rem;opacity:0;transition:opacity 0.3s}
+
+.header-actions.loaded{opacity:1}
+
+.action-chip{display:inline-flex;align-items:center;gap:0.35rem;min-height:2.1rem;padding:0.4rem 0.9rem;border:1px solid #333;border-radius:999px;color:#ccc;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-decoration:none;text-transform:uppercase;transition:border-color .2s,color .2s}
+
+.action-chip:hover{border-color:#666;color:var(--white)}
+
+.action-chip.accent{background:var(--red);border-color:var(--red);color:#000}
+
+.action-chip.accent:hover{background:var(--red-dim);border-color:var(--red-dim)}
+
+.primary-nav{border-top:1px solid #111}
+
+.nav-inner{display:flex;align-items:center;justify-content:center;gap:2rem;padding:0 1.5rem;max-width:1300px;margin:0 auto;overflow-x:auto}
+
+.nav-link{position:relative;flex:0 0 auto;padding:0.7rem 0;color:#888;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-decoration:none;text-transform:uppercase;transition:color .2s}
+
+.nav-link:hover{color:var(--white)}
+
+.nav-link.active{color:var(--white)}
+
+.nav-link.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red)}
+
+/* ── LOCKDOWN & NOTIFICATIONS ── */
+body.lockdown-active #headerActions a[href^="/@"],body.lockdown-active #headerActions a[href="#"],body.lockdown-active #headerActions a[href$="/login"],body.lockdown-active #headerActions a[href$="/signup"],body.lockdown-active .notif-wrapper{display:none !important}
+
+body.lockdown-active #headerActions::after{content:'LOCKDOWN ACTIVE';display:inline-flex;align-items:center;padding:0.4rem 0.8rem;background:var(--red);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-radius:999px;pointer-events:none}
+
+#lockdownBanner{display:none;background:#000;border-bottom:1px solid var(--red);text-align:center;padding:10px;align-items:center;justify-content:center;gap:8px}
+
+.notif-wrapper{position:relative}
+
+.notif-btn{background:transparent;border:none;color:#777;cursor:pointer;padding:0.4rem;display:flex;align-items:center;justify-content:center;transition:color .2s;position:relative}
+
+.notif-btn:hover{color:var(--white)}
+
+.notif-badge{position:absolute;top:0;right:0;background:var(--red);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;padding:0.1rem 0.3rem;border-radius:999px;transform:translate(25%,-25%);display:none}
+
+.notif-badge.show{display:block}
+
+.notif-dropdown{position:absolute;top:calc(100% + 10px);right:0;width:320px;background:#0d0d0d;border:1px solid #252525;border-top:3px solid var(--red);border-radius:2px;box-shadow:0 12px 40px rgba(0,0,0,.9);display:none;z-index:1000;max-height:400px;overflow-y:auto}
+
+.notif-dropdown.open{display:block}
+
+.notif-header{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1rem;border-bottom:1px solid #1a1a1a;background:#060606}
+
+.notif-header-title{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+
+.notif-mark-read{background:none;border:none;color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.05em;cursor:pointer}
+
+.notif-mark-read:hover{text-decoration:underline}
+
+.notif-item{display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border-bottom:1px solid #1a1a1a;text-decoration:none;transition:background .15s;color:var(--white)}
+
+.notif-item:hover{background:#131313}
+
+.notif-item.unread{background:rgba(255,153,0,.04)}
+
+.notif-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#1a1a1a;color:#888;flex-shrink:0;font-size:0.8rem}
+
+.notif-item.unread .notif-icon{background:var(--red);color:#000}
+
+.notif-text{font-size:0.85rem;color:#ccc;line-height:1.4}
+
+.notif-text strong{color:var(--white);font-weight:600}
+
+.notif-time{display:block;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;color:#555;margin-top:0.25rem;text-transform:uppercase;letter-spacing:0.05em}
+
+.notif-empty{padding:2rem 1rem;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:0.1em}
+
+/* ── MAIN LAYOUT & BACKGROUND ── */
+main{
+  flex:1;
+  width:100%;
+  max-width:100%;
+  margin:0 auto;
+  padding:6rem 1.5rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  overflow:hidden;
+  position:relative;
+}
+
+main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 50% 20%, rgba(255, 153, 0, 0.08) 0%, transparent 50%),
+    linear-gradient(rgba(255, 153, 0, 0.03) 1px, transparent 1px), 
+    linear-gradient(90deg, rgba(255, 153, 0, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.page-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  letter-spacing: 0.04em;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 10px 30px rgba(255, 153, 0, 0.15);
+}
+
+.page-header p {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* ── SECTION HEADINGS ── */
+.section-hed {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 1.5rem auto;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  text-transform: uppercase;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.center-hed {
+  text-align: center;
+  max-width: 400px; 
+  margin-top: 1rem;
+}
+
+/* ── APP FEATURES GRID ── */
+.app-features {
+  width: 100%;
+  max-width: 1100px; 
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 4rem; 
+}
+
+.feature-box {
+  background: linear-gradient(180deg, #0d0d0d 0%, #080808 100%);
+  border: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-box:hover {
+  border-color: #333;
+  transform: translateY(-4px);
+}
+
+.feature-num {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.03);
+  z-index: 0;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.feature-box:hover .feature-num {
+  color: rgba(255, 153, 0, 0.08);
+}
+
+.fb-icon, .feature-box h4, .feature-box p {
+  position: relative;
+  z-index: 1;
+}
+
+.fb-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--red);
+  background: rgba(255, 153, 0, 0.08);
+  border: 1px solid rgba(255, 153, 0, 0.15);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.fb-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.feature-box h4 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.feature-box p {
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* ── INTERACTIVE PLATFORM BOXES ── */
+.platform-wrapper {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  display: inline-block;
+}
+
+.platform-wrapper::before, .platform-wrapper::after {
+  content: '';
+  position: absolute;
+  width: 30px; 
+  height: 30px;
+  border: 2px solid var(--red);
+  pointer-events: none;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.platform-wrapper:hover::before, .platform-wrapper:hover::after {
+  opacity: 1;
+}
+
+.platform-wrapper::before {
+  top: 0; left: 0;
+  border-right: none; border-bottom: none;
+}
+.platform-wrapper::after {
+  bottom: 0; right: 0;
+  border-left: none; border-top: none;
+}
+
+.platform-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; 
+  gap: 1rem; 
+  width: 100%;
+}
+
+.platform-box {
+  display: flex;
+  align-items: center;
+  width: 84px; 
+  height: 84px;
+  background: var(--surface);
+  border: 1px solid #2a2a2a;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.8), 0 0 40px rgba(255, 153, 0, 0.05);
+}
+
+.platform-box:hover {
+  border-color: #444;
+}
+
+.platform-box.expanded {
+  width: 340px; /* Slightly wider to fit the centered content */
+  border-color: var(--red);
+  box-shadow: 10px 10px 0 rgba(0,0,0,0.9), 0 0 60px rgba(255, 153, 0, 0.15);
+}
+
+.pb-icon-wrap {
+  width: 84px; 
+  height: 84px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pb-icon {
+  width: 2.2rem;
+  height: 2.2rem;
+  color: var(--white);
+  transition: transform 0.3s;
+}
+
+.platform-box:hover .pb-icon {
+  transform: scale(1.1);
+}
+
+/* This is the fix for centering */
+.pb-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centers children horizontally */
+  flex: 1; /* Takes up all remaining space */
+  gap: 0.75rem;
+  padding-right: 0.5rem; 
+  white-space: nowrap;
+  
+  opacity: 0;
+  transform: translateX(-15px);
+  transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+}
+
+.platform-box.expanded .pb-content {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.info-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ccc;
+  background: #151515;
+  border: 1px solid #333;
+  padding: 0.3rem 0.6rem;
+}
+
+.btn-dl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  background: var(--red);
+  color: #000;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-dl:hover { background: #ffb340; }
+.btn-dl:active { transform: scale(0.98); }
+
+.btn-dl.disabled {
+  background: #222;
+  color: #666;
+  cursor: not-allowed;
+  border: 1px solid #333;
+}
+
+.btn-dl svg {
+  width: 1rem; 
+  height: 1rem;
+}
+
+/* ── FOOTER ── */
+footer{background:#000000;text-align:center;padding:2rem;font-size:0.75rem;color:#ccc;letter-spacing:0.1em;border-top:1px solid var(--border);margin-top:0}
+
+.tagline{font-family:'Barlow Condensed',sans-serif;font-size:clamp(0.68rem,1.4vw,0.82rem);letter-spacing:0.32em;text-transform:uppercase;color:var(--red)}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) {
+  .app-features { grid-template-columns: 1fr 1fr; max-width: 740px; }
+}
+
+@media (max-width: 780px) {
+  /* Fixed the mobile top bar */
+  .header-main { flex-direction: row; flex-wrap: nowrap; justify-content: space-between; gap: 0.5rem; padding: 0.6rem 0.8rem; }
+  .brand-group { gap: 0.4rem; flex-shrink: 0; }
+  #logo { width: 7rem; }
+  .discord-btn { display: none; }
+  .header-actions { flex-shrink: 1; flex-wrap: nowrap; gap: 0.3rem; }
+  .action-chip { padding: 0.3rem 0.6rem; font-size: 0.65rem; min-height: 1.8rem; }
+  .notif-btn svg { width: 18px; height: 18px; }
+
+  main { padding: 4rem 1rem; }
+  .notif-dropdown { position: fixed; top: 60px; left: 10px; right: 10px; width: auto; }
+}
+
+@media (max-width: 600px) {
+  .app-features { grid-template-columns: 1fr; max-width: 320px; }
+  
+  /* Keep horizontal expansion on mobile */
+  .platform-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .platform-box.expanded {
+    width: calc(100vw - 80px);
+    max-width: 340px;
+  }
+  
+  .pb-content {
+    flex-direction: row; /* Keep them side-by-side inside the expanded box */
+    justify-content: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="header-main">
+    <div class="brand-group">
+      <a class="brand-lockup" href="/" aria-label="PhonkHub home">
+        <img id="logo" src="https://i.ibb.co/FbnNpjpp/phonk-Hub.png" alt="PhonkHub Logo" />
+      </a>
+      <a class="discord-btn" href="https://discord.gg/b7gQNCpjy4" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord" title="Join our Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.029ZM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg>
+      </a>
+    </div>
+    <div class="header-actions" id="headerActions"></div>
+  </div>
+  <nav class="primary-nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="nav-link" href="/">Home</a>
+      <a class="nav-link" href="/forums">Forums</a>
+      <a class="nav-link" href="/library">Library</a>
+      <a class="nav-link active" href="/download" aria-current="page">App</a>
+      <a class="nav-link" href="/about">About</a>
+    </div>
+  </nav>
+</header>
+
+<div id="lockdownBanner" role="alert" aria-live="polite">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:#ff9900;">PhonkHub is in lockdown.</span>
+</div>
+
+<main id="main">
+  
+  <div class="page-header">
+    <h1>PhonkHub App</h1>
+    <p>Browse on anything, natively!</p>
+  </div>
+
+  <!-- Section Title: Features -->
+  <h2 class="section-hed">Features</h2>
+
+  <!-- APP FEATURES GRID (All 4 boxes) -->
+  <div class="app-features">
+    <div class="feature-box">
+      <div class="feature-num">01</div>
+      <div class="fb-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19V6l12-3v13"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <h4>Full Library</h4>
+      <p>Every single track on the site, right in your pocket. Vote, comment, and discover new phonk anywhere.</p>
+    </div>
+    
+    <div class="feature-box">
+      <div class="feature-num">02</div>
+      <div class="fb-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+      <h4>Push Alerts</h4>
+      <p>Get instant notifications for follows, replies, and mentions. Never miss a drop while on the move.</p>
+    </div>
+    
+    <div class="feature-box">
+      <div class="feature-num">03</div>
+      <div class="fb-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
+      </div>
+      <h4>Native Forums</h4>
+      <p>Post threads, reply to discussions, and react with emojis perfectly scaled for anything.</p>
+    </div>
+    
+    <div class="feature-box">
+      <div class="feature-num">04</div>
+      <div class="fb-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+      </div>
+      <h4>Zero Bloat</h4>
+      <p>A lightweight app with no algorithms, no ads, and no hidden fees. Just pure, uninterrupted sound.</p>
+    </div>
+  </div>
+
+  <!-- Section Title: Select Platform -->
+  <h2 class="section-hed center-hed">Select Platform</h2>
+
+  <!-- INTERACTIVE PLATFORM BOXES -->
+  <div class="platform-wrapper">
+    <div class="platform-grid">
+      
+      <!-- Android Box -->
+      <div class="platform-box" onclick="togglePlatform(this)">
+        <div class="pb-icon-wrap">
+          <svg class="pb-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.14-.55.4.4 0 0 0-.55.14l-1.86 3.23a11.3 11.3 0 0 0-9.78 0L5.25 5.89a.4.4 0 0 0-.55-.14.4.4 0 0 0-.14.55L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+        </div>
+        <div class="pb-content">
+          <div class="info-tag">v1.0.3</div>
+          <a href="https://github.com/m-3-blue/phonkhub/releases/download/Android/phonkhub-1.0.3.apk" class="btn-dl" download onclick="event.stopPropagation()">
+            APK
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>
+    <span class="tagline">New Tracks Added Periodically</span><br /> <br />
+    © 2026 PhonkHub  ·  Property Of ¥GoyMafia¥™  ·  All Rights To The Respective Artists
+  </p>
+</footer>
+
+<script>
+// --- AUTH & NOTIFICATIONS ---
+(async () => {
+  const actionsEl = document.getElementById('headerActions');
+  if (!actionsEl) return;
+  
+  try {
+    const authRes = await fetch('/api/auth?action=me', { credentials: 'include' });
+    const { user } = await authRes.json();
+    
+    if (!user) {
+      actionsEl.innerHTML = '<a class="action-chip" href="/login">Log In</a><a class="action-chip accent" href="/signup">Sign Up</a>';
+      actionsEl.classList.add('loaded');
+      return;
+    }
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'notif-wrapper';
+    wrapper.innerHTML = `
+      <button class="notif-btn" id="notifBtn" aria-label="Notifications">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge"></span>
+      </button>
+      <div class="notif-dropdown" id="notifDropdown" role="dialog">
+        <div class="notif-header">
+          <span class="notif-header-title">Notifications</span>
+          <button class="notif-mark-read" id="markReadBtn">Mark all read</button>
+        </div>
+        <div id="notifList"></div>
+      </div>`;
+    actionsEl.insertBefore(wrapper, actionsEl.firstChild);
+
+    const btn = document.getElementById('notifBtn'), dd = document.getElementById('notifDropdown');
+    const bdg = document.getElementById('notifBadge'), lst = document.getElementById('notifList');
+    
+    btn.addEventListener('click', e => { e.stopPropagation(); dd.classList.toggle('open'); });
+    document.addEventListener('click', e => { if (!wrapper.contains(e.target)) dd.classList.remove('open'); });
+    
+    async function loadNotifications() {
+      try {
+        const data = await fetch('/api/notifications').then(r => r.ok ? r.json() : null);
+        if (!data) return;
+        bdg.textContent = data.unreadCount > 9 ? '9+' : data.unreadCount || '';
+        bdg.classList.toggle('show', data.unreadCount > 0);
+        if (!data.notifications.length) { lst.innerHTML = '<div class="notif-empty">No notifications yet</div>'; return; }
+        const icons = { follow: '👤', reply: '💬', mention: '@' };
+        lst.innerHTML = data.notifications.map(n => {
+          const actor = n.actor_display_name || n.actor_username;
+          const text = n.type === 'follow' ? `<strong>${actor}</strong> followed you`
+                     : n.type === 'reply' ? `<strong>${actor}</strong> replied to your comment`
+                     : `<strong>${actor}</strong> mentioned you`;
+          const mins = Math.floor((Date.now() - new Date(n.created_at)) / 60000);
+          const t = mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago';
+          return `<a href="${n.link}" class="notif-item ${n.is_read ? '' : 'unread'}"><div class="notif-icon">${icons[n.type]||'🔔'}</div><div class="notif-text">${text}<span class="notif-time">${t}</span></div></a>`;
+        }).join('');
+      } catch {}
+    }
+    document.getElementById('markReadBtn').addEventListener('click', async () => {
+      await fetch('/api/notifications?action=read-all', { method: 'POST' });
+      loadNotifications();
+    });
+    loadNotifications();
+    setInterval(loadNotifications, 30000);
+
+    const chip = Object.assign(document.createElement('a'), { className: 'action-chip', href: '/@' + user.username, textContent: user.display_name || user.username });
+    const out = Object.assign(document.createElement('a'), { className: 'action-chip accent', href: '#', textContent: 'Log Out' });
+    out.addEventListener('click', async e => { e.preventDefault(); await fetch('/api/auth?action=logout', { method: 'POST' }); location.reload(); });
+    actionsEl.append(chip, out);
+    actionsEl.classList.add('loaded');
+    
+  } catch (err) {
+    actionsEl.innerHTML = '<a class="action-chip" href="/login">Log In</a><a class="action-chip accent" href="/signup">Sign Up</a>';
+    actionsEl.classList.add('loaded');
+  }
+})();
+
+// --- LOCKDOWN ---
+fetch('/api/lockdown-status')
+  .then(r => r.json())
+  .then(({ lockdown }) => {
+    if (lockdown !== '1') return;
+    document.body.classList.add('lockdown-active');
+    document.getElementById('lockdownBanner').style.display = 'flex';
+    const user = JSON.parse(localStorage.getItem('ph_user') || '{}');
+    if (user.is_admin) return;
+    const loggedIn = !!localStorage.getItem('ph_session_token') || !!user.id;
+    if (!loggedIn) {
+      document.querySelectorAll('.comment-login-prompt, .login-prompt, .reply-form-box').forEach(el => el.style.display = 'none');
+    } else {
+      document.querySelectorAll('textarea, input[type="text"], input[type="submit"], form button, .btn-orange, .vote-btn').forEach(el => {
+        el.disabled = true;
+        el.style.cssText += 'opacity:.5;cursor:not-allowed';
+        if (el.tagName === 'TEXTAREA') el.placeholder = 'PhonkHub is currently in lockdown.';
+      });
+    }
+  }).catch(console.error);
+</script>
+
+<script>
+  function togglePlatform(element) {
+    // If it's already expanded, close it
+    if (element.classList.contains('expanded')) {
+      element.classList.remove('expanded');
+      return;
+    }
+
+    // Close all other boxes
+    document.querySelectorAll('.platform-box').forEach(box => {
+      box.classList.remove('expanded');
+    });
+
+    // Expand the clicked one
+    element.classList.add('expanded');
+  }
+
+  // Close boxes if clicking outside
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.platform-box')) {
+      document.querySelectorAll('.platform-box').forEach(box => {
+        box.classList.remove('expanded');
+      });
+    }
+  });
+</script>
+
+<script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//relieved-understanding.com/bTX-Vus.d/GEln0LYpWqcH/peQmP9vuvZWUIlCkmPTTOcWzJNhj/kIwtMTTjcbttNEzCME2nOYTrAiybMSQ-";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+<script>
+(function(cfzet){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = cfzet || {};
+s.src = "//unfolded-uncle.com/cVD.9p6Kbo2E5/l/S_WbQD9fNQzzM_2MOGD/k/3kN/y/0Q3wM/ziYJ4/OkThgCxw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+
+<script>
+(function(pqby){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = pqby || {};
+s.src = "//relieved-understanding.com/bgXGV.sQdkGrlt0nYSWAcR/meomJ9OuFZeUalZk/PRTwc-zCNMjmkowYN/TacttjNTzaMi2pOfTcAN2KMuQw";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+</body>
+</html>
