@@ -2,13 +2,6 @@ import { createClient } from '@libsql/client';
 
 const SESSION_COOKIE = 'ph_session';
 
-// ─── CORS helper ───────────────────────────────────────────────────────────────
-function setCors(res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-}
-
 function getClient() {
   return createClient({
     url: process.env.TURSO_DATABASE_URL,
@@ -21,13 +14,11 @@ function now() {
 }
 
 function getSessionToken(req) {
-  // 1. Check Authorization header first (for the App)
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
     return authHeader.substring(7);
   }
 
-  // 2. Fallback to cookie (for the Main Site)
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
@@ -53,10 +44,32 @@ async function getCurrentUser(client, req) {
 }
 
 export default async function handler(req, res) {
-  // Handle CORS preflight
-  setCors(res);
+  // 1. BULLETPROOF CORS SETUP
+  const origin = req.headers.origin;
+
+  if (
+    !origin || 
+    origin === 'null' || 
+    origin.startsWith('file://') || 
+    origin.includes('localhost') || 
+    origin.includes('127.0.0.1') || 
+    origin === 'http://tauri.localhost' || 
+    origin === 'capacitor://localhost' ||
+    origin === 'https://o-phonkhub.vercel.app' ||
+    origin === 'https://phonkhub.vercel.app'
+  ) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight
   if (req.method === 'OPTIONS') {
-    return res.status(204).end();
+    return res.status(200).end();
   }
 
   const client = getClient();

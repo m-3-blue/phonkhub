@@ -104,23 +104,30 @@ function clearSessionCookie(res) {
 }
 
 export default async function handler(req, res) {
-  // 1. THE NEW, BULLETPROOF CORS SETUP
+  // 1. BULLETPROOF CORS SETUP
   const origin = req.headers.origin;
-  
-  if (origin && (origin.includes('localhost') || origin.includes('127.0.0.1') || origin === 'capacitor://localhost')) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (origin && ['https://o-phonkhub.vercel.app', 'https://phonkhub.vercel.app'].includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (!origin) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
 
+  if (
+    !origin || 
+    origin === 'null' || 
+    origin.startsWith('file://') || 
+    origin.includes('localhost') || 
+    origin.includes('127.0.0.1') || 
+    origin === 'http://tauri.localhost' || 
+    origin === 'capacitor://localhost' ||
+    origin === 'https://o-phonkhub.vercel.app' ||
+    origin === 'https://phonkhub.vercel.app'
+  ) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+  
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // Handle preflight
+  // 2. Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -159,7 +166,7 @@ export default async function handler(req, res) {
 
       const { username, email, password, display_name, captchaToken } = req.body || {};
 
-            // --- VERIFY CAPTCHA ---
+      // --- VERIFY CAPTCHA ---
       const isHuman = await verifyTurnstile(captchaToken);
       if (!isHuman) {
         return res.status(400).json({ error: 'CAPTCHA verification failed. Please try again.' });
@@ -207,7 +214,7 @@ export default async function handler(req, res) {
       if (await isIpBanned(client, ip)) return res.status(403).json({ error: 'Access denied' });
       const { username, password, captchaToken } = req.body || {};
 
-            // --- VERIFY CAPTCHA ---
+      // --- VERIFY CAPTCHA ---
       const isHuman = await verifyTurnstile(captchaToken);
       if (!isHuman) {
         return res.status(400).json({ error: 'CAPTCHA verification failed. Please try again.' });

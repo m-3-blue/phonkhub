@@ -13,7 +13,6 @@ function now() {
   return new Date().toISOString();
 }
 
-// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -64,24 +63,6 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   }
-  
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  // 2. Handle preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  
-  const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (!origin) {
-    // Allow server-to-server or curl (no browser origin)
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
-  // If origin is set but not in the list, we don't send CORS headers → browser blocks it
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');

@@ -80,19 +80,26 @@ async function getCurrentUser(client, req) {
 }
 
 export default async function handler(req, res) {
-  // 1. STRICT CORS SETUP
+  // 1. BULLETPROOF CORS SETUP
   const origin = req.headers.origin;
-  
-  if (origin && (origin.includes('localhost') || origin.includes('127.0.0.1') || origin === 'capacitor://localhost')) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (origin && ['https://o-phonkhub.vercel.app', 'https://phonkhub.vercel.app'].includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (!origin) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
 
+  if (
+    !origin || 
+    origin === 'null' || 
+    origin.startsWith('file://') || 
+    origin.includes('localhost') || 
+    origin.includes('127.0.0.1') || 
+    origin === 'http://tauri.localhost' || 
+    origin === 'capacitor://localhost' ||
+    origin === 'https://o-phonkhub.vercel.app' ||
+    origin === 'https://phonkhub.vercel.app'
+  ) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+  
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -204,7 +211,7 @@ export default async function handler(req, res) {
         args: [targetUser.id],
       });
 
-          return res.status(200).json({
+      return res.status(200).json({
         profile: {
           id: targetUser.id,
           username: targetUser.username,

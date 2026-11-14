@@ -36,7 +36,6 @@ async function isIpBanned(client, ip) {
   return result.rows.length > 0;
 }
 
-// --- THE FIX: Check Authorization header first for Capacitor ---
 function getSessionToken(req) {
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -73,22 +72,6 @@ export default async function handler(req, res) {
   } else {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-  
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  // 2. Handle preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (!origin) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
   }
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -219,7 +202,7 @@ export default async function handler(req, res) {
             id: row.user_id,
             username: row.username,
             display_name: row.display_name || row.username,
-            is_booster: row.is_booster, // ADD THIS
+            is_booster: row.is_booster,
           },
           replies: [],
         };
@@ -235,10 +218,9 @@ export default async function handler(req, res) {
       }
 
       let userVotes = {};
-
       const token = getSessionToken(req);
-
       let user = null;
+
       if (token) {
         const userResult = await client.execute({
           sql: `SELECT u.id, u.username, u.display_name, u.is_admin
@@ -282,13 +264,13 @@ export default async function handler(req, res) {
           category: {
             slug: thread.category_slug,
             name: thread.category_name,
-            admin_only: !!thread.admin_only // Added this for the frontend fix
+            admin_only: !!thread.admin_only
           },
           user: {
             id: thread.user_id,
             username: thread.username,
             display_name: thread.display_name || thread.username,
-            is_booster: thread.is_booster, // ADD THIS
+            is_booster: thread.is_booster,
           },
         },
         replies: topLevel,

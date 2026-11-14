@@ -15,6 +15,13 @@ function now() {
 }
 
 function getSessionToken(req) {
+  // 1. Check Authorization header first (for the App/Tauri)
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+
+  // 2. Fallback to cookie (for the Main Site)
   const raw = req.headers.cookie || '';
   const parts = raw.split(';');
   for (const part of parts) {
@@ -40,6 +47,34 @@ async function getCurrentUser(client, req) {
 }
 
 export default async function handler(req, res) {
+  // 1. BULLETPROOF CORS SETUP
+  const origin = req.headers.origin;
+
+  if (
+    !origin || 
+    origin === 'null' || 
+    origin.startsWith('file://') || 
+    origin.includes('localhost') || 
+    origin.includes('127.0.0.1') || 
+    origin === 'http://tauri.localhost' || 
+    origin === 'capacitor://localhost' ||
+    origin === 'https://o-phonkhub.vercel.app' ||
+    origin === 'https://phonkhub.vercel.app'
+  ) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // 2. Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -119,7 +154,7 @@ export default async function handler(req, res) {
 
     const counts = countsResult.rows[0] || { comment_count: 0, vote_count: 0 };
 
-      // Check if requester follows this user
+    // Check if requester follows this user
     const requester = await getCurrentUser(client, req);
     let isFollowing = false;
     if (requester && requester.id !== user.id) {

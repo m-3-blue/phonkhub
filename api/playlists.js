@@ -43,15 +43,22 @@ async function getCurrentUser(client, req) {
 }
 
 export default async function handler(req, res) {
-  // CORS Setup
+  // 1. BULLETPROOF CORS SETUP
   const origin = req.headers.origin;
 
-  if (!origin || origin === 'null' || origin.startsWith('file://') || origin.includes('localhost') || origin === 'capacitor://localhost' || origin.startsWith('app://') || origin.startsWith('tauri://')) {
-    // 🪟 Desktop App (Electron/Tauri/Capacitor) & Local dev
-    // We use '*' because the desktop app relies on Bearer tokens, NOT cookies.
+  if (
+    !origin || 
+    origin === 'null' || 
+    origin.startsWith('file://') || 
+    origin.includes('localhost') || 
+    origin.includes('127.0.0.1') || 
+    origin === 'http://tauri.localhost' || 
+    origin === 'capacitor://localhost' ||
+    origin === 'https://o-phonkhub.vercel.app' ||
+    origin === 'https://phonkhub.vercel.app'
+  ) {
     res.setHeader('Access-Control-Allow-Origin', '*');
   } else {
-    // 🌐 Web App
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   }
@@ -59,7 +66,11 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  // 2. Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   const client = getClient();
   const action = req.query.action;
   const user = await getCurrentUser(client, req);
@@ -118,7 +129,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
-        // --- DELETE A PLAYLIST ---
+    // --- DELETE A PLAYLIST ---
     if (action === 'delete' && req.method === 'POST') {
       if (!user) return res.status(401).json({ error: 'Log in first' });
       const { id } = req.body || {};

@@ -63,32 +63,30 @@ async function getCurrentUser(client, req) {
     id: result.rows[0].id,
     username: result.rows[0].username,
     display_name: result.rows[0].display_name || result.rows[0].username,
-    is_booster: result.rows[0].is_booster, // ADD THIS LINE
+    is_booster: result.rows[0].is_booster,
   };
 }
 
 export default async function handler(req, res) {
-  // 1. STRICT CORS SETUP
-  const ALLOWED_ORIGINS = [
-    'https://o-phonkhub.vercel.app',
-    'https://phonkhub.vercel.app',
-    'https://localhost',
-    'capacitor://localhost',
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://127.0.0.1:5500',
-    'http://localhost:5500'
-  ];
-
+  // 1. BULLETPROOF CORS SETUP
   const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+
+  if (
+    !origin || 
+    origin === 'null' || 
+    origin.startsWith('file://') || 
+    origin.includes('localhost') || 
+    origin.includes('127.0.0.1') || 
+    origin === 'http://tauri.localhost' || 
+    origin === 'capacitor://localhost' ||
+    origin === 'https://o-phonkhub.vercel.app' ||
+    origin === 'https://phonkhub.vercel.app'
+  ) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  } else {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (!origin) {
-    // Allow server-to-server or curl (no browser origin)
-    res.setHeader('Access-Control-Allow-Origin', '*');
   }
-  // If origin is set but not in the list, we don't send CORS headers → browser blocks it
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -133,7 +131,7 @@ export default async function handler(req, res) {
       const trackId = parseInt(req.query.track_id, 10);
       if (!trackId) return res.status(400).json({ error: 'Missing track_id' });
 
-      // 1. Fetch comments (Removed the JOIN to tracks to prevent crashes)
+      // 1. Fetch comments
       const result = await client.execute({
         sql: `SELECT c.id, c.track_id, c.parent_id, c.body, c.created_at, c.edited_at,
                      u.id AS user_id, u.username, u.display_name, u.is_booster
