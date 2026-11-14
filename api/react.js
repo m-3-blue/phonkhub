@@ -145,6 +145,26 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
+    // --- CHECK LOCKDOWN ---
+    // Only block POST requests (reacting). GET requests (viewing) are fine.
+    if (req.method === 'POST') {
+      const lockCheck = await client.execute("SELECT value FROM site_settings WHERE key = 'lockdown'");
+      if (lockCheck.rows.length > 0 && lockCheck.rows[0].value === '1') {
+        const token = getSessionToken(req);
+        let isAdmin = false;
+        if (token) {
+          const adminCheck = await client.execute({
+            sql: 'SELECT u.is_admin FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ?',
+            args: [token]
+          });
+          if (adminCheck.rows.length > 0 && adminCheck.rows[0].is_admin == 1) isAdmin = true;
+        }
+        if (!isAdmin) {
+          return res.status(403).json({ error: 'PhonkHub is currently in lockdown. Try again later.' });
+        }
+      }
+    }
+
     // -------- GET REACTIONS --------
     if (req.method === 'GET') {
       var targetType = req.query.target_type;
