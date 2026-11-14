@@ -55,8 +55,7 @@ function getSessionToken(req) {
 }
 
 export default async function handler(req, res) {
-  
-  // 1. BULLETPROOF CORS SETUP (Supports Web, Capacitor, Tauri, and Local Dev)
+  // 1. BULLETPROOF CORS SETUP
   const origin = req.headers.origin;
 
   if (
@@ -64,8 +63,8 @@ export default async function handler(req, res) {
     origin === 'null' || 
     origin.startsWith('file://') || 
     origin.includes('localhost') || 
-    origin.includes('127.0.0.1') ||  // <--- This catches Tauri Dev
-    origin === 'http://tauri.localhost' || // <--- This catches Tauri Production
+    origin.includes('127.0.0.1') || 
+    origin === 'http://tauri.localhost' || 
     origin === 'capacitor://localhost' ||
     origin === 'https://o-phonkhub.vercel.app' ||
     origin === 'https://phonkhub.vercel.app'
