@@ -131,17 +131,17 @@ export default async function handler(req, res) {
       const trackId = parseInt(req.query.track_id, 10);
       if (!trackId) return res.status(400).json({ error: 'Missing track_id' });
 
+      // 1. Fetch comments (Removed the JOIN to tracks to prevent crashes)
       const result = await client.execute({
         sql: `SELECT c.id, c.track_id, c.parent_id, c.body, c.created_at, c.edited_at,
-                     u.id AS user_id, u.username, u.display_name, u.is_booster,
-                     t.youtube_id, t.title AS track_title
+                     u.id AS user_id, u.username, u.display_name, u.is_booster
               FROM comments c 
               JOIN users u ON u.id = c.user_id
-              JOIN tracks t ON t.id = c.track_id
               WHERE c.track_id = ? ORDER BY c.created_at ASC`,
         args: [trackId],
       });
 
+      // 2. Fetch likes
       const likesResult = await client.execute({
         sql: `SELECT cl.comment_id, COUNT(*) AS like_count FROM comment_likes cl
               JOIN comments c ON c.id = cl.comment_id WHERE c.track_id = ? GROUP BY cl.comment_id`,
@@ -151,6 +151,7 @@ export default async function handler(req, res) {
       const likeCounts = {};
       for (const row of likesResult.rows) likeCounts[row.comment_id] = Number(row.like_count);
 
+      // 3. Fetch user likes
       const user = await getCurrentUser(client, req);
       let userLikes = {};
       if (user) {
@@ -162,6 +163,7 @@ export default async function handler(req, res) {
         for (const row of myLikes.rows) userLikes[row.comment_id] = true;
       }
 
+      // 4. Build the tree
       const byId = {};
       const topLevel = [];
 
@@ -169,9 +171,13 @@ export default async function handler(req, res) {
         byId[row.id] = {
           id: row.id, track_id: row.track_id, parent_id: row.parent_id,
           body: row.body, created_at: row.created_at, edited_at: row.edited_at || null,
-          youtube_id: row.youtube_id, track_title: row.track_title, // <-- ADD THESE
-          user: { id: row.user_id, username: row.username, display_name: row.display_name || row.username, is_booster: row.is_booster },
-          like_count: likeCounts[row.id] || 0, user_liked: !!userLikes[row.id], replies: [],
+          user: { 
+            id: row.user_id, 
+            username: row.username, 
+            display_name: row.display_name || row.username, 
+            is_booster: row.is_booster 
+          },
+          like_count: likeCounts[row.id] || 0, user_likes: !!userLikes[row.id], replies: [],
         };
       }
 
@@ -183,7 +189,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({ comments: topLevel, user });
     }
-
+    
     // -------- POST A COMMENT --------
     if (action === 'post' && req.method === 'POST') {
       const user = await getCurrentUser(client, req);
