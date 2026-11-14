@@ -45,20 +45,21 @@ async function getCurrentUser(client, req) {
 export default async function handler(req, res) {
   // CORS Setup
   const origin = req.headers.origin;
-  if (origin && (origin.includes('localhost') || origin === 'capacitor://localhost')) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (origin && ['https://o-phonkhub.vercel.app', 'https://phonkhub.vercel.app'].includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  } else if (!origin) {
+
+  if (!origin || origin === 'null' || origin.startsWith('file://') || origin.includes('localhost') || origin === 'capacitor://localhost' || origin.startsWith('app://') || origin.startsWith('tauri://')) {
+    // 🪟 Desktop App (Electron/Tauri/Capacitor) & Local dev
+    // We use '*' because the desktop app relies on Bearer tokens, NOT cookies.
     res.setHeader('Access-Control-Allow-Origin', '*');
+  } else {
+    // 🌐 Web App
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
   }
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-
   const client = getClient();
   const action = req.query.action;
   const user = await getCurrentUser(client, req);
